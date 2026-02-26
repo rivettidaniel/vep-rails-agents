@@ -308,7 +308,7 @@ All agents follow best practices from GitHub's analysis:
 
 ### Standard Agents Stack
 - Ruby 3.3+
-- Rails 7.x
+- Rails 7.x - 8.x
 - PostgreSQL
 - Hotwire (Turbo + Stimulus)
 - ViewComponent
