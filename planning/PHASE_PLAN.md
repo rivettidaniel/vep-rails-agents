@@ -30,7 +30,7 @@
 | `turbo_agent` | `hotwire-patterns` | Wave 4 |
 | `stimulus_agent` | `hotwire-patterns` | Wave 4 |
 | `mailer_agent` | `action-mailer-patterns` | Wave 4 |
-| `job_agent` | `solid-queue-setup` (or Sidekiq equivalent) | Wave 4 |
+| `job_agent` | `solid-queue-setup` | Wave 4 |
 | `tdd_refactoring_agent` | `tdd-cycle`, `rails-architecture` | Wave 5 |
 | `lint_agent` | _(none)_ | Wave 5 |
 | `review_agent` | `rails-architecture` | Wave 6 |

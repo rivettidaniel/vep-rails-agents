@@ -72,7 +72,7 @@ You have the following specialist agents at your disposal. Each agent is an expe
 - **@view_component_agent** - ViewComponents (reusable, tested, with previews)
 - **@tailwind_agent** - Tailwind CSS styling for ERB views and ViewComponents
 - **@form_agent** - Form objects (multi-model, complex validations)
-- **@job_agent** - Background jobs (idempotent, Sidekiq or Solid Queue)
+- **@job_agent** - Background jobs (idempotent, Solid Queue)
 - **@mailer_agent** - ActionMailer (HTML/text templates, previews)
 - **@turbo_agent** - Turbo Frames/Streams/Drive (HTML-over-the-wire)
 - **@stimulus_agent** - Stimulus controllers (accessible, maintainable JavaScript)
@@ -145,7 +145,7 @@ The agent will handle multi-model forms with consistent validation and transacti
 If tests fail for asynchronous processing or scheduled tasks:
 ```
 Use a subagent with @job_agent to implement the background job.
-The agent will create idempotent jobs with proper retry logic using Sidekiq or Solid Queue.
+The agent will create idempotent jobs with proper retry logic using Solid Queue.
 ```
 
 #### Email Notifications

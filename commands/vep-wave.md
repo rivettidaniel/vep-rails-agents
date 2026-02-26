@@ -124,37 +124,12 @@ Use this table when building the dispatch message to know which skills to pass t
 | `turbo_agent` | `hotwire-patterns` | Wave 4 |
 | `stimulus_agent` | `hotwire-patterns` | Wave 4 |
 | `mailer_agent` | `action-mailer-patterns` | Wave 4 |
-| `job_agent` | `solid-queue-setup` (or Sidekiq equivalent) | Wave 4 |
+| `job_agent` | `solid-queue-setup` | Wave 4 |
 | `tdd_refactoring_agent` | `tdd-cycle`, `rails-architecture` | Wave 5 |
 | `lint_agent` | _(none)_ | Wave 5 |
 | `review_agent` | `rails-architecture` | Wave 6 |
 | `security_agent` | _(none)_ | Wave 6 |
 | `rspec_agent` | `tdd-cycle` | Wave 6 |
-
-## Execution with Permissions Flag
-
-For faster, uninterrupted execution of parallel waves, use the `--dangerously-skip-permissions` flag:
-
-```bash
-# Execute wave WITHOUT prompting for permission at each step
-claude-code /vep-wave --dangerously-skip-permissions
-
-# This allows:
-- All agents to write changes immediately (no approval prompts)
-- Parallel execution without interruption
-- Faster wave completion
-```
-
-**When to use:**
-- ✅ Well-planned features with clear PHASE_PLAN
-- ✅ Running multiple waves in a single session
-- ✅ Teams coordinating implementation
-
-**When NOT to use:**
-- ❌ First-time features (review each step)
-- ❌ High-risk changes (use default mode)
-
----
 
 ## Rules
 - NEVER run tasks from different waves simultaneously (respects dependencies)

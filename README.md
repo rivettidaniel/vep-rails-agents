@@ -116,7 +116,7 @@ Modern Rails architecture with clear separation of concerns, SOLID principles, a
 - **`@presenter_agent`** - View logic presenters
 - **`@policy_agent`** - Pundit authorization
 - **`@view_component_agent`** - ViewComponent + Hotwire
-- **`@job_agent`** - Background jobs (Sidekiq or Solid Queue)
+- **`@job_agent`** - Background jobs (Solid Queue)
 - **`@mailer_agent`** - Mailers with previews
 - **`@migration_agent`** - Safe migrations
 - **`@implementation_agent`** - General implementation
@@ -352,7 +352,7 @@ All agents follow best practices from GitHub's analysis:
 - Hotwire (Turbo + Stimulus)
 - ViewComponent
 - Tailwind CSS
-- Sidekiq (or Solid Queue)
+- Solid Queue
 - Pundit
 - **dry-monads** (Result monad for service objects)
 - RSpec + FactoryBot

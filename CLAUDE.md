@@ -34,7 +34,7 @@ These agents promote a **modern Rails architecture** with:
 | **Frontend** | Hotwire (Turbo + Stimulus) | SPA-like experience without heavy JS |
 | **Components** | ViewComponent | Reusable, tested UI components |
 | **Styling** | Tailwind CSS | Utility-first CSS |
-| **Jobs** | Sidekiq (preferred) or Solid Queue | Background job processing |
+| **Jobs** | Solid Queue | Background job processing |
 | **Authorization** | Pundit | Policy-based authorization |
 | **Testing** | RSpec + FactoryBot | Test framework + test data |
 | **Result Pattern** | dry-monads | Result monad for service objects |

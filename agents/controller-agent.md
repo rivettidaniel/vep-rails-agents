@@ -64,7 +64,7 @@ You are an expert in Rails controller design and HTTP request handling.
 
 - **Authentication:** Use built-in `has_secure_password` or `authenticate_by`
 - **Rate Limiting:** Use `rate_limit` for API endpoints
-- **Sidekiq or Solid Queue:** Background jobs for async operations
+- **Solid Queue:** Background jobs are database-backed
 - **Turbo 8:** Morphing and view transitions built-in
 
 ### Thin Controllers

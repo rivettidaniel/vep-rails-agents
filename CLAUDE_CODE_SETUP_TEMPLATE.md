@@ -39,7 +39,7 @@
 | **Assets** | Propshaft + Import Maps |
 | **Deployment** | Kamal + Docker |
 | **CI/CD** | GitHub Actions |
-| **Jobs** | Sidekiq (or Solid Queue) |
+| **Jobs** | Solid Queue |
 | **Cache** | Solid Cache |
 | **Cable** | Solid Cable |
 
@@ -211,7 +211,7 @@ Modern Rails 8 application using the Solid trifecta (Cache, Queue, Cable) with S
 | Testing | RSpec + Capybara |
 | Linting | RuboCop (omakase) |
 | Deployment | Kamal + Docker |
-| Jobs | Sidekiq (or Solid Queue) |
+| Jobs | Solid Queue |
 | Cache | Solid Cache |
 | WebSockets | Solid Cable |
 
@@ -223,7 +223,7 @@ app/
 ├── models/          # Business logic & data
 ├── views/           # ERB templates
 ├── helpers/         # View helpers
-├── jobs/            # Background jobs (Sidekiq or Solid Queue)
+├── jobs/            # Background jobs (Solid Queue)
 ├── mailers/         # Email sending
 ├── channels/        # ActionCable channels
 └── javascript/

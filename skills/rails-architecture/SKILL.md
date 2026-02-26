@@ -34,7 +34,7 @@ Where should this code go?
 │   └─ → ViewComponent (see: viewcomponent-patterns skill)
 │
 ├─ Is it async/background work?
-│   └─ → Job (see: solid-queue-setup or Sidekiq skill)
+│   └─ → Job (see: solid-queue-setup skill)
 │
 ├─ Is it a complex form (multi-model, wizard)?
 │   └─ → Form Object (see: form-object-patterns skill)
@@ -99,7 +99,7 @@ ASYNC FLOWS:
 ┌─────────────────────┐       ┌─────────────────────┐
 │        JOB          │       │      CHANNEL        │
 │  • Background work  │       │  • Real-time        │
-│  • Sidekiq/SolidQ   │       │  • WebSockets       │
+│  • Solid Queue      │       │  • WebSockets       │
 └─────────────────────┘       └─────────────────────┘
 
 EMAIL FLOWS:
@@ -138,7 +138,7 @@ app/
 │   └── concerns/        # Shared controller behavior
 ├── forms/               # Form objects
 ├── helpers/             # Simple view helpers (avoid)
-├── jobs/                # Background jobs (Sidekiq or Solid Queue)
+├── jobs/                # Background jobs (Solid Queue)
 ├── mailers/             # Action Mailer classes
 ├── models/
 │   └── concerns/        # Shared model behavior
@@ -371,12 +371,11 @@ Uses `has_secure_password` with Session model, Current class, and password reset
 
 → See **authentication-flow** skill for details.
 
-### Background Jobs (Sidekiq or Solid Queue)
+### Background Jobs (Solid Queue)
 
-- **Sidekiq:** Redis-backed, high performance, extensive ecosystem
-- **Solid Queue:** Database-backed, no Redis required (Rails 8 default)
+Database-backed job processing, no Redis required.
 
-→ See **solid-queue-setup** skill for Solid Queue, or configure Sidekiq separately.
+→ See **solid-queue-setup** skill for details.
 
 ### Real-time (Action Cable + Solid Cable)
 
