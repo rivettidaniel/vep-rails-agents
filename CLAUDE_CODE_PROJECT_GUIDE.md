@@ -47,9 +47,9 @@ Then use recommended agents to implement
 
 ---
 
-## Available Agents (33 total)
+## Available Agents (34 total)
 
-### 1. Specialist Agents (30)
+### 1. Specialist Agents (31)
 
 #### Testing & TDD (3 agents)
 
@@ -68,7 +68,7 @@ Then use recommended agents to implement
 
 ---
 
-#### Implementation (10 agents)
+#### Implementation (11 agents)
 
 | Agent | Purpose | When to Use |
 |-------|---------|-------------|
@@ -83,6 +83,7 @@ Then use recommended agents to implement
 | `@job_agent` | Background jobs (Solid Queue) | Async work |
 | `@mailer_agent` | Mailers with previews | Email sending |
 | `@migration_agent` | Safe migrations | Database schema changes |
+| `@gem_agent` | Gemfile and dependencies | Managing gems and versions |
 | `@implementation_agent` | General implementation | General coding tasks |
 
 **Example:**

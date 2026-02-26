@@ -69,7 +69,7 @@ A curated collection of specialized AI agents for Rails development, organized i
 3. **VEP Planning System** - State-persistent project planning with wave-based parallel execution
 4. **Skills Library** - Reusable knowledge modules for specific Rails patterns and technologies
 
-> **New:** Check out the [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md) to use this project's 33 agents and 30 skills with Claude Code. Use `/vep-feature` to spec + plan any feature and generate a wave-structured PHASE_PLAN automatically. For general Rails setup, see [Claude Code Setup Template](CLAUDE_CODE_SETUP_TEMPLATE.md).
+> **New:** Check out the [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md) to use this project's 34 agents and 30 skills with Claude Code. Use `/vep-feature` to spec + plan any feature and generate a wave-structured PHASE_PLAN automatically. For general Rails setup, see [Claude Code Setup Template](CLAUDE_CODE_SETUP_TEMPLATE.md).
 
 Built using insights from [GitHub's analysis of 2,500+ agent.md files](https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/).
 
@@ -365,9 +365,9 @@ All agents follow best practices from GitHub's analysis:
 
 **Quick Start:** [CLAUDE_CODE_PROJECT_GUIDE.md](CLAUDE_CODE_PROJECT_GUIDE.md)
 
-This guide shows how to use the **33 agents** and **30 skills** in this project:
+This guide shows how to use the **34 agents** and **30 skills** in this project:
 
-- **Specialist Agents (30)** - Testing, implementation, frontend, quality, design patterns
+- **Specialist Agents (31)** - Testing, implementation, frontend, quality, design patterns
 - **Feature Spec Agents (3)** - Specification, planner, reviewer
 - **VEP Planning System** - `/vep-init`, `/vep-feature`, `/vep-wave`, `/vep-state`
 - **Skills (30)** - Architecture patterns, Hotwire, design patterns, and more
