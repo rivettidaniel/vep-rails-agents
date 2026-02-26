@@ -1,11 +1,11 @@
 <div align="center">
 
-<img src="assets/banner.svg" alt="DÉJATE DE MARIQUERAS — Venezuelan Execution Protocol v1.0" width="900"/>
+<img src="assets/banner.svg" alt="DÉJATE DE MARIQUERAS — Venezuelan Execution Protocol v1.1" width="900"/>
 
 **A specialized AI agent suite for Rails development with wave-based parallel execution.**
 
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
-[![Rails](https://img.shields.io/badge/Rails-7%2B-red?style=for-the-badge&logo=rubyonrails)](https://rubyonrails.org)
+[![Rails](https://img.shields.io/badge/Rails-7--8-red?style=for-the-badge&logo=rubyonrails)](https://rubyonrails.org)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet?style=for-the-badge)](https://claude.ai/code)
 
 ```bash

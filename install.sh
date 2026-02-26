@@ -2,7 +2,7 @@
 set -e
 
 # ============================================================
-#  VENEZUELAN EXECUTION PROTOCOL v1.0
+#  VENEZUELAN EXECUTION PROTOCOL v1.1
 #  Install script for vep-rails-agents
 # ============================================================
 
@@ -26,7 +26,7 @@ banner() {
   echo "    ╚██╔╝  ███████╗██║     "
   echo "     ╚═╝   ╚══════╝╚═╝     "
   echo ""
-  echo -e "  ${GREEN}[ VENEZUELAN EXECUTION PROTOCOL v1.0 ]${RESET}"
+  echo -e "  ${GREEN}[ VENEZUELAN EXECUTION PROTOCOL v1.1 ]${RESET}"
   echo ""
 }
 
