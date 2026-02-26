@@ -52,7 +52,7 @@
     <text class="text green" font-size="14" y="148" xml:space="preserve">     ╚═╝   ╚══════╝╚═╝     </text>
 
     <!-- Title and tagline -->
-    <text class="text white" font-size="15" y="188">  Venezuelan Execution Protocol <tspan class="dim">v1.0</tspan></text>
+    <text class="text white" font-size="15" y="188">  Venezuelan Execution Protocol <tspan class="dim">v1.1</tspan></text>
     <text class="text white" font-size="15" y="212">  <tspan class="dim">Déjate de mariqueras.</tspan> 33 agents · 30 skills · wave-based parallel execution.</text>
 
     <!-- Install output -->
