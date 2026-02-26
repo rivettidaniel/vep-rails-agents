@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/banner.svg" alt="DÉJATE DE MARIQUERAS — Venezuelan Execution Protocol v1.1" width="900"/>
+<img src="assets/banner.svg?v=1.1" alt="DÉJATE DE MARIQUERAS — Venezuelan Execution Protocol v1.1" width="900"/>
 
 **A specialized AI agent suite for Rails development with wave-based parallel execution.**
 
