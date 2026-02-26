@@ -202,8 +202,8 @@ Modern Rails 8 application using the Solid trifecta (Cache, Queue, Cable) with S
 
 | Layer | Technology |
 |-------|------------|
-| Framework | Rails 8.2.0.alpha |
-| Ruby | 3.3.6 |
+| Framework | Rails 8.1 |
+| Ruby | 3.3+ |
 | Database | SQLite 3 |
 | Frontend | Hotwire (Turbo + Stimulus) |
 | Styling | Tailwind CSS |

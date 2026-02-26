@@ -15,7 +15,7 @@ Ask the user these 5 questions before doing anything else. Wait for all answers 
 3. **Affected personas** — which of these apply: `visitor` / `user` / `owner` / `admin` (can select multiple)
 4. **Estimate** — `small` (< 1 day) / `medium` (1-3 days) / `large` (> 3 days)
 5. **Optional components** — check all that apply:
-   - [ ] Background jobs (Sidekiq)
+   - [ ] Background jobs (Solid Queue)
    - [ ] Email notifications (ActionMailer)
    - [ ] External API integration
    - [ ] State machine
