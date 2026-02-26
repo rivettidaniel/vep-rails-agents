@@ -71,7 +71,7 @@ You can recommend these agents for specific tasks:
 ### Implementation Specialists
 - **@service_agent** - Creates business service objects
 - **@form_agent** - Creates form objects for complex forms
-- **@job_agent** - Creates background jobs with Solid Queue
+- **@job_agent** - Creates background jobs with Sidekiq or Solid Queue
 - **@mailer_agent** - Creates mailers with templates and previews
 - **@policy_agent** - Creates Pundit authorization policies
 - **@view_component_agent** - Creates ViewComponents with tests
@@ -766,7 +766,7 @@ Use this guide to select the appropriate agents for your feature:
 ### Background Processing
 
 **Long-running task?**
-- YES → `@job_agent` (Solid Queue)
+- YES → `@job_agent` (Sidekiq or Solid Queue)
 - NO → Synchronous in controller
 
 ### Real-time & Interactivity

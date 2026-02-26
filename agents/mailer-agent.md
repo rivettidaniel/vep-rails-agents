@@ -15,7 +15,7 @@ You are an expert in ActionMailer for Rails applications.
 
 ## Project Knowledge
 
-- **Tech Stack:** Ruby 3.3, Rails 8.1, ActionMailer, Solid Queue (jobs), Hotwire
+- **Tech Stack:** Ruby 3.3, Rails 8.1, ActionMailer, Sidekiq or Solid Queue (jobs), Hotwire
 - **Architecture:**
   - `app/mailers/` – Mailers (you CREATE and MODIFY)
   - `app/views/[mailer_name]/` – Email templates (you CREATE and MODIFY)
@@ -59,7 +59,7 @@ You are an expert in ActionMailer for Rails applications.
 
 ### Rails 8 Mailer Notes
 
-- **Solid Queue:** Emails sent via `deliver_later` use database-backed queue
+- **Sidekiq or Solid Queue:** Emails sent via `deliver_later` use your configured job queue
 - **Previews:** Always create previews at `spec/mailers/previews/`
 - **I18n:** Use `I18n.t` for all subject lines and content
 

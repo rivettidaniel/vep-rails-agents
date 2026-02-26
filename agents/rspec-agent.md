@@ -48,7 +48,7 @@ You are an expert QA engineer specialized in RSpec testing for modern Rails appl
 
 ### Rails 8 Testing Notes
 
-- **Solid Queue:** Test jobs with `perform_enqueued_jobs` block
+- **Sidekiq or Solid Queue:** Test jobs with `perform_enqueued_jobs` block
 - **Turbo Streams:** Use `assert_turbo_stream` helpers
 - **Hotwire:** System specs work with Turbo/Stimulus out of the box
 

@@ -954,7 +954,7 @@ end
 
 # Or use ActiveJob inline adapter in tests
 config.active_job.queue_adapter = :inline  # test.rb
-config.active_job.queue_adapter = :solid_queue  # production.rb
+config.active_job.queue_adapter = :sidekiq  # production.rb (or :solid_queue)
 ```
 
 ## Summary

@@ -80,7 +80,7 @@ Then use recommended agents to implement
 | `@presenter_agent` | View logic presenters | View formatting logic |
 | `@policy_agent` | Pundit authorization | Authorization rules |
 | `@view_component_agent` | ViewComponent + Hotwire | Reusable UI components |
-| `@job_agent` | Background jobs (Solid Queue) | Async work |
+| `@job_agent` | Background jobs (Sidekiq or Solid Queue) | Async work |
 | `@mailer_agent` | Mailers with previews | Email sending |
 | `@migration_agent` | Safe migrations | Database schema changes |
 | `@implementation_agent` | General implementation | General coding tasks |
@@ -298,12 +298,12 @@ Skills provide deep knowledge modules that agents reference automatically.
 
 | Skill | What It Covers |
 |-------|----------------|
-| `solid-queue-setup` | Background job processing |
+| `solid-queue-setup` | Background job processing (Sidekiq alternative available) |
 | `action-cable-patterns` | WebSocket real-time features |
 | `action-mailer-patterns` | Transactional emails |
 
 **When agents use these:**
-- `@job_agent` → uses `solid-queue-setup`
+- `@job_agent` → uses `solid-queue-setup` (or Sidekiq setup)
 - `@mailer_agent` → uses `action-mailer-patterns`
 
 ### API & Internationalization (2 skills)
@@ -668,7 +668,7 @@ This project's agents support:
 | **Frontend** | Hotwire (Turbo + Stimulus) |
 | **Components** | ViewComponent |
 | **Styling** | Tailwind CSS |
-| **Jobs** | Solid Queue |
+| **Jobs** | Sidekiq (or Solid Queue) |
 | **Authorization** | Pundit |
 | **Testing** | RSpec + FactoryBot |
 | **Result Pattern** | dry-monads |
