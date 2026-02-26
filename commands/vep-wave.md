@@ -73,6 +73,32 @@ Mark task as completed in PHASE_PLAN.md progress tracker:
 - Start Wave 2: [next wave description]
 ```
 
+## Execution with Permissions Flag
+
+For faster parallel execution without permission prompts between tasks, use the `--dangerously-skip-permissions` flag:
+
+```bash
+/vep-wave 1 --dangerously-skip-permissions
+```
+
+This flag:
+- ✅ Skips permission confirmations between parallel agent calls
+- ✅ Allows all agents to execute without blocking on user input
+- ✅ Ideal for large multi-task waves where you've already verified the task scope
+- ⚠️ Use only when you've reviewed the full PHASE_PLAN.md and trust the task definitions
+- ⚠️ Not recommended for first-time or high-risk waves without careful review
+
+**When to use:**
+- Wave 2-6 after Wave 1 RED phase validates the overall approach
+- Multiple parallel tasks with proven patterns
+- Large features where stopping to confirm each agent adds context overhead
+
+**When NOT to use:**
+- Wave 1 (RED phase) - review failing tests carefully
+- First time running a new feature pattern
+- When modifying core architecture
+- When you haven't reviewed the full task scope
+
 ## Wave Completion Report
 
 After all tasks in a wave are done, output:
