@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540">
+  <defs>
+    <style>
+      .terminal-bg { fill: #1a1b26; }
+      .terminal-border { fill: #24283b; }
+      .title-bar { fill: #1f2335; }
+      .btn-red { fill: #f7768e; }
+      .btn-yellow { fill: #e0af68; }
+      .btn-green { fill: #9ece6a; }
+      .text { font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', Consolas, monospace; }
+      .prompt { fill: #7aa2f7; }
+      .command { fill: #c0caf5; }
+      .cyan { fill: #7dcfff; }
+      .green { fill: #9ece6a; }
+      .yellow { fill: #e0af68; }
+      .red { fill: #f7768e; }
+      .dim { fill: #565f89; }
+      .white { fill: #c0caf5; }
+    </style>
+  </defs>
+
+  <!-- Window border -->
+  <rect class="terminal-border" width="960" height="540" rx="12"/>
+  <rect class="terminal-bg" x="1" y="1" width="958" height="538" rx="11"/>
+
+  <!-- Title bar -->
+  <rect class="title-bar" x="1" y="1" width="958" height="36" rx="11"/>
+  <rect class="terminal-bg" x="1" y="26" width="958" height="12"/>
+
+  <!-- Window buttons -->
+  <circle class="btn-red" cx="24" cy="19" r="7"/>
+  <circle class="btn-yellow" cx="48" cy="19" r="7"/>
+  <circle class="btn-green" cx="72" cy="19" r="7"/>
+
+  <!-- Title bar label -->
+  <text x="480" y="24" text-anchor="middle" class="text dim" font-size="13">bash</text>
+
+  <!-- Content -->
+  <g transform="translate(32, 72)">
+
+    <!-- Install command prompt -->
+    <text class="text prompt" font-size="15" y="0">~</text>
+    <text class="text dim" font-size="15" x="16" y="0">$</text>
+    <text class="text command" font-size="14" x="36" y="0">curl -fsSL https://raw.githubusercontent.com/rivettidaniel/rails_ai_agents/main/install.sh | bash</text>
+
+    <!-- VEP ASCII art (green) -->
+    <text class="text green" font-size="14" y="48"  xml:space="preserve">  ██╗   ██╗███████╗██████╗ </text>
+    <text class="text green" font-size="14" y="68"  xml:space="preserve">  ██║   ██║██╔════╝██╔══██╗</text>
+    <text class="text green" font-size="14" y="88"  xml:space="preserve">  ╚██╗ ██╔╝█████╗  ██████╔╝</text>
+    <text class="text green" font-size="14" y="108" xml:space="preserve">   ╚████╔╝ ██╔══╝  ██╔═══╝ </text>
+    <text class="text green" font-size="14" y="128" xml:space="preserve">    ╚██╔╝  ███████╗██║     </text>
+    <text class="text green" font-size="14" y="148" xml:space="preserve">     ╚═╝   ╚══════╝╚═╝     </text>
+
+    <!-- Title and tagline -->
+    <text class="text white" font-size="15" y="188">  Venezuelan Execution Protocol <tspan class="dim">v1.0</tspan></text>
+    <text class="text white" font-size="15" y="212">  <tspan class="dim">Déjate de mariqueras.</tspan> 33 agents · 30 skills · wave-based parallel execution.</text>
+
+    <!-- Install output -->
+    <text class="text" font-size="15" y="260"><tspan class="green">  ✓</tspan><tspan class="white"> Installed agents/         </tspan><tspan class="dim">(33 specialist agents)</tspan></text>
+    <text class="text" font-size="15" y="282"><tspan class="green">  ✓</tspan><tspan class="white"> Installed skills/         </tspan><tspan class="dim">(30 knowledge modules)</tspan></text>
+    <text class="text" font-size="15" y="304"><tspan class="green">  ✓</tspan><tspan class="white"> Installed commands/        </tspan><tspan class="dim">(vep-init, vep-feature, vep-wave, vep-state)</tspan></text>
+    <text class="text" font-size="15" y="326"><tspan class="green">  ✓</tspan><tspan class="white"> Installed features/        </tspan><tspan class="dim">(feature specs and templates)</tspan></text>
+    <text class="text" font-size="15" y="348"><tspan class="green">  ✓</tspan><tspan class="white"> Installed planning/        </tspan><tspan class="dim">(PROJECT, ROADMAP, STATE, PHASE_PLAN)</tspan></text>
+
+    <!-- Done message -->
+    <text class="text" font-size="15" y="396">  <tspan class="green">Done!</tspan><tspan class="white"> Run </tspan><tspan class="cyan">/vep-init</tspan><tspan class="white"> to initialize your project.</tspan></text>
+
+    <!-- New prompt with cursor -->
+    <text class="text prompt" font-size="15" y="444">~</text>
+    <text class="text dim" font-size="15" x="16" y="444">$</text>
+    <text class="text white" font-size="15" x="36" y="444">▌</text>
+
+  </g>
+</svg>
