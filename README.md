@@ -19,6 +19,45 @@ curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main
 curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main/install.sh | bash -s -- --uninstall
 ```
 
+### How It Works
+
+VEP installs once globally to `~/.vep/` and creates **symlinks** in each project's `.claude/` directory:
+
+```
+~/.vep/                    (global installation)
+├── agents/
+├── commands/
+├── skills/
+└── planning/
+
+Your Project:
+.claude/
+├── agents → ~/.vep/agents         (symlink)
+├── commands → ~/.vep/commands     (symlink)
+├── skills → ~/.vep/skills         (symlink)
+└── planning → ~/.vep/planning     (symlink)
+```
+
+**This means:**
+- ✅ Install once, use everywhere
+- ✅ Updates automatically across all projects
+- ✅ No file duplication
+
+### Updating to Latest Version
+
+**Option 1:** Run the install script again (auto-detects and updates):
+```bash
+curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main/install.sh | bash
+```
+
+**Option 2:** Manual update (from anywhere):
+```bash
+cd ~/.vep
+git pull
+```
+
+Both options automatically update agents in **all your projects** that use VEP. 🚀
+
 </div>
 
 ---
