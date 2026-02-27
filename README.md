@@ -19,7 +19,11 @@ curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main
 curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main/install.sh | bash -s -- --uninstall
 ```
 
-### How It Works
+</div>
+
+---
+
+## How It Works
 
 VEP installs once globally to `~/.vep/` and creates **symlinks** in each project's `.claude/` directory:
 
@@ -43,7 +47,9 @@ Your Project:
 - ✅ Updates automatically across all projects
 - ✅ No file duplication
 
-### Updating to Latest Version
+---
+
+## Updating to Latest Version
 
 **Option 1:** Run the install script again (auto-detects and updates):
 ```bash
@@ -58,7 +64,9 @@ git pull
 
 Both options automatically update agents in **all your projects** that use VEP. 🚀
 
-### Optional: Set Up Global Security Hooks
+---
+
+## Optional: Set Up Global Security Hooks
 
 Protect your Rails projects with global Claude Code hooks (one-time setup per machine):
 
