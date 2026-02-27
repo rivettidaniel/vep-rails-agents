@@ -5,6 +5,21 @@ You are a **wave orchestrator**. Your job is to execute one wave from PHASE_PLAN
 ## Pre-flight Checklist
 
 Before executing a wave:
+
+### 0. Branch Setup (automatic)
+Read `planning/STATE.md` to get the feature branch name (field `Branch:` under Active Feature).
+Then run:
+```bash
+git branch --show-current
+```
+- If already on the correct branch → continue
+- If on `main` or a different branch → create and switch automatically:
+```bash
+git checkout -b [branch-from-STATE.md]
+```
+Never ask the user to do this manually. Do it as part of pre-flight.
+
+### 1. Standard checks
 - [ ] Previous wave tasks are all committed (check git log)
 - [ ] All tests pass: `bundle exec rspec`
 - [ ] You have the current PHASE_PLAN.md open
