@@ -58,6 +58,27 @@ git pull
 
 Both options automatically update agents in **all your projects** that use VEP. 🚀
 
+### Optional: Set Up Global Security Hooks
+
+Protect your Rails projects with global Claude Code hooks (one-time setup per machine):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main/setup-hooks.sh | bash
+```
+
+This sets up optional hooks to:
+- ✅ **Block sensitive file access** - Prevents reading `.env`, `master.key`, credentials
+- ✅ **Block dangerous commands** - Prevents `rm -rf /`, force push, `chmod 777`
+- ✅ **Auto-format code** - Runs RuboCop after Ruby edits (optional)
+
+**What happens:**
+- Hooks install to `~/.claude/hooks/` (global, shared by all projects)
+- Configuration goes in `~/.claude/settings.json`
+- All your Rails projects automatically benefit from these protections
+- You can uninstall anytime: `bash setup-hooks.sh --uninstall`
+
+See [SETUP_HOOKS_README.md](SETUP_HOOKS_README.md) for detailed documentation.
+
 </div>
 
 ---
