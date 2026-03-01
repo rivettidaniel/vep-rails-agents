@@ -557,7 +557,7 @@ The **VEP (Venezuelan Execution Protocol)** system adds project-level planning a
 | `planning/ROADMAP.md` | Phase-by-phase plan with branch names and PR checklists |
 | `planning/STATE.md` | Architecture Decision Records (ADRs), blockers, session log |
 | `planning/PHASE_PLAN.md` | XML-structured atomic tasks with wave groupings and verifications |
-| `features/[name].md` | Feature specification output from `/vep-feature` (via @feature_specification_agent) |
+| `planning/features/[name].md` | Feature specification output from `/vep-feature` (via @feature_specification_agent) |
 
 ### How It Works
 
@@ -579,7 +579,7 @@ The **VEP (Venezuelan Execution Protocol)** system adds project-level planning a
   └─> planning/PHASE_PLAN.md (wave tasks XML)
 
 /vep-feature
-  └─> @feature_specification_agent writes features/[name].md
+  └─> @feature_specification_agent writes planning/features/[name].md
   └─> @feature_reviewer_agent verifies spec completeness
   └─> PHASE_PLAN.md updated with wave structure (agent + skills per task)
 

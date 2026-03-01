@@ -82,6 +82,16 @@ When using these templates, you'll reference these specialist agents:
 
 ---
 
+## Output Locations
+
+Generated feature specifications go to the **VEP planning directory**:
+
+- **Template source:** Copy from `features/FEATURE_TEMPLATE.md` or `features/PARALLEL_EXECUTION_TEMPLATE.md`
+- **Generated output:** `planning/features/[feature-name].md` (via `/vep-feature`)
+- **Why:** All VEP outputs live in `planning/` to centralize project state
+
+---
+
 ## Workflow: From Spec to Parallel Execution
 
 ```
@@ -91,13 +101,13 @@ When using these templates, you'll reference these specialist agents:
            ↓
 2. @feature_planner_agent
    └─> Generate implementation plan with PR breakdown
-       └─> Creates: [feature-name]-plan.md
+       └─> Creates: planning/features/[feature-name]-plan.md
            ↓
 3. PARALLEL_EXECUTION_TEMPLATE.md
    └─> Analyze plan dependencies
    └─> Group into parallel waves
    └─> Generate execution prompts
-       └─> Creates: [feature-name]-PARALLEL-EXECUTION.md
+       └─> Creates: planning/features/[feature-name]-PARALLEL-EXECUTION.md
            ↓
 4. Execute Feature
    └─> Follow wave-by-wave execution

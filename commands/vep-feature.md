@@ -43,7 +43,7 @@ Feature context:
 - Estimate: [user's answer]
 - Optional components: [user's answer]
 
-Save the output to: features/[feature-name].md
+Save the output to: planning/features/[feature-name].md
 ```
 
 Wait for the spec to be written before proceeding.
@@ -55,7 +55,7 @@ Wait for the spec to be written before proceeding.
 Call `@feature_reviewer_agent` with:
 
 ```
-Review features/[feature-name].md against features/FEATURE_TEMPLATE.md.
+Review planning/features/[feature-name].md against features/FEATURE_TEMPLATE.md.
 
 Score it out of 10. Provide:
 - Score: X/10
@@ -211,7 +211,7 @@ Append the following entry to `planning/STATE.md` under the current session head
 
 ```markdown
 ### Active Feature: [feature-name]
-**Spec:** features/[feature-name].md (score: X/10)
+**Spec:** planning/features/[feature-name].md (score: X/10)
 **Plan:** planning/PHASE_PLAN.md (N tasks, 6 waves)
 **Branch:** feature/[feature-name]
 **Status:** Ready for /vep-wave 1
@@ -228,7 +228,7 @@ Feature Planning Complete
 
 Feature:   [feature-name]
 Problem:   [1-sentence summary]
-Spec:      features/[feature-name].md (score: X/10)
+Spec:      planning/features/[feature-name].md (score: X/10)
 Plan:      planning/PHASE_PLAN.md (N tasks across 6 waves)
 Branch:    feature/[feature-name]
 

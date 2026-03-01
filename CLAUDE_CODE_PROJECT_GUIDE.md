@@ -473,7 +473,7 @@ Skills provide deep knowledge modules that agents reference automatically.
 # STEP 2: Feature Specification
 /vep-feature                 # Spec "[feature name]"
 # Runs: @feature_specification_agent + @feature_reviewer_agent
-# Output: features/[feature_name].md + PHASE_PLAN.md with wave structure
+# Output: planning/features/[feature_name].md + PHASE_PLAN.md with wave structure
 
 # STEP 3: Execute Waves (RED → GREEN → REFACTOR)
 /vep-wave 1                  # RED — failing tests (all parallel)
