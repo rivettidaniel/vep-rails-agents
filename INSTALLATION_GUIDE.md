@@ -82,6 +82,21 @@ my-rails-app/.claude/
 └── CLAUDE.md (you create this)
 ```
 
+**For Cursor:** Create `.cursor/` and pass `--cursor` so symlinks are created in `.cursor/` instead:
+
+```bash
+cd ~/my-rails-app/
+mkdir -p .cursor
+curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main/install.sh | bash -s -- --cursor
+```
+
+Result: agents appear as Cursor **subagents** (`.cursor/agents/`), skills as **Agent Skills** (`.cursor/skills/`). See [CURSOR_SETUP.md](CURSOR_SETUP.md) for usage.
+
+**Uninstall from Cursor project:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main/install.sh | bash -s -- --cursor --uninstall
+```
+
 ---
 
 ### Step 2: (Optional) Set Up Global Security Hooks

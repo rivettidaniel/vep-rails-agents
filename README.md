@@ -7,16 +7,28 @@
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
 [![Rails](https://img.shields.io/badge/Rails-7--8-red?style=for-the-badge&logo=rubyonrails)](https://rubyonrails.org)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-compatible-blueviolet?style=for-the-badge)](https://claude.ai/code)
+[![Cursor](https://img.shields.io/badge/Cursor-compatible-00d4aa?style=for-the-badge&logo=cursor)](https://cursor.com)
 
+**Claude Code (default):**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main/install.sh | bash
 ```
-
 > Run from your Rails project root. Requires a `.claude/` directory — create it with `mkdir .claude` if needed.
 
+**Cursor:**
 ```bash
-# Uninstall
+mkdir -p .cursor
+curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main/install.sh | bash -s -- --cursor
+```
+> Run from your Rails project root. Requires a `.cursor/` directory — create it with `mkdir .cursor` if needed.
+
+**Uninstall:**
+```bash
+# Claude (default)
 curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main/install.sh | bash -s -- --uninstall
+
+# Cursor
+curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main/install.sh | bash -s -- --cursor --uninstall
 ```
 
 </div>
@@ -25,20 +37,28 @@ curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main
 
 ## How It Works
 
-VEP installs once globally to `~/.vep/` and creates **symlinks** in each project's `.claude/` directory:
+VEP installs once globally to `~/.vep/` and creates **symlinks** in each project's IDE directory (`.claude/` for Claude Code or `.cursor/` for Cursor):
 
 ```
 ~/.vep/                    (global installation)
 ├── agents/
 ├── commands/
 ├── skills/
+├── features/
 └── planning/
 
-Your Project:
+Your Project (Claude Code):
 .claude/
 ├── agents → ~/.vep/agents         (symlink)
 ├── commands → ~/.vep/commands     (symlink)
 ├── skills → ~/.vep/skills         (symlink)
+└── planning → ~/.vep/planning     (symlink)
+
+Your Project (Cursor):
+.cursor/
+├── agents → ~/.vep/agents         (symlink) — subagents
+├── commands → ~/.vep/commands     (symlink)
+├── skills → ~/.vep/skills         (symlink) — Agent Skills
 └── planning → ~/.vep/planning     (symlink)
 ```
 
@@ -98,7 +118,9 @@ A curated collection of specialized AI agents for Rails development, organized i
 3. **VEP Planning System** - State-persistent project planning with wave-based parallel execution
 4. **Skills Library** - Reusable knowledge modules for specific Rails patterns and technologies
 
-> **New:** Check out the [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md) to use this project's 34 agents and 30 skills with Claude Code. Use `/vep-feature` to spec + plan any feature and generate a wave-structured PHASE_PLAN automatically. For general Rails setup, see [Claude Code Setup Template](CLAUDE_CODE_SETUP_TEMPLATE.md).
+> **New:** Use this project's 34 agents and 30 skills in your IDE:
+> - **Claude Code:** [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md) — use `/vep-feature` to spec + plan any feature and generate a wave-structured PHASE_PLAN. For general Rails setup, see [Claude Code Setup Template](CLAUDE_CODE_SETUP_TEMPLATE.md).
+> - **Cursor:** [Cursor Setup Guide](CURSOR_SETUP.md) — install with `--cursor` and use the same agents as subagents and skills in Cursor Agent.
 
 Built using insights from [GitHub's analysis of 2,500+ agent.md files](https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/).
 
@@ -388,9 +410,9 @@ All agents follow best practices from GitHub's analysis:
 
 ---
 
-## Claude Code Setup
+## IDE Setup
 
-### Using This Project with Claude Code
+### Claude Code
 
 **Quick Start:** [CLAUDE_CODE_PROJECT_GUIDE.md](CLAUDE_CODE_PROJECT_GUIDE.md)
 
@@ -410,6 +432,12 @@ For configuring Claude Code with **any Rails project**, see [CLAUDE_CODE_SETUP_T
 - **Security Hooks** - Block secrets, dangerous commands, Rails-specific protections
 - **Custom Commands** - `/ci`, `/lint`, `/security`, `/rails-test`, `/generate`
 - **MCP Servers** - GitHub, PostgreSQL, sequential thinking integration
+
+### Cursor
+
+**Quick Start:** [CURSOR_SETUP.md](CURSOR_SETUP.md)
+
+After installing with `--cursor`, VEP agents appear as **subagents** in Cursor Agent (invoke with `@agent_name` or `/agent-name`), and the skills library is available under `.cursor/skills/`. Use the same workflows (TDD, service objects, VEP planning) as in the Claude Code guide; see CURSOR_SETUP.md for Cursor-specific details and VEP command usage.
 
 ---
 
