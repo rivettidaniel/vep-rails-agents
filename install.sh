@@ -8,7 +8,13 @@ set -e
 
 REPO_URL="https://github.com/rivettidaniel/vep-rails-agents.git"
 INSTALL_DIR="${VEP_DIR:-$HOME/.vep}"
-CLAUDE_DIR=".claude"
+# Target IDE directory: .claude (Claude Code) or .cursor (Cursor)
+# Set via: install.sh --cursor  or  VEP_IDE=cursor install.sh
+TARGET_DIR=".claude"
+for arg in "$@"; do
+  if [ "$arg" = "--cursor" ]; then TARGET_DIR=".cursor"; break; fi
+done
+if [ "${VEP_IDE:-}" = "cursor" ]; then TARGET_DIR=".cursor"; fi
 
 GREEN='\033[0;32m'
 BRIGHT_GREEN='\033[1;32m'
@@ -64,20 +70,21 @@ install_vep() {
 
 # ── Link into project ────────────────────────────────────────
 link_project() {
-  if [ ! -d "$CLAUDE_DIR" ]; then
+  if [ ! -d "$TARGET_DIR" ]; then
     echo ""
-    echo -e "  ${DIM}No .claude/ directory found in current directory.${RESET}"
-    echo -e "  ${DIM}Run from your Rails project root to link VEP into it.${RESET}"
+    echo -e "  ${DIM}No $TARGET_DIR/ directory found in current directory.${RESET}"
+    echo -e "  ${DIM}Run from your Rails project root and create it first: ${BOLD}mkdir -p $TARGET_DIR${RESET}"
+    echo -e "  ${DIM}Then run this script again to link VEP into it.${RESET}"
     echo ""
     return
   fi
 
-  step "Linking VEP into $(pwd)/$CLAUDE_DIR/"
+  step "Linking VEP into $(pwd)/$TARGET_DIR/"
 
   COMPONENTS=("agents" "commands" "skills" "features" "planning")
 
   for component in "${COMPONENTS[@]}"; do
-    target="$CLAUDE_DIR/$component"
+    target="$TARGET_DIR/$component"
     source="$INSTALL_DIR/$component"
 
     if [ -L "$target" ]; then
@@ -93,12 +100,12 @@ link_project() {
 
 # ── Uninstall ────────────────────────────────────────────────
 uninstall_vep() {
-  step "Removing VEP symlinks from $(pwd)/$CLAUDE_DIR/"
+  step "Removing VEP symlinks from $(pwd)/$TARGET_DIR/"
 
   COMPONENTS=("agents" "commands" "skills" "features" "planning")
 
   for component in "${COMPONENTS[@]}"; do
-    target="$CLAUDE_DIR/$component"
+    target="$TARGET_DIR/$component"
     if [ -L "$target" ]; then
       rm "$target"
       ok "Removed $target"
@@ -130,6 +137,9 @@ next_steps() {
   echo -e "  ${GREEN}/vep-state${RESET}     save session state"
   echo ""
   echo -e "  ${DIM}Full docs: https://github.com/rivettidaniel/vep-rails-agents${RESET}"
+  if [ "$TARGET_DIR" = ".cursor" ]; then
+    echo -e "  ${DIM}Cursor guide: CURSOR_SETUP.md (in the vep-rails-agents repo)${RESET}"
+  fi
   echo -e "${BRIGHT_GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
   echo ""
 }
