@@ -160,12 +160,14 @@ Use this table when building the dispatch message to know which skills to pass t
 | `factory_method_agent` | `factory-method-pattern` | Wave 3 |
 | `command_agent` | `command-pattern` | Wave 3 |
 | `packwerk_agent` | `packwerk` | Wave 3-4 |
+| `gem_agent` | `gem-management` | Wave 1-4 (as needed) |
 | `controller_agent` | `rails-controller` | Wave 4 |
 | `view_component_agent` | `viewcomponent-patterns` | Wave 4 |
 | `turbo_agent` | `hotwire-patterns` | Wave 4 |
 | `stimulus_agent` | `hotwire-patterns` | Wave 4 |
 | `mailer_agent` | `action-mailer-patterns` | Wave 4 |
 | `job_agent` | `solid-queue-setup` | Wave 4 |
+| `tailwind_agent` | `tailwind-css` | Wave 4-5 |
 | `tdd_refactoring_agent` | `tdd-cycle`, `rails-architecture` | Wave 5 |
 | `lint_agent` | _(none)_ | Wave 5 |
 | `review_agent` | `rails-architecture` | Wave 6 |

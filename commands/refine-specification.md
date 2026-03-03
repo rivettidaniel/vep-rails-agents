@@ -245,12 +245,12 @@ After all questions are answered, generate a comprehensive summary in this exact
 2. **TDD Workflow** - Use `tdd-orchestrator-agent` to coordinate development
 3. **Technical Design** - Create detailed architecture docs if needed
 
-📋 **Copy this summary** and save it to `docs/features/[feature-name]-specification.md`
+📋 **Copy this summary** and save it to `planning/features/[feature-name].md`
 
 🎯 **Recommended next command:**
 ```bash
-# Use the feature planner agent to create implementation tasks
-@feature-planner-agent "Generate implementation plan from specification at docs/features/[feature-name]-specification.md"
+# Use /vep-feature to generate implementation plan from specification
+/vep-feature
 ```
 ```
 
@@ -260,7 +260,7 @@ After all questions are answered, generate a comprehensive summary in this exact
 2. **Adapt questions to the draft** - Don't ask what's already clearly specified
 3. **Provide realistic options** - Based on Rails/Hotwire best practices
 4. **Flag inconsistencies** - If you spot conflicts or gaps, point them out
-5. **Use project context** - Reference EventEssentials architecture (ViewComponents, Pundit, multi-tenancy)
+5. **Use project context** - Reference Rails best practices (ViewComponents, Pundit, authorization patterns)
 6. **Keep it practical** - Focus on actionable details, not theoretical perfection
 
 ## Output Format Rules
@@ -282,7 +282,7 @@ After all questions are answered, generate a comprehensive summary in this exact
 6. [Ask 2-3 follow-up questions]
 7. "Great! I'm now generating your refined specification summary..."
 8. [Output the structured summary]
-9. "✅ Your specification is ready! Copy the summary above and save it to `docs/features/[name]-specification.md`. Would you like me to proceed with implementation planning?"
+9. "✅ Your specification is ready! Copy the summary above and save it to `planning/features/[name].md`. Next, run `/vep-feature` to generate your implementation plan."
 
 ---
 

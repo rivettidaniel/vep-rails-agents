@@ -310,7 +310,7 @@ Based on your analysis, recommend one option with clear reasoning:
 **Next steps if approved:**
 1. [First action]
 2. [Second action]
-3. Run `@refine-draft-specs` with the specification below
+3. Run `/refine-specification` with the specification below
 ```
 
 ---
@@ -368,11 +368,11 @@ If the solution requires code (not process/config change), generate a **draft sp
 
 ---
 
-**💾 Save this draft to:** `docs/features/feature-name/specification.md`
+**💾 Save this draft to:** `planning/features/feature-name.md`
 
 **🔄 Next command:**
 ```bash
-@refine-draft-specs docs/features/feature-name/specification.md
+/refine-specification
 ```
 
 ---
@@ -425,7 +425,7 @@ If the solution requires code (not process/config change), generate a **draft sp
 8. [Present options with trade-offs]
 9. **"I recommend Option B because... Does this align with your thinking?"**
 10. [Get feedback]
-11. **"Here's a draft specification. Save it and run `@refine-draft-specs` next."**
+11. **"Here's a draft specification. Save it and run `/refine-specification` next."**
 
 ---
 
