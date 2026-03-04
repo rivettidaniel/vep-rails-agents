@@ -185,7 +185,7 @@ module Billing
   # @example Find invoice by order
   #   Billing::InvoiceFinder.for_order(order)
   #
-  InvoiceFinder = ::Billing::InvoiceFinder Service
+  InvoiceFinder = ::Billing::InvoiceFinderService
 end
 ```
 
@@ -762,8 +762,12 @@ RSpec.describe "Billing Package" do
   end
 
   describe "Privacy" do
-    it "does not expose Invoice model directly" do
-      expect { Billing::Invoice }.to raise_error(NameError)
+    # Packwerk enforces privacy statically, not at runtime.
+    # Constants are still accessible in Ruby's object space during tests.
+    # Use packwerk check to verify privacy, not NameError expectations.
+    it "reports no privacy violations" do
+      result = `bundle exec packwerk check --packages=app/packages/billing`
+      expect(result).not_to include("privacy violation")
     end
   end
 end

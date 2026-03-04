@@ -767,16 +767,13 @@ RSpec.describe "Billing Package" do
   end
 
   describe "Privacy" do
-    it "does not expose private Invoice model" do
-      expect { Billing::Invoice }.to raise_error(NameError)
-    end
-
-    it "does not expose private Payment model" do
-      expect { Billing::Payment }.to raise_error(NameError)
-    end
-
-    it "does not expose private service implementations" do
-      expect { Billing::InvoiceCreatorService }.to raise_error(NameError)
+    # Packwerk is a static analysis tool, not a runtime enforcer.
+    # Constants ARE accessible at runtime — privacy is enforced by `packwerk check`.
+    # Verify package-level privacy via the packwerk_spec.rb compliance tests instead:
+    #   bundle exec packwerk check --packages=app/packages/billing
+    it "reports no privacy violations" do
+      result = `bundle exec packwerk check --packages=app/packages/billing`
+      expect(result).not_to include("privacy violation")
     end
   end
 
@@ -889,6 +886,29 @@ Circular dependency detected:
 - [ ] `package_todo.yml` violations are tracked
 - [ ] Public API is documented
 - [ ] Namespaces follow Zeitwerk conventions
+
+## Related Skills
+
+| Skill | When to Use With Packwerk |
+|-------|--------------------------|
+| `packwerk` | Full Packwerk reference (configuration, migration, CI setup) |
+| `event-dispatcher-pattern` | Break circular dependencies by dispatching events across package boundaries |
+| `rails-service-object` | Services inside packages follow the same Result pattern conventions |
+| `rails-query-object` | Query objects are a common pattern for private package internals |
+| `tdd-cycle` | TDD workflow when building a new package (public API tests first) |
+
+### Packwerk vs Other Modularization Approaches
+
+| Need | Use |
+|------|-----|
+| Enforce explicit package boundaries and privacy | **Packwerk** |
+| Share logic between multiple controllers/models | Rails `Concern` |
+| Isolate a complex domain (billing, shipping) | **Packwerk** package |
+| Reusable gem-level extraction | Ruby gem / Rails engine |
+| Runtime privacy enforcement (not just static) | `packwerk` + `package_protections` gem |
+| Simple namespace grouping (no enforcement) | Ruby `module` namespace |
+
+> Rule of thumb: use Packwerk when you need a linter-enforced contract — "this code cannot touch that package's internals." Use plain modules for organization without enforcement.
 
 ## Guidelines
 
