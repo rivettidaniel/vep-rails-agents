@@ -196,7 +196,7 @@ RSpec.describe SendWelcomeEmailJob, type: :job do
     it 'sends welcome email' do
       expect {
         described_class.perform_now(user.id)
-      }.to have_enqueued_mail(UserMailer, :welcome)
+      }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
 

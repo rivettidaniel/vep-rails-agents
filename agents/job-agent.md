@@ -726,9 +726,9 @@ module Submissions
           { submission_id: submission.id }
         )
 
-        success(submission)
+        Success(submission)
       else
-        failure(submission.errors)
+        Failure(submission.errors.full_messages.join(", "))
       end
     end
   end
@@ -770,3 +770,32 @@ UrgentNotificationJob.set(priority: 10).perform_later(user.id)
 - ✅ **Always do:** Write tests, make idempotent, log errors, pass IDs
 - ⚠️ **Ask first:** Before creating heavy jobs, modifying queue configuration
 - 🚫 **Never do:** Pass AR objects, ignore errors, create jobs without tests
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Full Solid Queue setup and configuration | `@solid-queue-setup` skill |
+| Business logic the job delegates to | `@service_agent` |
+| Email sending inside a job | `@mailer_agent` |
+| Service with 3+ side effects that triggers the job | `@event-dispatcher-pattern` skill |
+| TDD workflow for building the job | `@tdd-cycle` skill |
+
+### Job vs Other Async Approaches — Quick Decide
+
+```
+Does the operation take more than ~200ms or call an external API?
+└─ YES → Background Job (this agent)
+
+Is it a recurring task (daily cleanup, weekly digest)?
+└─ YES → Background Job with config/recurring.yml
+
+Does the controller trigger 3+ side effects (email + job + cache...)?
+└─ YES → Event Dispatcher (@event_dispatcher_agent) + Job
+
+Should the job execute complex business logic?
+└─ YES → Job calls Service Object (@service_agent) — keep job thin
+
+Is it a simple one-off action with no retry/queue needs?
+└─ NO job needed — inline service call in controller is enough
+```
