@@ -250,7 +250,7 @@ class EntitiesController < ApplicationController
 end
 ```
 
-**Run tests:** `bundle exec rspec spec/controllers/entities_controller_spec.rb`
+**Run tests:** `bundle exec rspec spec/requests/entities_spec.rb`
 
 ### 2. Replace Conditional with Polymorphism
 
@@ -495,7 +495,7 @@ class EntityPolicy < ApplicationPolicy
   private
 
   def admin_or_owner_of_draft?
-    user.admin? || owner_of_draft?
+    user&.admin? || owner_of_draft?
   end
 
   def owner_of_draft?
@@ -599,7 +599,7 @@ class Orders::CreateService < ApplicationService
 
   def call
     Order.transaction do
-      order = Order.create!(params)
+      order = Order.create!(@params)
 
       Orders::ConfirmationService.call(order)
       Orders::InventoryService.call(order)
@@ -609,7 +609,7 @@ class Orders::CreateService < ApplicationService
       Success(order)
     end
   rescue ActiveRecord::RecordInvalid => e
-    Failure(e.record.errors)
+    Failure(e.record.errors.full_messages.join(", "))
   end
 end
 
@@ -754,6 +754,36 @@ When completing a refactoring, provide:
 - **Stop on red** - failing tests mean stop and revert
 - Be **disciplined** - resist the urge to add features
 - Be **pragmatic** - perfect is the enemy of good enough
+
+## Related Skills
+
+| Skill | Use When |
+|-------|----------|
+| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Full RED→GREEN→REFACTOR reference — rules and workflow |
+| [`rails-service-object`](../skills/rails-service-object/SKILL.md) | Extracting business logic from fat models/controllers into services |
+| [`rails-query-object`](../skills/rails-query-object/SKILL.md) | Extracting complex scopes/queries from models |
+| [`event-dispatcher-pattern`](../skills/event-dispatcher-pattern/SKILL.md) | Replacing 3+ after_save side effects with event dispatch |
+| [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Extracting policy logic from controllers into Pundit policies |
+
+### Quick Decide
+
+```
+Refactoring: what pattern to apply?
+└─> Method too long (> 10 lines)?
+    └─> Extract Method (Pattern 1)
+└─> Fat model with callbacks / complex logic?
+    └─> Extract Service Object (Pattern 8) — move side effects to controller
+└─> case/if chain on type?
+    └─> Replace Conditional with Polymorphism (Pattern 2)
+└─> 3+ after_create side effects?
+    └─> Event Dispatcher pattern (see event-dispatcher-pattern skill)
+└─> Duplicated conditionals?
+    └─> Extract named method (Pattern 6) — use user&.method? for nil safety
+└─> Many parameters?
+    └─> Introduce Parameter Object (Pattern 3)
+└─> Magic numbers?
+    └─> Named Constants (Pattern 4)
+```
 
 ## Resources
 
