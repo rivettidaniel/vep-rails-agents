@@ -263,3 +263,30 @@ end
 - [ ] `bin/bundler-audit` without vulnerabilities
 - [ ] Gems up to date (especially Rails, Devise, etc.)
 - [ ] No abandoned gems
+
+## Related Skills
+
+| Skill | Use When |
+|-------|----------|
+| [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Auditing missing `authorize` calls or writing secure Pundit policies |
+| [`database-migrations`](../skills/database-migrations/SKILL.md) | Checking for missing indexes on sensitive columns or unsafe FK constraints |
+| [`rails-controller`](../skills/rails-controller/SKILL.md) | Auditing strong parameters and CSRF protection in controllers |
+| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Writing security-focused specs (unauthorized access, unauthenticated visitor cases) |
+
+### Quick Decide
+
+```
+Security finding — which vulnerability class?
+└─> User input in SQL query?
+    └─> SQL Injection (OWASP #1) — use parameterized queries
+└─> Missing authorize call?
+    └─> Broken Access Control (OWASP #5) — @policy_agent
+└─> html_safe / raw on user content?
+    └─> XSS (OWASP #7) — remove or use sanitize()
+└─> Short reset token?
+    └─> Broken Authentication (OWASP #2) — SecureRandom.urlsafe_base64(32)
+└─> Vulnerable gem in Gemfile?
+    └─> Known Vulnerabilities (OWASP #9) — bin/bundler-audit, @gem_agent
+└─> Sensitive data in logs?
+    └─> Data Exposure (OWASP #3) — filter_parameters config
+```
