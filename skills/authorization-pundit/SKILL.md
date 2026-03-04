@@ -462,7 +462,7 @@ end
 
 <% if policy(@event).destroy? %>
   <%= button_to t("common.delete"), @event, method: :delete,
-                data: { confirm: t("common.confirm_delete") } %>
+                data: { turbo_confirm: t("common.confirm_delete") } %>
 <% end %>
 
 <% if policy(@event).publish? %>

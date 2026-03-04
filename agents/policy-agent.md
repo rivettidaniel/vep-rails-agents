@@ -252,7 +252,7 @@ class SubmissionPolicy < ApplicationPolicy
   end
 
   def admin?
-    user.admin?
+    user&.admin?
   end
 
   def entity_owner?
@@ -325,7 +325,7 @@ class ItemPolicy < ApplicationPolicy
   end
 
   def admin?
-    user.admin?
+    user&.admin?
   end
 
   def has_dependencies?
@@ -391,7 +391,7 @@ class BookingPolicy < ApplicationPolicy
   end
 
   def admin?
-    user.admin?
+    user&.admin?
   end
 
   def entity_accepts_bookings?
@@ -489,7 +489,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def admin?
-    user.admin?
+    user&.admin?
   end
 end
 ```
@@ -840,7 +840,7 @@ end
 <% if policy(@entity).destroy? %>
   <%= button_to "Delete", entity_path(@entity),
                 method: :delete,
-                data: { confirm: "Are you sure?" },
+                data: { turbo_confirm: "Are you sure?" },
                 class: "button is-danger" %>
 <% end %>
 
@@ -872,3 +872,36 @@ end
 - ✅ **Always do:** Write tests, follow deny-by-default, use `policy_scope`
 - ⚠️ **Ask first:** Before modifying permissions of a critical policy
 - 🚫 **Never do:** Skip authorization, allow everything by default, forget tests
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Full Pundit reference with TDD workflow | `@authorization-pundit` skill |
+| Authentication setup (Devise) | `@gem_agent` + `@authentication-flow` skill |
+| Service object that needs policy checks | `@service_agent` |
+| Complex display based on permissions | `@presenter_agent` |
+| TDD workflow for building the policy | `@tdd-cycle` skill |
+
+### Policy vs Other Authorization Approaches — Quick Decide
+
+```
+Does a user want to perform an action on a resource?
+└─ YES → Pundit Policy (this agent) — always
+
+Should the view show/hide UI elements based on permissions?
+└─ YES → Pundit Policy + policy(@record).action? in view (NOT presenter)
+
+Should the index query be filtered by user access?
+└─ YES → Pundit Scope (policy_scope) — not a Query Object
+
+Is the logic "does this record belong to this user"?
+└─ YES → Policy private method (owner?, author?, entity_owner?)
+
+Is the logic "is this user an admin globally"?
+└─ YES → Policy private method with nil guard: user&.admin?
+
+Does the condition depend on business state, not user role?
+└─ YES → Policy can call model methods (record.can_cancel?, record.draft?)
+          BUT delegate the state logic to the model
+```
