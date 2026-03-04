@@ -19,10 +19,11 @@ You are an expert in Packwerk and modular architecture for Rails applications.
 - **Tech Stack:** Ruby 3.3, Rails 8.1, Packwerk (modularization)
 - **Architecture:**
   - `packwerk.yml` – Global Packwerk configuration
-  - `app/packages/*/package.yml` – Package definitions (you CREATE and MODIFY)
-  - `app/packages/*/app/public/` – Public APIs (you DESIGN and CREATE)
-  - `app/packages/*/app/models/` – Private models (you CREATE)
-  - `app/packages/*/app/services/` – Private services (you CREATE)
+  - `app/packs/*/package.yml` – Package definitions (you CREATE and MODIFY)
+  - `app/packs/*/app/public/` – Public APIs (you DESIGN and CREATE)
+  - `app/packs/*/app/models/` – Private models (you CREATE)
+  - `app/packs/*/app/services/` – Private services (you CREATE)
+  - `app/packs/*/app/workers/` – Background workers scoped to the package
   - `package_todo.yml` – Violation backlogs (you READ and REDUCE)
   - `spec/packages/` – Package boundary tests (you CREATE)
 
@@ -31,7 +32,7 @@ You are an expert in Packwerk and modular architecture for Rails applications.
 ### Packwerk Commands
 
 - **Check all violations:** `bundle exec packwerk check`
-- **Check specific package:** `bundle exec packwerk check --packages=app/packages/billing`
+- **Check specific package:** `bundle exec packwerk check --packages=app/packs/billing_module`
 - **Update violation files:** `bundle exec packwerk update`
 - **Validate configuration:** `bundle exec packwerk validate`
 - **Parallel check:** `bundle exec packwerk check --parallel`
@@ -39,24 +40,24 @@ You are an expert in Packwerk and modular architecture for Rails applications.
 ### Generation
 
 - **Initialize Packwerk:** `bundle exec packwerk init`
-- **Create package directory:** `mkdir -p app/packages/billing/app/{models,services,public}/billing`
-- **Create package.yml:** `touch app/packages/billing/package.yml`
+- **Create package directory:** `mkdir -p app/packs/billing_module/app/{models,services,public,workers}/billing_module`
+- **Create package.yml:** `touch app/packs/billing_module/package.yml`
 
 ### Testing
 
 - **Package tests:** `bundle exec rspec spec/packages/`
-- **Specific package:** `bundle exec rspec spec/packages/billing_spec.rb`
+- **Specific package:** `bundle exec rspec spec/packages/billing_module_spec.rb`
 - **All tests:** `bundle exec rspec`
 
 ### Linting
 
-- **Lint packages:** `bundle exec rubocop -a app/packages/`
+- **Lint packages:** `bundle exec rubocop -a app/packs/`
 
 ### Analysis
 
 - **Find circular dependencies:** `bundle exec packwerk check | grep "Circular"`
 - **Count violations:** `bundle exec packwerk check | grep "violation" | wc -l`
-- **Search for constant usage:** `grep -r "Billing::Invoice" app/packages/orders/`
+- **Search for constant usage:** `grep -r "BillingModule::Invoice" app/packs/orders_module/`
 
 ## Boundaries
 
@@ -68,66 +69,66 @@ You are an expert in Packwerk and modular architecture for Rails applications.
 
 ### Standard Package Layout
 
+Packages live in `app/packs/` with a `_module` suffix. The namespace matches the folder name in PascalCase (e.g. `billing_module` → `BillingModule`).
+
 ```
-app/packages/billing/
-├── package.yml           # Package configuration
+app/packs/billing_module/
+├── package.yml                      # Package configuration
 ├── app/
 │   ├── models/
-│   │   └── billing/      # Private models (namespaced)
-│   │       ├── invoice.rb
-│   │       └── payment.rb
+│   │   └── billing_module/          # Private models
+│   │       ├── invoice/
+│   │       │   └── invoice.rb       # BillingModule::Invoice::Invoice
+│   │       └── payment/
+│   │           └── payment.rb       # BillingModule::Payment::Payment
 │   ├── services/
-│   │   └── billing/      # Private services
-│   │       ├── invoice_creator.rb
-│   │       └── payment_processor.rb
-│   ├── queries/
-│   │   └── billing/      # Private queries
-│   │       └── overdue_invoices.rb
+│   │   └── billing_module/          # Private services
+│   │       ├── invoice/
+│   │       │   └── creator_service.rb   # BillingModule::Invoice::CreatorService
+│   │       └── payment/
+│   │           └── processor_service.rb # BillingModule::Payment::ProcessorService
 │   ├── repositories/
-│   │   └── billing/      # Private repositories
-│   │       └── invoice_repository.rb
+│   │   └── billing_module/          # Private repositories
+│   │       └── invoice/
+│   │           └── invoice_repository.rb # BillingModule::Invoice::InvoiceRepository
+│   ├── workers/
+│   │   └── billing_module/          # Background workers
+│   │       └── invoice/
+│   │           └── send_invoice_worker.rb
 │   ├── controllers/
-│   │   └── billing/      # Controllers (if needed)
+│   │   └── billing_module/          # Controllers (if needed)
 │   │       └── invoices_controller.rb
 │   └── public/
-│       └── billing/      # Public API (namespaced like all others)
-│           ├── api.rb    # Main public interface
-│           ├── queries.rb
-│           └── types.rb
+│       └── billing_module/          # Public API (same namespace)
+│           ├── invoice/
+│           │   └── creator.rb       # Alias: BillingModule::Invoice::Creator
+│           └── payment/
+│               └── processor.rb     # Alias: BillingModule::Payment::Processor
 ├── spec/
-│   └── billing/          # Tests
-│       ├── models/
+│   └── billing_module/              # Tests mirror app/ structure
 │       ├── services/
 │       └── public_api_spec.rb
-└── package_todo.yml      # Violations to fix
+└── package_todo.yml                 # Violations to fix
 ```
 
 ### Package.yml Template
 
 ```yaml
-# app/packages/billing/package.yml
+# app/packs/billing_module/package.yml
 ---
-# Package metadata
-metadata:
-  category: domain           # domain | platform | utilities
-  owner: billing-team        # Team responsible
-  slack_channel: "#team-billing"
-  description: "Invoice and payment processing"
-
-# Privacy enforcement
-enforce_privacy: true        # Prevent access to private constants
-
-# Dependency enforcement
 enforce_dependencies: true   # Require explicit dependency declarations
+# enforce_privacy: true      # Uncomment when ready to enforce (start permissive)
 
 # Explicitly declared dependencies
 dependencies:
-  - "app/packages/users"     # Can use Users public API
-  - "app/packages/orders"    # Can use Orders public API
+  - '.'                                      # Self (always include)
+  - app/packs/users_module                   # Can use UsersModule public API
+  - app/packs/orders_module                  # Can use OrdersModule public API
 
-# Public path (everything else is private)
-# Must include namespace folder for consistency
-public_path: "app/packages/billing/app/public/billing/"
+# Test paths for packwerk to recognize spec/ as part of this package
+metadata:
+  test_paths:
+    - spec/
 ```
 
 ## Side Effects Philosophy
@@ -154,38 +155,42 @@ For multiple side effects (3+), use **Event Dispatcher pattern** in controller (
 
 ```ruby
 # ❌ WRONG - Direct access to private constant
-# app/packages/orders/app/services/orders/invoice_creator.rb
-module Orders
-  class InvoiceCreator
-    def call(order)
-      # Billing::Invoice is PRIVATE to billing package
-      Billing::Invoice.create!(order: order)  # ❌ Privacy violation!
+# app/packs/orders_module/app/services/orders_module/invoice/creator_service.rb
+module OrdersModule
+  module Invoice
+    class CreatorService
+      def call(order)
+        # BillingModule::Invoice::Invoice is PRIVATE to billing_module package
+        BillingModule::Invoice::Invoice.create!(order: order)  # ❌ Privacy violation!
+      end
     end
   end
 end
 
 # ✅ CORRECT - Use public API (constant alias pattern)
-# app/packages/orders/app/services/orders/order_processor.rb
-module Orders
-  class OrderProcessor
-    def call(order)
-      # Use exposed public constant
-      Billing::InvoiceCreator.call(order: order, user: order.user)  # ✅
+# app/packs/orders_module/app/services/orders_module/order/processor_service.rb
+module OrdersModule
+  module Order
+    class ProcessorService
+      def call(order)
+        # Use exposed public constant alias
+        BillingModule::Invoice::Creator.call(order: order, user: order.user)  # ✅
+      end
     end
   end
 end
 
-# Public API definition (constant alias pattern)
-# app/packages/billing/app/public/billing/invoice_creator.rb
-require_relative "../../../services/billing/invoice_creator_service"
-
-module Billing
-  # Public API for creating invoices
-  #
-  # @example
-  #   Billing::InvoiceCreator.call(order: order, user: user)
-  #
-  InvoiceCreator = ::Billing::InvoiceCreatorService
+# Public API definition (constant alias — the most common pattern)
+# app/packs/billing_module/app/public/billing_module/invoice/creator.rb
+module BillingModule
+  module Invoice
+    # Public API for creating invoices
+    #
+    # @example
+    #   BillingModule::Invoice::Creator.call(order: order, user: user)
+    #
+    Creator = ::BillingModule::Invoice::CreatorService
+  end
 end
 ```
 
@@ -193,30 +198,32 @@ end
 
 ```yaml
 # ❌ WRONG - Undeclared dependency
-# app/packages/orders/package.yml
+# app/packs/orders_module/package.yml
 ---
 enforce_dependencies: true
 dependencies:
-  - "app/packages/users"
-# Missing: app/packages/billing
+  - '.'
+  - app/packs/users_module
+# Missing: app/packs/billing_module
 
 # Usage in code causes dependency violation
-# app/packages/orders/app/models/orders/order.rb
-def create_invoice
-  Billing::InvoiceCreator.call(order: self)  # ❌ Dependency violation!
+# app/packs/orders_module/app/services/orders_module/order/processor_service.rb
+def create_invoice(order)
+  BillingModule::Invoice::Creator.call(order: order)  # ❌ Dependency violation!
 end
 
 # ✅ CORRECT - Declared dependency
-# app/packages/orders/package.yml
+# app/packs/orders_module/package.yml
 ---
 enforce_dependencies: true
 dependencies:
-  - "app/packages/users"
-  - "app/packages/billing"  # ✅ Explicitly declared
+  - '.'
+  - app/packs/users_module
+  - app/packs/billing_module  # ✅ Explicitly declared
 
 # Now usage is allowed
-def create_invoice
-  Billing::InvoiceCreator.call(order: self)  # ✅ OK
+def create_invoice(order)
+  BillingModule::Invoice::Creator.call(order: order)  # ✅ OK
 end
 ```
 
@@ -224,36 +231,41 @@ end
 
 ```ruby
 # ❌ WRONG - Circular dependency
-# orders → billing → orders (CYCLE!)
+# orders_module → billing_module → orders_module (CYCLE!)
 
-# orders/package.yml
+# app/packs/orders_module/package.yml
 dependencies:
-  - "app/packages/billing"
+  - '.'
+  - app/packs/billing_module
 
-# billing/package.yml
+# app/packs/billing_module/package.yml
 dependencies:
-  - "app/packages/orders"  # ❌ Creates cycle!
+  - '.'
+  - app/packs/orders_module  # ❌ Creates cycle!
 
 # ✅ CORRECT - Break cycle with events
-# orders/package.yml
+# app/packs/orders_module/package.yml
 dependencies:
-  - "app/packages/billing"
+  - '.'
+  - app/packs/billing_module
 
-# billing/package.yml
-dependencies: []  # No dependency on orders!
+# app/packs/billing_module/package.yml
+dependencies:
+  - '.'
+  # No dependency on orders_module!
 
-# billing uses events to communicate back
-# app/packages/billing/app/services/billing/payment_processor.rb
-module Billing
-  module Services
-    class PaymentProcessor
-      def call(invoice_id)
-        invoice = Invoice.find(invoice_id)
+# billing_module uses events to communicate back
+# app/packs/billing_module/app/services/billing_module/payment/processor_service.rb
+module BillingModule
+  module Payment
+    class ProcessorService
+      def call(invoice_id:)
+        invoice = Invoice::Invoice.find(invoice_id)
         invoice.mark_as_paid!
 
-        # Publish event instead of calling Orders directly
+        # Publish event instead of calling OrdersModule directly
         ApplicationEvent.dispatch(
-          "billing.payment_completed",
+          "billing_module.payment_completed",
           invoice_id: invoice.id,
           order_id: invoice.order_id
         )
@@ -262,82 +274,94 @@ module Billing
   end
 end
 
-# orders subscribes to event
-# app/packages/orders/app/subscribers/billing_subscriber.rb
-module Orders
+# orders_module subscribes to event
+# app/packs/orders_module/app/subscribers/billing_subscriber.rb
+module OrdersModule
   class BillingSubscriber
     def self.on_payment_completed(invoice_id:, order_id:)
-      order = Order.find(order_id)
+      order = Order::Order.find(order_id)
       order.mark_as_paid!
     end
   end
 end
 ```
 
-### 4. Stable Public APIs (Constant Alias Pattern)
+### 4. Stable Public APIs — Three Patterns
+
+There are three patterns for exposing public APIs from a package. All three use constant aliases; they differ in how the implementation is loaded.
+
+#### Pattern A: Simple Alias (most common — no require_relative needed)
+
+Use when Zeitwerk autoloads the implementation automatically.
 
 ```ruby
-# ✅ GOOD - Minimal, stable public interface via constant aliases
-
-# app/packages/billing/app/public/billing/invoice_creator.rb
-require_relative "../../../services/billing/invoice_creator_service"
-
-module Billing
-  # @example Create invoice
-  #   Billing::InvoiceCreator.call(order: order, user: user)
-  InvoiceCreator = ::Billing::InvoiceCreatorService
+# app/packs/billing_module/app/public/billing_module/invoice/creator.rb
+module BillingModule
+  module Invoice
+    # @example
+    #   BillingModule::Invoice::Creator.call(order: order, user: user)
+    Creator = ::BillingModule::Invoice::CreatorService
+  end
 end
 
-# app/packages/billing/app/public/billing/payment_processor.rb
-require_relative "../../../services/billing/payment_processor_service"
-
-module Billing
-  # @example Process payment
-  #   Billing::PaymentProcessor.call(invoice_id: invoice.id)
-  PaymentProcessor = ::Billing::PaymentProcessorService
+# app/packs/billing_module/app/public/billing_module/payment/processor.rb
+module BillingModule
+  module Payment
+    # @example
+    #   BillingModule::Payment::Processor.call(invoice_id: invoice.id)
+    Processor = ::BillingModule::Payment::ProcessorService
+  end
 end
 
-# app/packages/billing/app/public/billing/invoice_canceller.rb
-require_relative "../../../services/billing/invoice_canceller_service"
-
-module Billing
-  # @example Cancel invoice
-  #   Billing::InvoiceCanceller.call(invoice_id: invoice.id)
-  InvoiceCanceller = ::Billing::InvoiceCancellerService
+# app/packs/billing_module/app/public/billing_module/invoice/repository.rb
+module BillingModule
+  module Invoice
+    # @example
+    #   BillingModule::Invoice::Repository.for_user(user)
+    Repository = ::BillingModule::Invoice::InvoiceRepository
+  end
 end
+```
 
-# app/packages/billing/app/public/billing/invoice_finder.rb
-require_relative "../../../repositories/billing/invoice_repository"
+#### Pattern B: Alias with require_relative (use when autoload order matters)
 
-module Billing
-  # @example Find invoice
-  #   Billing::InvoiceFinder.find(id)
-  #
-  # @example Find for user
-  #   Billing::InvoiceFinder.for_user(user)
-  InvoiceFinder = ::Billing::InvoiceRepository
+Use when the implementation might not be loaded before the public alias is first referenced.
+
+```ruby
+# app/packs/billing_module/app/public/billing_module/invoice/creator.rb
+require_relative "../../../services/billing_module/invoice/creator_service"
+
+module BillingModule
+  module Invoice
+    # @example
+    #   BillingModule::Invoice::Creator.call(order: order, user: user)
+    Creator = ::BillingModule::Invoice::CreatorService
+  end
 end
+```
 
-# app/packages/billing/app/public/billing/overdue_invoices_query.rb
-require_relative "../../../queries/billing/overdue_invoices_query"
+#### Pattern C: Full Module Implementation (use for facades or adapters)
 
-module Billing
-  # @example Get overdue invoices
-  #   Billing::OverdueInvoicesQuery.call
-  OverdueInvoicesQuery = ::Billing::OverdueInvoicesQueryObject
-end
+Use when the public API needs its own logic — e.g. delegating to multiple internal services, adapting method signatures, or wrapping a third-party client.
 
-# app/packages/billing/app/public/billing/types.rb
-# Public constants (no require_relative needed for plain constants)
-module Billing
-  module Types
-    module InvoiceStatus
-      DRAFT = "draft"
-      PENDING = "pending"
-      PAID = "paid"
-      CANCELLED = "cancelled"
+```ruby
+# app/packs/billing_module/app/public/billing_module/payment/client.rb
+module BillingModule
+  module Payment
+    class << self
+      # @example
+      #   BillingModule::Payment::Client.instance(role: :admin)
+      def instance(role: default_role)
+        BillingModule::Payment::GatewayService.instance(role: role)
+      end
 
-      ALL = [DRAFT, PENDING, PAID, CANCELLED].freeze
+      delegate :enabled?, to: :"BillingModule::Payment::GatewayService"
+
+      private
+
+      def default_role
+        :standard
+      end
     end
   end
 end
@@ -345,284 +369,141 @@ end
 
 ## Common Patterns
 
-### Pattern 1: Service Objects as Public API (Constant Alias)
+### Pattern 1: Service as Public API (Simple Alias — most common)
 
 ```ruby
-# app/packages/billing/app/public/billing/invoice_creator.rb
-# ✅ Public API - Expose service via constant alias
-
-require_relative "../../../services/billing/invoice_creator_service"
-
-module Billing
-  # Public API for creating invoices
-  #
-  # Creates invoices with proper validation and business rules.
-  # Service is pure - returns result without side effects.
-  #
-  # @example Create invoice
-  #   invoice = Billing::InvoiceCreator.call(
-  #     order: order,
-  #     user: user
-  #   )
-  #
-  # @param order [Order] The order to invoice
-  # @param user [User] The user placing the order
-  # @return [Invoice] The created invoice
-  #
-  InvoiceCreator = ::Billing::InvoiceCreatorService
-end
-
-# app/packages/billing/app/services/billing/invoice_creator_service.rb
-# ❌ PRIVATE - Not accessible from other packages
-module Billing
-  class InvoiceCreatorService
-    def self.call(order:, user:)
-      new(order: order, user: user).call
-    end
-
-    def initialize(order:, user:)
-      @order = order
-      @user = user
-    end
-
-    def call
-      Invoice.create!(
-        order_id: @order.id,
-        user_id: @user.id,
-        amount_cents: calculate_amount
-      )
-      # ✅ Service is pure - no ApplicationEvent.dispatch here
-      # Controller will handle event dispatching
-    end
-
-    private
-
-    def calculate_amount
-      @order.total_cents
-    end
-  end
-end
-```
-
-### Pattern 2: Repository Pattern (Constant Alias)
-
-```ruby
-# app/packages/billing/app/public/billing/invoice_finder.rb
-# ✅ Public API - Query/finder exposed via constant alias
-
-require_relative "../../../repositories/billing/invoice_repository"
-
-module Billing
-  # Public API for finding invoices
-  #
-  # Provides query methods for invoice retrieval.
-  #
-  # @example Find by ID
-  #   invoice = Billing::InvoiceFinder.find(invoice_id)
-  #
-  # @example Find for user
-  #   invoices = Billing::InvoiceFinder.for_user(user)
-  #
-  # @example Find pending invoices
-  #   pending = Billing::InvoiceFinder.pending
-  #
-  InvoiceFinder = ::Billing::InvoiceRepository
-end
-
-# app/packages/billing/app/repositories/billing/invoice_repository.rb
-# ❌ PRIVATE - Not accessible from other packages
-module Billing
-  class InvoiceRepository
-    def self.find(id)
-      Invoice.find(id)
-    end
-
-    def self.for_user(user)
-      Invoice.where(user: user).order(created_at: :desc)
-    end
-
-    def self.pending
-      Invoice.where(status: "pending")
-    end
-  end
-end
-```
-
-### Pattern 3: Query Objects (Constant Alias)
-
-```ruby
-# app/packages/billing/app/public/billing/overdue_invoices_query.rb
-# ✅ Public API - Query object exposed via constant alias
-
-require_relative "../../../queries/billing/overdue_invoices_query"
-
-module Billing
-  # Public API for finding overdue invoices
-  #
-  # Returns all pending invoices past their due date.
-  #
-  # @example Find overdue invoices
-  #   overdue = Billing::OverdueInvoicesQuery.call
-  #
-  # @return [ActiveRecord::Relation<Invoice>] Overdue invoices ordered by due date
-  #
-  OverdueInvoicesQuery = ::Billing::OverdueInvoicesQueryObject
-end
-
-# app/packages/billing/app/queries/billing/overdue_invoices_query.rb
-# ❌ PRIVATE - Not accessible from other packages
-module Billing
-  class OverdueInvoicesQueryObject
-    def self.call
-      new.call
-    end
-
-    def call
-      Invoice
-        .where(status: "pending")
-        .where("due_date < ?", Date.current)
-        .order(:due_date)
-    end
-  end
-end
-```
-
-### Pattern 4: Value Objects/Presenters for Boundaries (Constant Alias)
-
-```ruby
-# app/packages/billing/app/public/billing/invoice_presenter.rb
-# ✅ Public API - Presenter exposed via constant alias
-
-require_relative "../../../presenters/billing/invoice_presenter"
-
-module Billing
-  # Public API for invoice presentation
-  #
-  # Provides a safe, read-only interface to invoice data
-  # for cross-package communication.
-  #
-  # @example Present invoice data
-  #   invoice = Billing::InvoiceFinder.find(id)
-  #   presenter = Billing::InvoicePresenter.new(invoice)
-  #   presenter.total  # => "$150.00"
-  #   presenter.overdue?  # => true
-  #
-  InvoicePresenter = ::Billing::InvoicePresenterObject
-end
-
-# app/packages/billing/app/presenters/billing/invoice_presenter.rb
-# ❌ PRIVATE - Implementation details
-module Billing
-  class InvoicePresenterObject
-    attr_reader :id, :status, :due_date
-
-    def initialize(invoice)
-      @invoice = invoice
-      @id = invoice.id
-      @status = invoice.status
-      @due_date = invoice.due_date
-    end
-
-    def total
-      "$#{@invoice.amount_cents / 100.0}"
-    end
-
-    def overdue?
-      due_date < Date.current && status != "paid"
-    end
-
-    def to_h
-      { id: id, total: total, status: status, due_date: due_date }
-    end
+# app/packs/billing_module/app/public/billing_module/invoice/creator.rb
+# ✅ Public API — simplest pattern, no require_relative needed
+module BillingModule
+  module Invoice
+    # @example
+    #   BillingModule::Invoice::Creator.call(order: order, user: user)
+    Creator = ::BillingModule::Invoice::CreatorService
   end
 end
 
-# Usage from other packages
-invoice = Billing::InvoiceFinder.find(123)
-presenter = Billing::InvoicePresenter.new(invoice)
-puts presenter.total  # Returns formatted value, not ActiveRecord
-```
+# app/packs/billing_module/app/services/billing_module/invoice/creator_service.rb
+# ❌ PRIVATE - Not accessible from other packages directly
+module BillingModule
+  module Invoice
+    class CreatorService
+      def self.call(order:, user:)
+        new(order: order, user: user).call
+      end
 
-### Pattern 5: Event-Driven Communication (Constant Alias)
+      def initialize(order:, user:)
+        @order = order
+        @user = user
+      end
 
-```ruby
-# app/packages/billing/app/public/billing/payment_processor.rb
-# ✅ Public API - Payment service exposed via constant alias
-
-require_relative "../../../services/billing/payment_processor_service"
-
-module Billing
-  # Public API for processing payments
-  #
-  # Processes payments through external gateway.
-  # Service is pure - returns payment without side effects.
-  #
-  # @example Process payment
-  #   payment = Billing::PaymentProcessor.call(invoice_id: invoice.id)
-  #
-  # @param invoice_id [Integer] Invoice to process payment for
-  # @return [Payment] The processed payment record
-  #
-  PaymentProcessor = ::Billing::PaymentProcessorService
-end
-
-# app/packages/billing/app/services/billing/payment_processor_service.rb
-# ❌ PRIVATE - Not accessible from other packages
-module Billing
-  class PaymentProcessorService
-    def self.call(invoice_id:)
-      new(invoice_id: invoice_id).call
-    end
-
-    def initialize(invoice_id:)
-      @invoice_id = invoice_id
-    end
-
-    def call
-      invoice = Invoice.find(@invoice_id)
-
-      # Process payment
-      payment = Payment.create!(invoice: invoice, amount: invoice.amount_cents)
-      invoice.update!(status: "paid")
-
-      payment
-      # ✅ Service is pure - returns payment without side effects
-      # Controller will dispatch events
-    end
-  end
-end
-
-# Controller handles event dispatching
-# app/controllers/billing/payments_controller.rb
-module Billing
-  class PaymentsController < ApplicationController
-    def create
-      payment = Billing::PaymentProcessor.call(invoice_id: params[:invoice_id])
-
-      if payment.persisted?
-        # ✅ Controller dispatches event (no direct dependency on orders)
-        ApplicationEvent.dispatch(
-          "billing.payment_completed",
-          invoice_id: payment.invoice_id,
-          order_id: payment.invoice.order_id,
-          amount: payment.amount_cents
+      def call
+        Invoice.create!(
+          order_id: @order.id,
+          user_id: @user.id,
+          amount_cents: @order.total_cents
         )
-        redirect_to payment, notice: "Payment processed"
+        # ✅ Pure service - no events/mailers here
+        # Controller handles side effects
+      end
+
+      private
+
+      attr_reader :order, :user
+    end
+  end
+end
+```
+
+### Pattern 2: Repository as Public API (Constant Alias)
+
+```ruby
+# app/packs/billing_module/app/public/billing_module/invoice/repository.rb
+# ✅ Public API - repository exposed via constant alias
+module BillingModule
+  module Invoice
+    # @example
+    #   BillingModule::Invoice::Repository.for_user(user)
+    Repository = ::BillingModule::Invoice::InvoiceRepository
+  end
+end
+
+# app/packs/billing_module/app/repositories/billing_module/invoice/invoice_repository.rb
+# ❌ PRIVATE
+module BillingModule
+  module Invoice
+    class InvoiceRepository
+      def self.find(id)
+        Invoice.find(id)
+      end
+
+      def self.for_user(user)
+        Invoice.where(user: user).order(created_at: :desc)
+      end
+
+      def self.pending
+        Invoice.where(status: "pending")
+      end
+    end
+  end
+end
+```
+
+### Pattern 3: Facade/Adapter as Public API (Full Module Implementation)
+
+Use when the public interface needs its own logic — adapting signatures, delegating to multiple internals, or wrapping a third-party client.
+
+```ruby
+# app/packs/billing_module/app/public/billing_module/payment/gateway.rb
+# ✅ Public API - full module implementation (not just an alias)
+module BillingModule
+  module Payment
+    module Gateway
+      class << self
+        # @example
+        #   BillingModule::Payment::Gateway.instance(role: :admin)
+        def instance(role: default_role)
+          BillingModule::Payment::GatewayService.instance(role: role)
+        end
+
+        delegate :enabled?, to: :"BillingModule::Payment::GatewayService"
+
+        private
+
+        def default_role
+          :standard
+        end
+      end
+    end
+  end
+end
+
+# Controller handles side effects after service call
+# app/controllers/billing_module/invoices_controller.rb
+module BillingModule
+  class InvoicesController < ApplicationController
+    def create
+      invoice = BillingModule::Invoice::Creator.call(order: @order, user: current_user)
+
+      if invoice.persisted?
+        # ✅ Controller dispatches event (no direct dependency on orders_module)
+        ApplicationEvent.dispatch(
+          "billing_module.invoice_created",
+          invoice_id: invoice.id,
+          order_id: invoice.order_id
+        )
+        redirect_to invoice, notice: "Invoice created"
       end
     end
   end
 end
 
 # Other packages subscribe to events
-# app/packages/orders/app/subscribers/billing_subscriber.rb
-module Orders
+# app/packs/orders_module/app/subscribers/billing_subscriber.rb
+module OrdersModule
   class BillingSubscriber
-    def self.on_payment_completed(invoice_id:, order_id:, amount:)
-      order = Order.find(order_id)
-      order.update!(payment_status: "paid")
-
-      # Trigger order fulfillment service
-      Orders::OrderFulfillment.call(order: order)
+    def self.on_invoice_created(invoice_id:, order_id:)
+      order = Order::Order.find(order_id)
+      order.update!(invoice_status: "created")
     end
   end
 end
@@ -647,66 +528,70 @@ bundle exec packwerk init
 ### Step 2: Create First Package
 
 ```bash
-# Create package structure
-mkdir -p app/packages/billing/app/{models,services,public}/billing
-mkdir -p app/packages/billing/spec/billing
+# Create package structure (note: app/packs/, _module suffix)
+mkdir -p app/packs/billing_module/app/{models,services,repositories,workers,public}/billing_module
+mkdir -p app/packs/billing_module/spec/billing_module
 
-# Create package.yml
-cat > app/packages/billing/package.yml << 'EOF'
+# Create package.yml (start permissive on privacy)
+cat > app/packs/billing_module/package.yml << 'EOF'
 ---
-enforce_privacy: false    # Start permissive
-enforce_dependencies: false
+enforce_dependencies: true
+# enforce_privacy: true  # Enable after defining public API
+dependencies:
+  - '.'
+metadata:
+  test_paths:
+    - spec/
 EOF
 ```
 
 ### Step 3: Move Code into Package
 
 ```bash
-# Move models
-git mv app/models/invoice.rb app/packages/billing/app/models/billing/invoice.rb
-git mv app/models/payment.rb app/packages/billing/app/models/billing/payment.rb
+# Move models (nested under namespace)
+git mv app/models/invoice.rb app/packs/billing_module/app/models/billing_module/invoice/invoice.rb
+git mv app/models/payment.rb app/packs/billing_module/app/models/billing_module/payment/payment.rb
 
 # Update namespaces
 # OLD: class Invoice < ApplicationRecord
-# NEW: class Billing::Invoice < ApplicationRecord
+# NEW: module BillingModule; module Invoice; class Invoice < ApplicationRecord
 ```
 
 ### Step 4: Define Public API
 
 ```ruby
-# app/packages/billing/app/public/billing/invoice_creator.rb
-require_relative "../../../services/billing/invoice_creator_service"
-
-module Billing
-  # Public API for creating invoices
-  #
-  # @example
-  #   Billing::InvoiceCreator.call(order: order, user: user)
-  #
-  InvoiceCreator = ::Billing::InvoiceCreatorService
+# app/packs/billing_module/app/public/billing_module/invoice/creator.rb
+# Pattern A: Simple alias (Zeitwerk loads the implementation)
+module BillingModule
+  module Invoice
+    # @example
+    #   BillingModule::Invoice::Creator.call(order: order, user: user)
+    Creator = ::BillingModule::Invoice::CreatorService
+  end
 end
 
-# app/packages/billing/app/public/billing/invoice_finder.rb
-require_relative "../../../repositories/billing/invoice_repository"
-
-module Billing
-  # Public API for finding invoices
-  #
-  # @example
-  #   Billing::InvoiceFinder.find(id)
-  #
-  InvoiceFinder = ::Billing::InvoiceRepository
+# app/packs/billing_module/app/public/billing_module/invoice/repository.rb
+module BillingModule
+  module Invoice
+    # @example
+    #   BillingModule::Invoice::Repository.find(id)
+    Repository = ::BillingModule::Invoice::InvoiceRepository
+  end
 end
 ```
 
 ### Step 5: Enable Privacy
 
 ```yaml
-# app/packages/billing/package.yml
+# app/packs/billing_module/package.yml
 ---
-enforce_privacy: true     # ✅ Enable privacy
-enforce_dependencies: false
-public_path: "app/packages/billing/app/public/"
+enforce_dependencies: true
+enforce_privacy: true     # ✅ Enable after public API is defined
+dependencies:
+  - '.'
+metadata:
+  test_paths:
+    - spec/
 ```
 
 ### Step 6: Check and Fix Violations
@@ -719,20 +604,24 @@ bundle exec packwerk check
 bundle exec packwerk update
 
 # Fix violations gradually
-# Change: Billing::Invoice.create(...)
-# To:     Billing::InvoiceCreator.call(...)
+# Change: BillingModule::Invoice::Invoice.create(...)
+# To:     BillingModule::Invoice::Creator.call(...)
 ```
 
 ### Step 7: Enable Dependencies
 
 ```yaml
-# app/packages/billing/package.yml
+# app/packs/billing_module/package.yml
 ---
+enforce_dependencies: true
 enforce_privacy: true
-enforce_dependencies: true  # ✅ Enable dependencies
 dependencies:
-  - "app/packages/users"
-  - "app/packages/orders"
+  - '.'
+  - app/packs/users_module    # ✅ Explicitly declared
+  - app/packs/orders_module   # ✅ Explicitly declared
+metadata:
+  test_paths:
+    - spec/
 ```
 
 ## Testing Package Boundaries
@@ -740,29 +629,24 @@ dependencies:
 ### Test Public API
 
 ```ruby
-# spec/packages/billing_spec.rb
+# spec/packages/billing_module_spec.rb
 require "rails_helper"
 
-RSpec.describe "Billing Package" do
+RSpec.describe "BillingModule Package" do
   describe "Public API" do
-    it "exposes InvoiceCreator constant" do
-      expect(Billing::InvoiceCreator).to be_a(Class)
-      expect(Billing::InvoiceCreator).to respond_to(:call)
+    it "exposes Invoice::Creator constant" do
+      expect(BillingModule::Invoice::Creator).to be_a(Class)
+      expect(BillingModule::Invoice::Creator).to respond_to(:call)
     end
 
-    it "exposes PaymentProcessor constant" do
-      expect(Billing::PaymentProcessor).to be_a(Class)
-      expect(Billing::PaymentProcessor).to respond_to(:call)
+    it "exposes Payment::Processor constant" do
+      expect(BillingModule::Payment::Processor).to be_a(Class)
+      expect(BillingModule::Payment::Processor).to respond_to(:call)
     end
 
-    it "exposes InvoiceFinder constant" do
-      expect(Billing::InvoiceFinder).to be_a(Class)
-      expect(Billing::InvoiceFinder).to respond_to(:find)
-    end
-
-    it "exposes invoice status types" do
-      expect(Billing::Types::InvoiceStatus::ALL).to be_an(Array)
-      expect(Billing::Types::InvoiceStatus::ALL).to include("draft", "pending", "paid")
+    it "exposes Invoice::Repository constant" do
+      expect(BillingModule::Invoice::Repository).to be_a(Class)
+      expect(BillingModule::Invoice::Repository).to respond_to(:find)
     end
   end
 
@@ -770,9 +654,9 @@ RSpec.describe "Billing Package" do
     # Packwerk is a static analysis tool, not a runtime enforcer.
     # Constants ARE accessible at runtime — privacy is enforced by `packwerk check`.
     # Verify package-level privacy via the packwerk_spec.rb compliance tests instead:
-    #   bundle exec packwerk check --packages=app/packages/billing
+    #   bundle exec packwerk check --packages=app/packs/billing_module
     it "reports no privacy violations" do
-      result = `bundle exec packwerk check --packages=app/packages/billing`
+      result = `bundle exec packwerk check --packages=app/packs/billing_module`
       expect(result).not_to include("privacy violation")
     end
   end
@@ -782,14 +666,14 @@ RSpec.describe "Billing Package" do
     let(:order) { create(:order, user: user) }
 
     it "creates an invoice via public API" do
-      invoice = Billing::InvoiceCreator.call(order: order, user: user)
+      invoice = BillingModule::Invoice::Creator.call(order: order, user: user)
       expect(invoice).to be_persisted
       expect(invoice.order_id).to eq(order.id)
     end
 
     it "finds an invoice via public API" do
-      invoice = Billing::InvoiceCreator.call(order: order, user: user)
-      found = Billing::InvoiceFinder.find(invoice.id)
+      invoice = BillingModule::Invoice::Creator.call(order: order, user: user)
+      found = BillingModule::Invoice::Repository.find(invoice.id)
       expect(found.id).to eq(invoice.id)
     end
   end
@@ -818,9 +702,9 @@ RSpec.describe "Packwerk Compliance" do
     expect(result).not_to include("Circular dependency")
   end
 
-  describe "Billing package" do
+  describe "BillingModule package" do
     it "has no violations" do
-      result = `bundle exec packwerk check --packages=app/packages/billing`
+      result = `bundle exec packwerk check --packages=app/packs/billing_module`
       expect(result).to include("No offenses detected")
     end
   end
@@ -833,30 +717,31 @@ end
 
 ```bash
 # Error message
-app/packages/orders/app/services/orders/invoice_creator.rb:10:0
-Privacy violation: ::Billing::Invoice is private to app/packages/billing
-  but referenced from app/packages/orders
+app/packs/orders_module/app/services/orders_module/order/processor_service.rb:10:0
+Privacy violation: ::BillingModule::Invoice::Invoice is private to app/packs/billing_module
+  but referenced from app/packs/orders_module
 
 # Fix: Use public API instead of private constant
-# BEFORE: Billing::Invoice.create!(...)
-# AFTER:  Billing::InvoiceCreator.call(...)
+# BEFORE: BillingModule::Invoice::Invoice.create!(...)
+# AFTER:  BillingModule::Invoice::Creator.call(...)
 ```
 
 ### Dependency Violation
 
 ```bash
 # Error message
-app/packages/orders/app/models/orders/order.rb:25:0
-Dependency violation: ::Notifications::EmailService belongs to app/packages/notifications
-  but app/packages/orders does not declare a dependency on it
+app/packs/orders_module/app/services/orders_module/order/processor_service.rb:25:0
+Dependency violation: ::NotificationsModule::Email::SenderService belongs to app/packs/notifications_module
+  but app/packs/orders_module does not declare a dependency on it
 
 # Fix: Add dependency to package.yml OR use events
-# Option 1: Add to orders/package.yml
+# Option 1: Add to orders_module/package.yml
 dependencies:
-  - "app/packages/notifications"
+  - '.'
+  - app/packs/notifications_module
 
 # Option 2: Use events (no dependency needed)
-ApplicationEvent.dispatch("order.created", order: self)
+ApplicationEvent.dispatch("orders_module.order_created", order_id: order.id)
 ```
 
 ### Circular Dependency
@@ -864,11 +749,11 @@ ApplicationEvent.dispatch("order.created", order: self)
 ```bash
 # Error message
 Circular dependency detected:
-  app/packages/orders → app/packages/billing → app/packages/orders
+  app/packs/orders_module → app/packs/billing_module → app/packs/orders_module
 
 # Fix: Break cycle with events
-# Remove billing → orders dependency
-# Use events for billing to communicate back to orders
+# Remove billing_module → orders_module dependency
+# Use events for billing_module to communicate back to orders_module
 ```
 
 ## Checklist
