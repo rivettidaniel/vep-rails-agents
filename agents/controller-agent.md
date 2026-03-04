@@ -495,10 +495,10 @@ class ResourcesController < ApplicationController
     )
 
     if result.success?
-      redirect_to result.data, notice: "Resource created successfully."
+      redirect_to result.value!, notice: "Resource created successfully."
     else
       @resource = Resource.new(resource_params)
-      @resource.errors.merge!(result.error)
+      @resource.errors.add(:base, result.failure)
       render :new, status: :unprocessable_entity
     end
   end
@@ -518,9 +518,9 @@ class ResourcesController < ApplicationController
     )
 
     if result.success?
-      redirect_to result.data, notice: "Resource updated successfully."
+      redirect_to result.value!, notice: "Resource updated successfully."
     else
-      @resource.errors.merge!(result.error)
+      @resource.errors.add(:base, result.failure)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -563,10 +563,10 @@ class OrdersController < ApplicationController
     )
 
     if result.success?
-      redirect_to result.data, notice: "Order placed successfully!"
+      redirect_to result.value!, notice: "Order placed successfully!"
     else
       @order = Order.new
-      @order.errors.add(:base, result.error)
+      @order.errors.add(:base, result.failure)
       render :new, status: :unprocessable_entity
     end
   end
@@ -580,7 +580,7 @@ class OrdersController < ApplicationController
     if result.success?
       redirect_to @order, notice: "Order cancelled."
     else
-      redirect_to @order, alert: result.error, status: :unprocessable_entity
+      redirect_to @order, alert: result.failure, status: :unprocessable_entity
     end
   end
 
@@ -624,7 +624,7 @@ class ReviewsController < ApplicationController
       redirect_to restaurant_path(@restaurant), notice: "Review posted!"
     else
       @review = @restaurant.reviews.build(review_params)
-      @review.errors.merge!(result.error)
+      @review.errors.add(:base, result.failure)
       render :new, status: :unprocessable_entity
     end
   end
@@ -678,9 +678,9 @@ class Api::V1::RestaurantsController < Api::V1::BaseController
     )
 
     if result.success?
-      render json: result.data, status: :created
+      render json: result.value!, status: :created
     else
-      render json: { errors: result.error }, status: :unprocessable_entity
+      render json: { errors: result.failure }, status: :unprocessable_entity
     end
   end
 
@@ -694,9 +694,9 @@ class Api::V1::RestaurantsController < Api::V1::BaseController
     )
 
     if result.success?
-      render json: result.data, status: :ok
+      render json: result.value!, status: :ok
     else
-      render json: { errors: result.error }, status: :unprocessable_entity
+      render json: { errors: result.failure }, status: :unprocessable_entity
     end
   end
 
@@ -1078,6 +1078,21 @@ end
 - **Test thoroughly** - request specs for all actions and edge cases
 - **Use proper status codes** - communicate clearly with HTTP
 - **Handle errors gracefully** - rescue and redirect appropriately
+
+## Related Skills
+
+### Primary Skill
+- **`rails-controller`** — Full controller reference, RESTful conventions, strong parameters
+
+### Always Include
+- **`tdd-cycle`** — Request specs are written alongside every controller action
+- **`authorization-pundit`** — Every action requires `authorize`; policy patterns live here
+- **`rails-service-object`** — Controllers delegate to services; dry-monads Result API (`value!` / `failure`)
+
+### Often Needed
+- **`rails-query-object`** — Index actions with filtering/sorting/pagination should use Query Objects, not inline scopes
+- **`hotwire-patterns`** — When controller responds with Turbo Streams (`respond_to format.turbo_stream`)
+- **`api-versioning`** — When building `Api::V1::` namespaced JSON controllers
 
 ## Resources
 
