@@ -239,6 +239,8 @@ end
 - `/vep-feature` - Spec feature + generate PHASE_PLAN with wave structure
 - `/vep-wave N` - Execute wave N with all parallel agents in ONE message
 - `/vep-state` - Save session state, ADRs, and next session context
+- `/frame-problem` - Reframe a stakeholder request into real problem + architectural alternatives
+- `/refine-specification` - Ask clarifying questions to refine a draft feature spec
 
 #### For Feature Planning
 - `@feature_specification_agent` - Write detailed specs
@@ -547,6 +549,8 @@ The **VEP (Venezuelan Execution Protocol)** system adds project-level planning a
 | `/vep-feature` | `commands/vep-feature.md` | Spec a feature — calls spec+reviewer agents, generates PHASE_PLAN with agents+skills per wave |
 | `/vep-wave` | `commands/vep-wave.md` | Execute one wave of parallel tasks |
 | `/vep-state` | `commands/vep-state.md` | Update STATE.md at the end of a session |
+| `/frame-problem` | `commands/frame-problem.md` | Challenge a stakeholder request — reframe the real problem, propose architectural alternatives |
+| `/refine-specification` | `commands/refine-specification.md` | Ask clarifying questions to refine a draft feature spec before planning |
 
 ### Planning File Templates (in `planning/`)
 

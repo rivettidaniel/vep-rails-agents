@@ -25,6 +25,8 @@
 | `factory_method_agent` | `factory-method-pattern` | Wave 3 |
 | `command_agent` | `command-pattern` | Wave 3 |
 | `packwerk_agent` | `packwerk` | Wave 3-4 |
+| `gem_agent` | _(none)_ | Wave 1-4 (as needed) |
+| `implementation_agent` | `rails-architecture` | Wave 2-4 (as needed) |
 | `controller_agent` | `rails-controller` | Wave 4 |
 | `view_component_agent` | `viewcomponent-patterns` | Wave 4 |
 | `turbo_agent` | `hotwire-patterns` | Wave 4 |
