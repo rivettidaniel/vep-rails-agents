@@ -774,12 +774,9 @@ end
 
 ```ruby
 # app/events/content_events.rb
+# ✅ Handlers are pure side effects (model was already updated before dispatch)
 ApplicationEvent.on(:content_flagged) do |content, reason|
   ModerationMailer.flagged(content, reason).deliver_later
-end
-
-ApplicationEvent.on(:content_flagged) do |content, reason|
-  content.update(flagged_at: Time.current, flag_reason: reason)
 end
 
 ApplicationEvent.on(:content_flagged) do |content, reason|
@@ -787,11 +784,26 @@ ApplicationEvent.on(:content_flagged) do |content, reason|
 end
 
 ApplicationEvent.on(:content_approved) do |content|
-  content.user.increment_reputation!(5)
+  # Side effect: notify user — business logic (reputation) belongs in service
+  ContentMailer.approval_notice(content).deliver_later
 end
 
 ApplicationEvent.on(:content_rejected) do |content|
   ContentMailer.rejection_notice(content).deliver_later
+end
+
+# app/controllers/contents_controller.rb
+# Business logic (flagging the record) happens BEFORE dispatch
+def flag
+  @content = Content.find(params[:id])
+  authorize @content
+
+  if @content.update(flagged_at: Time.current, flag_reason: params[:reason])
+    ApplicationEvent.dispatch(:content_flagged, @content, params[:reason])
+    redirect_to @content, notice: "Content flagged for review."
+  else
+    redirect_to @content, alert: "Could not flag content."
+  end
 end
 ```
 
@@ -955,6 +967,72 @@ end
 # Or use ActiveJob inline adapter in tests
 config.active_job.queue_adapter = :inline  # test.rb
 config.active_job.queue_adapter = :solid_queue  # production.rb
+```
+
+## Related Skills
+
+### Primary Skill
+- **`event-dispatcher-pattern`** — `ApplicationEvent` implementation, handler structure, testing patterns, async handlers
+
+### Always Include
+- **`tdd-cycle`** — Test each handler in isolation; test that controllers dispatch the right event
+- **`rails-service-object`** — Business logic goes in services BEFORE dispatch; handlers are side effects only
+- **`rails-controller`** — Controllers are the dispatch point; Event Dispatcher keeps them thin
+
+### Often Needed
+- **`action-cable-patterns`** — Many handlers broadcast via Turbo Streams or ActionCable
+- **`solid-queue-setup`** — Slow handlers should enqueue jobs (`ProcessEntityJob.perform_later`) not run inline
+
+### Decision Guide: Event Dispatcher vs Direct Side Effects
+
+Use the number-of-side-effects rule:
+
+```ruby
+# 1-2 side effects → direct in controller (simpler)
+if @user.save
+  UserMailer.welcome(@user).deliver_later
+  redirect_to @user
+end
+
+# 3+ side effects → Event Dispatcher (cleaner)
+if @user.save
+  ApplicationEvent.dispatch(:user_registered, @user)
+  redirect_to @user
+end
+```
+
+### Decision Guide: Event Dispatcher vs Service Object
+
+| | Event Dispatcher | Service Object |
+|---|---|---|
+| **Purpose** | Decouple independent side effects | Orchestrate business logic with steps |
+| **Order** | Handlers run independently (no guarantee) | Steps run in defined order |
+| **Failure** | One handler fails, others still run | Failure stops the whole operation |
+| **Business logic** | ❌ Never in handlers | ✅ Yes |
+
+```ruby
+# Service: business logic with guaranteed order
+result = Orders::CreateService.call(order_params)
+# → validate → charge → create → Success/Failure
+
+# Event Dispatcher: independent notifications after success
+ApplicationEvent.dispatch(:order_created, order)
+# → email handler (independent)
+# → analytics handler (independent)
+# → inventory handler (independent)
+```
+
+### Decision Guide: Event Dispatcher vs Chain of Responsibility
+
+- **Chain** — ONE handler claims the request and stops the chain
+- **Event Dispatcher** — ALL handlers run for every event
+
+```ruby
+# Chain: who approves this order? (one handler responds)
+ApprovalChain.build.approve(purchase_order)
+
+# Event Dispatcher: order approved — notify everyone (all handlers respond)
+ApplicationEvent.dispatch(:order_approved, order)
 ```
 
 ## Summary
