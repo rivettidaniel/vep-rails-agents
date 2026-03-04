@@ -910,33 +910,52 @@ export default class extends Controller {
 
 ### Infinite Scroll
 
+Use **Turbo Streams** (not frames) to append items to an existing list. Frames replace their own content — they cannot append to an element outside themselves.
+
 ```erb
 <%# app/views/resources/index.html.erb %>
 <div id="resources">
   <%= render @resources %>
 </div>
 
-<%= turbo_frame_tag "pagination",
-                    src: resources_path(page: @next_page),
-                    loading: :lazy do %>
-  <div class="loading">Loading more...</div>
+<% if @next_page %>
+  <div id="pagination">
+    <%= link_to "Load more",
+                resources_path(page: @next_page),
+                data: { turbo_stream: true } %>
+  </div>
 <% end %>
 ```
 
+```ruby
+# app/controllers/resources_controller.rb
+def index
+  @resources = Resource.page(params[:page]).per(20)
+  @next_page = @resources.next_page
+
+  respond_to do |format|
+    format.turbo_stream  # Renders index.turbo_stream.erb
+    format.html
+  end
+end
+```
+
 ```erb
-<%# app/views/resources/_pagination.html.erb (returned for frame) %>
+<%# app/views/resources/index.turbo_stream.erb %>
 <%= turbo_stream.append "resources" do %>
   <%= render @resources %>
 <% end %>
 
-<%= turbo_frame_tag "pagination",
-                    src: (@next_page ? resources_path(page: @next_page) : nil),
-                    loading: :lazy do %>
+<%= turbo_stream.update "pagination" do %>
   <% if @next_page %>
-    <div class="loading">Loading more...</div>
+    <%= link_to "Load more",
+                resources_path(page: @next_page),
+                data: { turbo_stream: true } %>
   <% end %>
 <% end %>
 ```
+
+> ⚠️ **Never use `turbo_stream.*` tags inside a Turbo Frame response** — stream tags are only processed when the response Content-Type is `text/vnd.turbo-stream.html`. Inside a regular HTML frame response they are ignored.
 
 ## What NOT to Do
 
@@ -1046,6 +1065,31 @@ document.addEventListener("turbo:submit-start", (event) => {
 - **Test your streams** - Request specs verify Turbo responses
 - **Morphing is powerful** - Turbo 8's morphing preserves state
 - Be **pragmatic** - Don't over-engineer simple interactions
+
+## Related Skills
+
+| Skill | Use When |
+|-------|----------|
+| [`hotwire-patterns`](../skills/hotwire-patterns/SKILL.md) | Full Hotwire reference — Turbo Frames, Streams, and Stimulus integration patterns |
+| [`viewcomponent-patterns`](../skills/viewcomponent-patterns/SKILL.md) | Wrapping Turbo Frames/Stream targets in reusable ViewComponents |
+| [`rails-controller`](../skills/rails-controller/SKILL.md) | Adding `respond_to` blocks with `format.turbo_stream` to controllers |
+| [`action-cable-patterns`](../skills/action-cable-patterns/SKILL.md) | Broadcasting Turbo Streams over WebSocket (real-time updates) |
+
+### Quick Decide
+
+```
+Need a UI update — which Turbo tool?
+└─> Update one isolated section (inline edit, search results)?
+    └─> Turbo Frame — scope a region, frame navigates independently
+└─> Surgical DOM update from server (append, remove, replace)?
+    └─> Turbo Stream — format.turbo_stream + .turbo_stream.erb template
+└─> Real-time push to all users (chat, notifications)?
+    └─> Turbo Stream over ActionCable — broadcast_*_to model methods
+└─> Append to a list from "Load More" link?
+    └─> Turbo Stream (NOT frame) — frames can't append outside themselves
+└─> Full page navigation feels slow?
+    └─> Turbo Drive (default) — already enabled; add morphing for smoother updates
+```
 
 ## Resources
 
