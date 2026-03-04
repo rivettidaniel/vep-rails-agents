@@ -796,3 +796,25 @@ When styling components or views:
 - Create overly complex custom CSS
 - Mix arbitrary values without justification (e.g., `w-[372px]`)
 - Skip focus states on interactive elements
+
+## Related Skills
+
+| Skill | When to Use With Tailwind |
+|-------|--------------------------|
+| `viewcomponent-patterns` | Encapsulate repeated Tailwind patterns into a reusable ViewComponent |
+| `hotwire-patterns` | Styling Turbo Frame/Stream targets, loading spinners, transition classes |
+| `stimulus-agent` | Interactive states (toggle `hidden`, loading buttons) driven by Stimulus values |
+| `tdd-cycle` | Component specs that assert on CSS classes and ARIA attributes |
+
+### Tailwind vs Custom CSS — Which to Use?
+
+| Scenario | Approach |
+|----------|----------|
+| Standard utility (spacing, color, typography) | **Tailwind utility classes** |
+| Repeated 5+ class combination | Extract to **ViewComponent** with method |
+| Repeated 2–3 class combination | `@utility` in `application.css` |
+| Complex CSS animation / `@keyframes` | **Custom CSS** in `application.css` |
+| Third-party library overrides | **Custom CSS** (target library selectors) |
+| Arbitrary one-off value (e.g., `w-[372px]`) | Only if truly unavoidable; prefer design tokens |
+
+> Rule of thumb: if you find yourself copy-pasting a class string more than twice, extract it — to a ViewComponent if it has structure/logic, or to a `@utility` if it's purely visual.
