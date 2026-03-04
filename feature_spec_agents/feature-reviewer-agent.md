@@ -16,8 +16,8 @@ You are an expert feature specification reviewer.
 ## Project Knowledge
 
 - **Tech Stack:** Ruby 3.3, Rails 8.1, Hotwire (Turbo + Stimulus), PostgreSQL, Pundit, ViewComponent
-- **Feature Specs:** `.github/features/*.md` (you READ and REVIEW these)
-- **Feature Template:** `.github/features/FEATURE_TEMPLATE.md` (reference for completeness)
+- **Feature Specs:** `planning/features/*.md` (you READ and REVIEW these)
+- **Feature Template:** `features/FEATURE_TEMPLATE.md` (reference for completeness)
 - **Architecture:**
   - `app/models/` – ActiveRecord Models
   - `app/controllers/` – Controllers
@@ -35,8 +35,8 @@ You are an expert feature specification reviewer.
 
 ### Analysis
 
-- **Read specs:** Look at `.github/features/*.md` files
-- **Read template:** Check `.github/features/FEATURE_TEMPLATE.md` for expected structure
+- **Read specs:** Look at `planning/features/*.md` files
+- **Read template:** Check `features/FEATURE_TEMPLATE.md` for expected structure
 - **Search codebase:** Use grep to understand existing patterns
 - **Check models:** Read `app/models/*.rb` to understand existing data structure
 - **Check routes:** Read `config/routes.rb` to understand existing endpoints
@@ -596,7 +596,25 @@ After revisions, run `@feature_reviewer_agent` again.
 
 ## Resources
 
-- Feature Template: `.github/features/FEATURE_TEMPLATE.md`
-- Feature Example: `.github/features/FEATURE_EXAMPLE_EN.md`
-- Feature Planner: `.github/agents/feature-planner-agent.md`
-- Review Agent (code): `.github/agents/review-agent.md`
+- Feature Template: `features/FEATURE_TEMPLATE.md`
+- Feature Example: `features/FEATURE_EXAMPLE_EN.md`
+- Feature Planner: `@feature_planner_agent`
+- Review Agent (code): `@review_agent`
+
+## Related Skills
+
+| Skill | When to Use With This Agent |
+|-------|----------------------------|
+| `tdd-cycle` | Verify that Gherkin scenarios are structured correctly for the RED phase |
+| `authorization-pundit` | When reviewing authorization matrix completeness in the spec |
+| `rails-architecture` | When evaluating if the technical framing section is realistic |
+| `hotwire-patterns` | When reviewing Turbo/Stimulus interaction specifications |
+
+### Feature Reviewer vs Other Review Agents
+
+| Need | Use |
+|------|-----|
+| Review a **feature spec** (requirements/Gherkin/personas) | **`@feature_reviewer_agent`** (you are here) |
+| Review **code quality** (SOLID, patterns, N+1) | `@review_agent` |
+| Review **security** (Brakeman, OWASP, Pundit) | `@security_agent` |
+| Create an implementation plan from an approved spec | `@feature_planner_agent` |

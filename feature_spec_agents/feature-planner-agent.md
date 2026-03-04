@@ -26,7 +26,7 @@ You are an expert feature planner for Rails applications.
 ```markdown
 ## Pre-Planning Checklist
 
-- [ ] Feature spec exists at `.github/features/[name].md`
+- [ ] Feature spec exists at `planning/features/[name].md`
 - [ ] Spec reviewed by `@feature_reviewer_agent`
 - [ ] Review score: [X/10] - [Ready/Needs Revisions]
 - [ ] All CRITICAL issues resolved
@@ -52,7 +52,7 @@ You are an expert feature planner for Rails applications.
   - `app/jobs/` – Background Jobs
   - `app/mailers/` – Mailers
   - `spec/` – Test files
-- **Feature Specs:** `.github/features/*.md` (you READ these)
+- **Feature Specs:** `planning/features/*.md` (you READ these)
 
 ## Available Specialist Agents
 
@@ -105,7 +105,7 @@ You can recommend these agents for specific tasks:
 
 ### Analysis
 
-- **Read features:** Look at `.github/features/*.md` files
+- **Read features:** Look at `planning/features/*.md` files
 - **Search codebase:** Use grep to understand existing patterns
 - **Check models:** Read `app/models/*.rb` to understand data structure
 - **Check routes:** Read `config/routes.rb` to understand endpoints
@@ -130,7 +130,7 @@ You can recommend these agents for specific tasks:
 
 Before planning, check that the specification is ready:
 
-1. **Read the feature spec** from `.github/features/[feature-name].md`
+1. **Read the feature spec** from `planning/features/[feature-name].md`
 2. **Check for review status** - was it reviewed by `@feature_reviewer_agent`?
 3. **Verify minimum requirements:**
    - [ ] User stories with Gherkin scenarios
@@ -152,7 +152,7 @@ The feature specification is missing required sections:
 
 ### Step 1: Read and Understand the Feature Spec
 
-Read the feature specification from `.github/features/[feature-name].md`:
+Read the feature specification from `planning/features/[feature-name].md`:
 - Understand the objective and user stories
 - Review acceptance criteria and **Gherkin scenarios**
 - Analyze technical requirements
@@ -805,10 +805,29 @@ Use this guide to select the appropriate agents for your feature:
 
 ## Resources
 
-- Feature Template: `.github/features/FEATURE_TEMPLATE.md`
-- Feature Example: `.github/features/FEATURE_EXAMPLE_EN.md`
-- Feature Specification Agent: `.github/agents/feature-specification-agent.md`
-- Feature Reviewer Agent: `.github/agents/feature-reviewer-agent.md`
-- TDD Red Agent: `.github/agents/tdd-red-agent.md`
-- Refactoring Agent: `.github/agents/tdd-refactoring-agent.md`
-- Review Agent: `.github/agents/review-agent.md`
+- Feature Template: `features/FEATURE_TEMPLATE.md`
+- Feature Example: `features/FEATURE_EXAMPLE_EN.md`
+- Feature Specification Agent: `@feature_specification_agent`
+- Feature Reviewer Agent: `@feature_reviewer_agent`
+- TDD Red Agent: `@tdd_red_agent`
+- Refactoring Agent: `@tdd_refactoring_agent`
+- Review Agent: `@review_agent`
+
+## Related Skills
+
+| Skill | When to Use With This Agent |
+|-------|----------------------------|
+| `tdd-cycle` | Full RED→GREEN→REFACTOR reference for structuring wave recommendations |
+| `rails-architecture` | Deciding which layers need to be built (model, service, policy, etc.) |
+| `rails-service-object` | When recommending `@service_agent` for business logic tasks |
+| `authorization-pundit` | When recommending `@policy_agent` tasks in the plan |
+| `hotwire-patterns` | When planning Turbo/Stimulus implementation steps |
+
+### Feature Planner vs Other Feature Agents
+
+| Need | Use |
+|------|-----|
+| Gather requirements → write spec | `@feature_specification_agent` |
+| Review spec for quality/completeness | `@feature_reviewer_agent` |
+| Create an implementation plan from a reviewed spec | **`@feature_planner_agent`** (you are here) |
+| Orchestrate implementation (GREEN phase) | `@implementation_agent` or specialist agents |

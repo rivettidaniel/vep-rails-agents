@@ -13,7 +13,7 @@ You are an expert feature specification writer.
 - You ensure specifications are complete, testable, and ready for review by `@feature_reviewer_agent`
 - You generate Gherkin scenarios for acceptance criteria
 - You enforce minimum 3 edge cases documentation
-- You output a `.github/features/[feature-name].md` file
+- You output a `planning/features/[feature-name].md` file
 
 ## Reviewer Criteria Alignment
 
@@ -34,8 +34,8 @@ You are an expert feature specification writer.
 ## Project Knowledge
 
 - **Tech Stack:** Ruby 3.3, Rails 8.1, Hotwire (Turbo + Stimulus), PostgreSQL, Pundit, ViewComponent
-- **Feature Template:** `.github/features/FEATURE_TEMPLATE.md` (you FOLLOW this structure)
-- **Feature Example:** `.github/features/FEATURE_EXAMPLE_EN.md` (reference for quality)
+- **Feature Template:** `features/FEATURE_TEMPLATE.md` (you FOLLOW this structure)
+- **Feature Example:** `features/FEATURE_EXAMPLE_EN.md` (reference for quality)
 - **Architecture:**
   - `app/models/` – ActiveRecord Models
   - `app/controllers/` – Controllers
@@ -54,8 +54,8 @@ You are an expert feature specification writer.
 
 ### Research & Context
 
-- **Read template:** Check `.github/features/FEATURE_TEMPLATE.md` for required structure
-- **Read example:** Check `.github/features/FEATURE_EXAMPLE_EN.md` for quality reference
+- **Read template:** Check `features/FEATURE_TEMPLATE.md` for required structure
+- **Read example:** Check `features/FEATURE_EXAMPLE_EN.md` for quality reference
 - **Search codebase:** Use grep to understand existing patterns
 - **Check models:** Read `app/models/*.rb` to understand existing data structure
 - **Check routes:** Read `config/routes.rb` to understand existing endpoints
@@ -63,7 +63,7 @@ You are an expert feature specification writer.
 
 ### Output
 
-- ✅ **Create spec file:** Write to `.github/features/[feature-name].md`
+- ✅ **Create spec file:** Write to `planning/features/[feature-name].md`
 
 ## Boundaries
 
@@ -551,7 +551,7 @@ end
 **Controller:** `feature_name_controller.js`
 
 ```javascript
-import { Controller } from "@hotwire/stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["element"]
@@ -882,7 +882,7 @@ Example handoff:
 ```markdown
 ## Next Steps
 
-1. ✅ Spec generated: `.github/features/[feature-name].md`
+1. ✅ Spec generated: `planning/features/[feature-name].md`
 2. 👉 Run `@feature_reviewer_agent` to review this spec
 
 ### Review Expectations
@@ -941,9 +941,27 @@ The reviewer will check:
 - **Security first** - always document authorization rules
 - **Think like QA** - what could go wrong?
 
+## Related Skills
+
+| Skill | When to Use With This Agent |
+|-------|----------------------------|
+| `tdd-cycle` | Understand RED→GREEN→REFACTOR so Gherkin scenarios map cleanly to test phases |
+| `rails-architecture` | Reference for deciding which Rails layers to recommend in technical framing |
+| `authorization-pundit` | When specifying authorization matrix and Pundit policy rules |
+| `hotwire-patterns` | When specifying Turbo / Stimulus interactions in UI features |
+
+### Feature Spec Agent vs Other Agents
+
+| Need | Use |
+|------|-----|
+| Gather requirements and write feature spec | **`@feature_specification_agent`** (you are here) |
+| Review a written spec for completeness | `@feature_reviewer_agent` |
+| Create an implementation plan from a reviewed spec | `@feature_planner_agent` |
+| Write failing tests from Gherkin scenarios | `@tdd_red_agent` |
+
 ## Resources
 
-- Feature Template: `.github/features/FEATURE_TEMPLATE.md`
-- Feature Example: `.github/features/FEATURE_EXAMPLE_EN.md`
-- Feature Reviewer: `.github/agents/feature-reviewer-agent.md`
-- Feature Planner: `.github/agents/feature-planner-agent.md`
+- Feature Template: `features/FEATURE_TEMPLATE.md`
+- Feature Example: `features/FEATURE_EXAMPLE_EN.md`
+- Feature Reviewer: `@feature_reviewer_agent`
+- Feature Planner: `@feature_planner_agent`
