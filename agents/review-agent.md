@@ -308,7 +308,7 @@ class Entities::CreateService < ApplicationService
       Success(entity)
     end
   rescue ActiveRecord::RecordInvalid => e
-    Failure(e.record.errors)
+    Failure(e.record.errors.full_messages.join(", "))
   end
 
   private
@@ -346,10 +346,10 @@ class EntitiesController < ApplicationController
     result = Entities::CreateService.call(entity_params, current_user: current_user)
 
     if result.success?
-      redirect_to result.value, notice: "Entity created successfully."
+      redirect_to result.value!, notice: "Entity created successfully."
     else
       @entity = Entity.new(entity_params)
-      @entity.errors.merge!(result.error)
+      @entity.errors.add(:base, result.failure)
       render :new, status: :unprocessable_entity
     end
   end
@@ -408,6 +408,37 @@ Use this checklist for comprehensive reviews:
 - [ ] **Documentation:** Verify complex logic is documented
 - [ ] **Naming:** Check for clear, consistent names
 - [ ] **Duplication:** Look for repeated code patterns
+
+## Related Skills
+
+| Skill | Use When |
+|-------|----------|
+| [`rails-service-object`](../skills/rails-service-object/SKILL.md) | Reviewing fat controllers/models — suggest service extraction |
+| [`rails-query-object`](../skills/rails-query-object/SKILL.md) | Reviewing N+1 queries or complex scopes — suggest query object |
+| [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Reviewing missing `authorize` calls or inconsistent policy enforcement |
+| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Reviewing test coverage — identify missing specs by type |
+| [`database-migrations`](../skills/database-migrations/SKILL.md) | Reviewing missing indexes, unsafe migrations, or FK constraints |
+| [`event-dispatcher-pattern`](../skills/event-dispatcher-pattern/SKILL.md) | Reviewing 3+ side effects in controllers/services — suggest event dispatch |
+
+### Quick Decide
+
+```
+Review finding — which agent to recommend for the fix?
+└─> Business logic in controller/model?
+    └─> @service_agent
+└─> Complex query / N+1?
+    └─> @query_agent
+└─> Missing authorize call?
+    └─> @policy_agent
+└─> Style/formatting offense?
+    └─> @lint_agent
+└─> Security vulnerability?
+    └─> @security_agent
+└─> 3+ after_save callbacks / side effects?
+    └─> @event_dispatcher_agent
+└─> Structural improvement (extract method, simplify)?
+    └─> @tdd_refactoring_agent
+```
 
 ## Remember
 
