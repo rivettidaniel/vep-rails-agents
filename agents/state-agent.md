@@ -610,11 +610,8 @@ RSpec.describe DraftOrderState do
           .to(SubmittedOrderState)
       end
 
-      it 'sends submission email' do
-        expect {
-          subject.submit
-        }.to have_enqueued_mail(OrderMailer, :submitted)
-      end
+      # ✅ Email test belongs in controller spec, NOT here
+      # State is pure - no side effects (no mailers, no broadcasts)
     end
 
     context 'without items' do
@@ -944,3 +941,36 @@ The State pattern provides:
 - Subscriptions (trial, active, paused, cancelled)
 - Support tickets (open, in_progress, resolved, closed)
 - Job applications (submitted, screening, interview, hired)
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Full State Pattern reference with FSM, testing, examples | `@state-pattern` skill |
+| Complex business logic inside a transition (e.g., charging payment) | `@rails-service-object` skill |
+| 3+ side effects after a state transition (emails, jobs, cache) | `@event-dispatcher-pattern` skill |
+| Writing transition specs and shared examples | `@tdd-cycle` skill |
+| Runtime algorithm selection (client chooses behavior) | `@strategy-pattern` skill |
+| Operations that need undo/redo across state changes | `@command-pattern` skill |
+
+### State vs Similar Patterns — Quick Decide
+
+```
+Object behavior changes AUTOMATICALLY based on its own internal state?
+└─ YES → State Pattern (this agent)
+
+Caller SELECTS which algorithm to use at runtime?
+└─ YES → Strategy (@strategy_agent)
+
+Algorithm has a FIXED SEQUENCE with variant steps?
+└─ YES → Template Method (@template_method_agent)
+
+Need UNDO or queue the operation?
+└─ YES → Command (@command_agent)
+
+Transition triggers 3+ side effects (email + job + cache + ...)?
+└─ YES → Event Dispatcher (@event_dispatcher_agent) — keep states pure
+
+Simple boolean flag (on/off)?
+└─ YES → Just use a boolean column, no pattern needed
+```

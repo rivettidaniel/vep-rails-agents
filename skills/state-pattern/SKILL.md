@@ -751,9 +751,8 @@ RSpec.describe Orders::DraftState do
           .from('draft').to('submitted')
       end
 
-      it 'sends notification email' do
-        expect { subject.submit }.to have_enqueued_mail(OrderMailer, :submitted)
-      end
+      # ✅ Email test belongs in controller spec, NOT here
+      # State is pure - no side effects (no mailers, no broadcasts)
     end
 
     context 'with invalid order' do
