@@ -152,14 +152,13 @@ RSpec.describe UserRegistrationService do
       end
 
       it 'sends a welcome email' do
-        expect(UserMailer).to receive(:welcome_email).and_call_original
-        service.call
+        expect { service.call }.to have_enqueued_mail(UserMailer, :welcome_email)
       end
 
       it 'returns success result' do
         result = service.call
-        expect(result.success?).to be true
-        expect(result.user).to be_a(User)
+        expect(result).to be_success
+        expect(result.value!).to be_a(User)
       end
     end
 
@@ -172,8 +171,8 @@ RSpec.describe UserRegistrationService do
 
       it 'returns failure result with errors' do
         result = service.call
-        expect(result.success?).to be false
-        expect(result.errors).to include(:email)
+        expect(result).to be_failure
+        expect(result.failure).to include('email')
       end
     end
 
@@ -183,8 +182,8 @@ RSpec.describe UserRegistrationService do
 
       it 'returns failure result' do
         result = service.call
-        expect(result.success?).to be false
-        expect(result.errors).to include('Email already taken')
+        expect(result).to be_failure
+        expect(result.failure).to include('Email already taken')
       end
     end
   end
@@ -345,7 +344,7 @@ RSpec.describe ActiveUsersQuery do
 end
 ```
 
-**✅ GOOD EXAMPLE - Pundit Policy test:
+**✅ GOOD EXAMPLE - Pundit Policy test:**
 ```ruby
 # spec/policies/submission_policy_spec.rb
 require 'rails_helper'
@@ -392,7 +391,7 @@ RSpec.describe SubmissionPolicy do
 end
 ```
 
-**✅ GOOD EXAMPLE - System test (end-to-end):
+**✅ GOOD EXAMPLE - System test (end-to-end):**
 ```ruby
 # spec/system/user_authentication_spec.rb
 require 'rails_helper'
@@ -579,6 +578,34 @@ end
 6. **Fix issues** if necessary
 7. **Check linting** with `bundle exec rubocop -a spec/`
 8. **Run entire suite** with `bundle exec rspec` to ensure nothing is broken
+
+## Related Skills
+
+| Skill | Use When |
+|-------|----------|
+| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Full RED→GREEN→REFACTOR workflow reference |
+| [`rails-service-object`](../skills/rails-service-object/SKILL.md) | Testing services — dry-monads API: `be_success`, `result.value!`, `result.failure` |
+| [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Testing Pundit policies — `permit_action`, `forbid_action` matchers |
+| [`view-component`](../skills/view-component/SKILL.md) | Testing ViewComponents — `render_inline`, CSS/text matchers |
+| [`action-mailer-patterns`](../skills/action-mailer-patterns/SKILL.md) | Testing mailer delivery — `have_enqueued_mail` vs `deliveries.count` |
+| [`solid-queue-setup`](../skills/solid-queue-setup/SKILL.md) | Testing background jobs — `have_enqueued_job`, `perform_enqueued_jobs` |
+
+### Quick Decide
+
+```
+Writing tests for existing code?
+└─> Service returns dry-monads?
+    └─> result.value! (success), result.failure (failure) — NOT result.user / result.errors
+└─> Email delivery?
+    └─> deliver_later → have_enqueued_mail(Mailer, :method)
+    └─> deliver_now  → change { ActionMailer::Base.deliveries.count }.by(1)
+└─> Controller behavior?
+    └─> Use spec/requests/ (NOT spec/controllers/)
+└─> Full user flow?
+    └─> spec/system/ with Capybara + :js tag for JavaScript interactions
+└─> Pundit policy?
+    └─> permit_action / forbid_action matchers (pundit-matchers gem)
+```
 
 ## Resources
 
