@@ -512,11 +512,13 @@ class BaseOrderProcessor
   end
 
   def process_payment
+    before_payment
     result = PaymentService.charge(
       amount: order.total,
       customer: order.customer
     )
     order.payment_id = result[:transaction_id]
+    after_payment
   end
 
   def update_inventory
@@ -854,3 +856,33 @@ The Template Method pattern provides:
 - Email generators (different templates)
 - Multi-step wizards (registration, checkout)
 - Data migration scripts (different sources)
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Full Template Method reference with hooks, testing, examples | `@template-method-pattern` skill |
+| The shared algorithm involves complex business logic | `@rails-service-object` skill |
+| Background jobs that share a processing skeleton | `@solid-queue-setup` skill |
+| Writing shared examples to test abstract steps | `@tdd-cycle` skill |
+| Multiple interchangeable algorithms (swap at runtime) | `@strategy-pattern` skill |
+| Steps are side effects after saving (emails, jobs) | `@event-dispatcher-pattern` skill |
+
+### Template Method vs Similar Patterns — Quick Decide
+
+```
+Algorithm has a FIXED SEQUENCE of steps, but some steps vary by subclass?
+└─ YES → Template Method (this agent)
+
+Need to SWAP the entire algorithm at runtime (caller decides)?
+└─ YES → Strategy (@strategy_agent)
+
+Need UNDO / QUEUE the operation?
+└─ YES → Command (@command_agent)
+
+Steps trigger SIDE EFFECTS (email, jobs, cache) after completion?
+└─ YES → Event Dispatcher (@event_dispatcher_agent) — keep template method clean
+
+Multiple OBJECTS need to be created polymorphically during the process?
+└─ YES → Combine with Factory Method (@factory_method_agent)
+```
