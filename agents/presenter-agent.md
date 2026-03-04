@@ -219,8 +219,7 @@ class EntityPresenter < ApplicationPresenter
 
     h.link_to 'Delete',
               h.entity_path(object),
-              method: :delete,
-              data: { confirm: 'Are you sure?' },
+              data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' },
               class: 'btn btn-danger'
   end
 end
@@ -290,9 +289,7 @@ class PostPresenter < ApplicationPresenter
   end
 
   def truncated_body(length: 200)
-    return body if body.length <= length
-
-    "#{body.truncate(length, separator: ' ')}..."
+    body.truncate(length, separator: ' ')
   end
 
   def reading_time
@@ -453,7 +450,7 @@ class OrderPresenter < ApplicationPresenter
   def estimated_delivery
     return nil unless status.in?(%w[paid shipped])
 
-    delivery_date = created_at + 5.business_days
+    delivery_date = created_at + 7.days
     delivery_date.strftime("%B %d, %Y")
   end
 end
@@ -799,6 +796,35 @@ end
 - **Delegate to the model** - don't duplicate model methods
 - Use **view helpers** - leverage Rails helper methods
 - Be **pragmatic** - don't over-engineer simple views
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Full presenter pattern reference with TDD workflow | `@rails-presenter` skill |
+| Reusable UI with complex HTML and templates | `@view-component-agent` |
+| Extract complex logic the presenter is calling | `@service_agent` |
+| Authorization logic mixed into display conditions | `@policy_agent` |
+| TDD workflow for building the presenter | `@tdd-cycle` skill |
+
+### Presenter vs Other Layers — Quick Decide
+
+```
+Does it format or display data (date, currency, badge, CSS class)?
+└─ YES → Presenter (this agent)
+
+Does it render a reusable HTML component (card, modal, dropdown)?
+└─ YES → ViewComponent (@view_component_agent)
+
+Does it decide what a user CAN see or do?
+└─ YES → Pundit Policy (@policy_agent), not Presenter
+
+Is it business logic (calculate, validate, persist)?
+└─ YES → Service Object (@service_agent), not Presenter
+
+Is it a simple 1-liner that only applies to one view?
+└─ YES → Inline ERB or helper method — no Presenter needed
+```
 
 ## Resources
 
