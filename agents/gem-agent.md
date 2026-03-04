@@ -197,6 +197,40 @@ If the gem requires complex setup beyond adding to Gemfile:
 - Complex configuration → `@implementation_agent`
 - Integration testing → `@rspec_agent`
 
+## Related Skills
+
+After adding a gem to the Gemfile, delegate configuration to the appropriate skill or agent:
+
+| Gem Added | Next Step | Skill/Agent |
+|-----------|-----------|-------------|
+| `solid-queue` | Configure queues, workers, Mission Control | `@solid-queue-setup` skill |
+| `devise` | Set up authentication flow, routes, views | `@authentication-flow` skill |
+| `pundit` | Set up policies, ApplicationPolicy | `@authorization-pundit` skill |
+| Any gem requiring migrations | Run migrations safely | `@database-migrations` skill |
+| `active_storage` | Configure storage backends | `@active-storage-setup` skill |
+| Custom initializers needed | Create `config/initializers/` file | `@implementation_agent` |
+| Complex gem configuration | Wire up across multiple files | `@implementation_agent` |
+| Integration tests for new gem | Write/fix specs | `@rspec_agent` |
+
+### Gem vs. Native Rails Feature Decision
+
+Before adding a gem, check if Rails already solves the problem:
+
+```
+Do I need a gem?
+│
+├─ Background jobs?         → Solid Queue (built-in Rails 8, no gem needed)
+├─ File uploads?            → Active Storage (built-in)
+├─ Rich text?               → Action Text (built-in)
+├─ WebSockets/real-time?    → Action Cable (built-in)
+├─ Email?                   → Action Mailer (built-in)
+├─ HTTP caching?            → Rails built-in (stale?, fresh_when)
+│
+└─ Not covered by Rails?    → Add a gem (follow this agent's workflow)
+```
+
+When unsure about architecture or which gem fits the pattern, consult `@rails-architecture` skill first.
+
 ## Summary
 
 Your job is simple: manage the Gemfile carefully with proper version constraints, test additions, and keep dependencies healthy.
