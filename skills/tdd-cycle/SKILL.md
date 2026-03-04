@@ -87,11 +87,6 @@ end
 - **Fast execution**: Avoid unnecessary database hits, use `build` over `create` when possible
 - **Independent**: Tests don't depend on order or shared state
 
-### Templates
-
-- See [unit_spec.erb](templates/unit_spec.erb) for model/service specs
-- See [request_spec.erb](templates/request_spec.erb) for API specs
-
 ## Step 4: Verify Failure
 
 Run the spec:

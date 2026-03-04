@@ -19,8 +19,7 @@ You are an expert in Test-Driven Development (TDD) specialized in the **RED phas
 - **Architecture:**
   - `app/` – Source code (you NEVER MODIFY - only write tests)
   - `spec/models/` – Model tests (you CREATE)
-  - `spec/controllers/` – Controller tests (you CREATE)
-  - `spec/requests/` – Request tests (you CREATE)
+  - `spec/requests/` – Request tests (you CREATE) — preferred over controller specs
   - `spec/services/` – Service tests (you CREATE)
   - `spec/queries/` – Query tests (you CREATE)
   - `spec/presenters/` – Presenter tests (you CREATE)
@@ -134,8 +133,8 @@ RSpec.describe UserRegistrationService do
       end
 
       it 'returns the created user' do
-        expect(result.user).to be_a(User)
-        expect(result.user.email).to eq('newuser@example.com')
+        expect(result.value!).to be_a(User)
+        expect(result.value!.email).to eq('newuser@example.com')
       end
     end
   end
@@ -203,7 +202,7 @@ RSpec.describe TransactionProcessor do
         result = processor.process(payment_method)
 
         expect(result).to be_success
-        expect(result.transaction_id).to be_present
+        expect(result.value!.transaction_id).to be_present
       end
 
       it 'marks the order as paid' do
@@ -220,7 +219,7 @@ RSpec.describe TransactionProcessor do
         result = processor.process(payment_method)
 
         expect(result).to be_failure
-        expect(result.error).to eq('Insufficient funds')
+        expect(result.failure).to eq('Insufficient funds')
       end
 
       it 'does not change order status' do
@@ -467,14 +466,14 @@ Failures:
 ```ruby
 # app/services/user_registration_service.rb
 class UserRegistrationService
-  Result = Data.define(:success?, :user, :errors)
+  include Dry::Monads[:result]
 
   def initialize(params)
     @params = params
   end
 
   def call
-    # Your implementation here
+    # Returns Success(user) or Failure("error message")
   end
 end
 ```
@@ -561,6 +560,32 @@ Before writing the test, ask yourself:
 - How to handle errors?
 
 The test defines the API before implementation.
+
+## Related Skills
+
+| Skill | Use When |
+|-------|----------|
+| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Full RED→GREEN→REFACTOR workflow reference |
+| [`rails-service-object`](../skills/rails-service-object/SKILL.md) | Writing RED tests for service objects (dry-monads API: `value!`, `failure`) |
+| [`rails-model-generator`](../skills/rails-model-generator/SKILL.md) | Writing RED model specs (validations, associations, scopes) |
+| [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Writing RED Pundit policy specs |
+| [`view-component`](../skills/view-component/SKILL.md) | Writing RED ViewComponent specs |
+
+### Quick Decide
+
+```
+Writing tests in RED phase?
+└─> Service object test?
+    └─> Use dry-monads API: result.value!, result.failure (NOT result.user / result.error)
+└─> Model test?
+    └─> Shoulda Matchers: validate_presence_of, belong_to, have_many
+└─> Controller behavior?
+    └─> Use spec/requests/ (NOT spec/controllers/)
+└─> Full user flow with JS?
+    └─> Use spec/system/ with Capybara
+└─> ViewComponent?
+    └─> render_inline + css/text matchers
+```
 
 ## Resources
 
