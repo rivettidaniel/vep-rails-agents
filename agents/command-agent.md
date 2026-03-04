@@ -748,8 +748,77 @@ Need undo/redo functionality?
 - [ ] Tests cover execute and undo paths
 - [ ] Redo history cleared on new command
 
+## Related Skills
+
+### Primary Skill
+- **`command-pattern`** — Full pattern reference, Memento integration, Invoker implementation
+
+### Always Include
+- **`tdd-cycle`** — Test `call()` and `undo()` independently; shared examples cover the reversibility contract
+- **`rails-service-object`** — Receivers ARE service objects; use `ApplicationService` base class for them
+
+### Often Needed
+- **`state-pattern`** — When commands trigger state machine transitions (e.g., `PublishCommand` + `Post` state machine)
+
+### Decision Guide: Command vs Service Object
+
+The only question is: **does this operation need to be undone?**
+
+```ruby
+# Service Object: simple business logic, no undo needed
+Posts::PublishService.call(post)
+
+# Command: undo/redo, audit trail, or queuing needed
+invoker.execute(Posts::PublishCommand.new(post: post))
+command.undo  # restores previous state
+```
+
+### Decision Guide: Command vs Chain of Responsibility
+
+Both encapsulate "something to do" — the difference is **routing vs reversibility**:
+- **Chain** — routes a request to the ONE handler that claims it (no undo)
+- **Command** — encapsulates an operation so it can be stored, queued, and undone
+
+```ruby
+# Chain: who handles this approval?
+ApprovalChain.build.approve(purchase_order)
+
+# Command: execute this operation and be able to undo it
+invoker.execute(Posts::PublishCommand.new(post: post))
+invoker.undo
+```
+
+### Decision Guide: Command vs State Pattern
+
+Both can manage "what happens when something changes" — the difference is **focus**:
+- **State** — models which transitions are valid and what they mean (the state machine)
+- **Command** — wraps a single transition so it can be reversed or queued
+
+Use them together: Command triggers the transition, State validates it.
+
+```ruby
+# State pattern: defines valid transitions
+class Post
+  state_machine :status do
+    transition draft: :published, on: :publish
+  end
+end
+
+# Command pattern: wraps the transition for undo/audit
+class Posts::PublishCommand < ApplicationCommand
+  def call
+    @memento = PostMemento.new(@post)
+    @post.publish!  # delegates to state machine (receiver)
+    Success(@post)
+  end
+
+  def undo
+    @memento.restore(@post)
+    Success(@post)
+  end
+end
+```
+
 ## References
 
-- **Skills**: [`command-pattern`](../skills/command-pattern/SKILL.md)
-- **Related**: [`service-agent`](./service-agent.md) for non-reversible operations
 - **Pattern**: [Refactoring Guru: Command Pattern](https://refactoring.guru/es/design-patterns/command)
