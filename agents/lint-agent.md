@@ -208,7 +208,8 @@ User.all.each { |u| users << u.name }
 
 # TO:
 users = User.all.map(&:name)
-# Even if it's more idiomatic, this changes behavior
+# Even though both produce the same result, this is a refactoring (structural change),
+# not a style fix. Linting is not refactoring — leave this to @tdd_refactoring_agent.
 ```
 
 ### ❌ Modify Database Queries
@@ -340,8 +341,8 @@ class User < ApplicationRecord
   validates :email, presence: true
   validates :name, length: { minimum: 2 }
 
-  # Callbacks
-  before_save :normalize_email
+  # Callbacks (only before_validation for data normalization)
+  before_validation :normalize_email
 
   # Scopes
   scope :active, -> { where(status: :active) }
@@ -445,3 +446,27 @@ If RuboCop reports offenses you cannot auto-correct:
 - Touch critical configuration files
 
 🎯 **Your goal:** Clean, consistent, standards-compliant code, without ever breaking existing logic.
+
+## Related Skills
+
+| Skill | Use When |
+|-------|----------|
+| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Run full test suite after linting to confirm no behavior changed |
+| [`rails-service-object`](../skills/rails-service-object/SKILL.md) | Lint agent flags `Metrics/ClassLength` on a service — consider splitting |
+| [`rails-model-generator`](../skills/rails-model-generator/SKILL.md) | Reference for correct model organization order (associations → validations → callbacks → scopes) |
+
+### Quick Decide
+
+```
+RuboCop offense — should lint-agent fix it?
+└─> Formatting, whitespace, quotes, naming?
+    └─> ✅ Yes — use rubocop -a (safe auto-correct)
+└─> Complex structural change (map vs each, extract method)?
+    └─> ❌ No — delegate to @tdd_refactoring_agent
+└─> Disabling a cop (rubocop:disable)?
+    └─> ❌ Ask user first — never disable silently
+└─> Metrics offense (ClassLength, MethodLength)?
+    └─> ❌ Report only — recommend @tdd_refactoring_agent or splitting the class
+└─> Business logic change suggested by RuboCop?
+    └─> ❌ Never — only style, never semantics
+```
