@@ -268,3 +268,26 @@ remove_foreign_key :submissions, :entities
 - [ ] Indexes added with `algorithm: :concurrently` if necessary
 - [ ] Column removal in 2 steps (ignored_columns first)
 - [ ] Data backfill done in a job, not in the migration
+
+## Related Skills
+
+| Skill | Use When |
+|-------|----------|
+| [`database-migrations`](../skills/database-migrations/SKILL.md) | Primary skill — safe patterns, indexes, FK constraints, backfill strategies |
+| [`rails-model-generator`](../skills/rails-model-generator/SKILL.md) | Generating a model alongside its migration (create table + validations together) |
+| [`solid-queue-setup`](../skills/solid-queue-setup/SKILL.md) | Data backfills that need background jobs (large table writes) |
+| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Verifying schema changes don't break existing specs |
+
+### Quick Decide
+
+```
+Need to change the database schema?
+└─> New table / column / index?
+    └─> Use migration-agent (safe patterns in database-migrations skill)
+└─> Adding a model alongside the migration?
+    └─> Use rails-model-generator skill (generates both)
+└─> Backfilling data for millions of rows?
+    └─> Use solid-queue-setup skill (background job approach)
+└─> Column rename or removal on live table?
+    └─> Multi-step: ignore → deploy → remove (see database-migrations Pattern 5/6)
+```

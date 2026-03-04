@@ -103,16 +103,30 @@ class AddAccountToEvents < ActiveRecord::Migration[8.0]
 end
 ```
 
-### Pattern 5: Rename Column (Safe)
+### Pattern 5: Rename Column (⚠️ Zero-Downtime — Multi-Step)
+
+`rename_column` breaks production code if deployed while the old column name is still referenced. Always use a multi-step approach:
 
 ```ruby
-# db/migrate/20240115000001_rename_name_to_title_on_events.rb
-class RenameNameToTitleOnEvents < ActiveRecord::Migration[8.0]
+# Step 1: Add new column (deploy)
+class AddTitleToEvents < ActiveRecord::Migration[8.0]
   def change
-    rename_column :events, :name, :title
+    add_column :events, :title, :string
+  end
+end
+
+# Step 2: Backfill + update code to use new column (deploy)
+# Keep old column readable during transition
+
+# Step 3: Remove old column once code no longer references it (deploy)
+class RemoveNameFromEvents < ActiveRecord::Migration[8.0]
+  def change
+    safety_assured { remove_column :events, :name, :string }
   end
 end
 ```
+
+> ⚠️ **Never use `rename_column` on production tables in use** — it breaks any code referencing the old column until the next deploy.
 
 ### Pattern 6: Remove Column (Safe)
 
@@ -133,12 +147,14 @@ end
 ```ruby
 # db/migrate/20240115000001_add_status_enum_to_orders.rb
 class AddStatusEnumToOrders < ActiveRecord::Migration[8.0]
+  disable_ddl_transaction!
+
   def change
     # Use integer for Rails enum
     add_column :orders, :status, :integer, default: 0, null: false
 
-    # Add index for queries
-    add_index :orders, :status
+    # Concurrent index — safe for large tables
+    add_index :orders, :status, algorithm: :concurrently
   end
 end
 ```
