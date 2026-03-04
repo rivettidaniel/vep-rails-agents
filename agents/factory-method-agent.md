@@ -680,29 +680,25 @@ class AuthProviderFactory
   end
 
   # Uses metaprogramming instead of case statement
+  # Each factory subclass accepts its own options via initialize
   def self.for(type, **options)
     factory_class_name = FACTORIES[type]
     raise ArgumentError, "Unknown auth type: #{type}" unless factory_class_name
 
-    factory_class = Object.const_get(factory_class_name)
-
-    # Handle factories that need constructor arguments
-    if type == :oauth
-      factory_class.new(options[:provider])
-    else
-      factory_class.new
-    end
+    Object.const_get(factory_class_name).new(**options)
   end
 end
 
 class PasswordAuthProviderFactory < AuthProviderFactory
+  def initialize(**); end  # No options needed
+
   def create_provider
     PasswordAuthProvider.new
   end
 end
 
 class OauthAuthProviderFactory < AuthProviderFactory
-  def initialize(provider)
+  def initialize(provider:, **)
     @provider = provider
   end
 
@@ -984,6 +980,51 @@ notification = NotificationFactory.create(:email, user: user, message: "Hi")
 # Factory Method - Inheritance, extensible
 factory = EmailNotificationFactory.new  # Can be subclassed
 notification = factory.create_notification(user: user, message: "Hi")
+```
+
+## Related Skills
+
+### Primary Skill
+- **`factory-method-pattern`** — Full pattern reference, registry with metaprogramming, product interface
+
+### Always Include
+- **`tdd-cycle`** — Test each concrete factory independently; shared examples verify product interface compliance
+
+### Often Needed
+- **`rails-service-object`** — Factories are used via services (e.g., `NotificationService` wraps the factory call)
+- **`strategy-pattern`** — Frequently confused with Factory Method; see decision guide below
+
+### Decision Guide: Factory Method vs Strategy
+
+Both select a "thing" at runtime based on a type — the difference is **what they select**:
+
+- **Factory Method** — selects which *object to create* (creation pattern)
+- **Strategy** — selects which *algorithm to execute* (behavior pattern)
+
+```ruby
+# Factory Method: creates the right type of notification object
+factory = NotificationFactory.for(:email)
+notification = factory.create_notification(user: user, message: "Hi")
+
+# Strategy: picks the right algorithm to process something
+exporter = Exporters::Strategy.for(:csv)
+exporter.export(data)  # same object type, different behavior
+```
+
+If the answer to "what changes between types?" is **the object being created** → Factory Method.
+If it's **the algorithm applied to the same kind of data** → Strategy.
+
+### Decision Guide: Factory Method vs Builder
+
+- **Factory Method** — one step, polymorphic (`factory.create_report(data: data)`)
+- **Builder** — multiple chained steps to construct a complex object
+
+```ruby
+# Factory Method: simple creation, type varies
+ReportFactory.for(:pdf).create_report(data: data)
+
+# Builder: complex construction, many optional parts
+ReportBuilder.new.with_title("Sales").with_data(data).include_charts.as_pdf.build
 ```
 
 ## Summary
