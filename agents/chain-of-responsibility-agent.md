@@ -380,7 +380,7 @@ class UrgentTicketRouter < TicketRouter
       assigned_to_team: 'Emergency Response',
       assigned_at: Time.current
     )
-    Team.find_by(name: 'Emergency Response').notify_urgent(ticket)
+    # ✅ Handler is pure - controller handles notification
   end
 end
 
@@ -933,6 +933,55 @@ handler1 = ConcreteHandlerA.new(successor: handler2)
 
 # 4. Use chain
 handler1.handle(request)
+```
+
+## Related Skills
+
+### Primary Skill
+- **`chain-of-responsibility-pattern`** — Full pattern reference, Rails examples, anti-patterns
+
+### Always Include
+- **`tdd-cycle`** — Test each handler in isolation first, then test the full chain integration
+
+### Often Needed
+- **`rails-service-object`** — Chain builders are service objects; use `ApplicationService` base class
+- **`rails-query-object`** — When handlers filter/search records, extract query logic here
+
+### Chain of Responsibility vs Similar Patterns
+
+| Question | Answer → Use |
+|----------|-------------|
+| One handler processes the request (early exit)? | **Chain of Responsibility** ✅ |
+| ALL handlers must run on every request? | **Observer / Event Dispatcher** |
+| Fixed sequence, every step always executes? | **Template Method** |
+| One algorithm chosen at runtime, then fully executed? | **Strategy** |
+| Need undo/redo or queuing of operations? | **Command** |
+| Building complex objects step by step? | **Builder** |
+
+### Decision Guide: Chain vs Strategy
+Both pick a "handler" at runtime — the difference is **who decides**:
+- **Strategy** — the *client* picks one algorithm explicitly and uses it completely
+- **Chain** — handlers *self-select*; the request travels until something claims it
+
+```ruby
+# Strategy: client decides
+PaymentService.new(strategy: StripePayment.new).charge(order)
+
+# Chain: handlers decide among themselves
+ApprovalChain.build.approve(purchase_order)
+```
+
+### Decision Guide: Chain vs Event Dispatcher
+Both trigger multiple objects — the difference is **how many respond**:
+- **Chain** — exactly ONE handler processes (chain stops on first match)
+- **Event Dispatcher** — ALL subscribers are notified (no early exit)
+
+```ruby
+# Chain: one approver handles (manager OR director OR VP)
+ApprovalChain.build.approve(order)
+
+# Event Dispatcher: all side effects run (mailer AND search AND analytics)
+ApplicationEvent.dispatch(:order_approved, order)
 ```
 
 ## References
