@@ -123,8 +123,9 @@ class EntityRegistrationForm < ApplicationForm
     ActiveRecord::Base.transaction do
       @entity = create_entity
       create_contact_info
-      notify_owner
     end
+    # ✅ Side effects (mailers, notifications) belong in the controller
+    # after form.save returns true — NOT inside persist!
   end
 
   def create_entity
@@ -141,10 +142,6 @@ class EntityRegistrationForm < ApplicationForm
       phone: phone,
       email: email
     )
-  end
-
-  def notify_owner
-    EntityMailer.registration_confirmation(entity).deliver_later
   end
 
   def owner_exists
@@ -250,8 +247,9 @@ class ContentSubmissionForm < ApplicationForm
     ActiveRecord::Base.transaction do
       @submission = create_submission
       create_scores
-      update_entity_rating
     end
+    # ✅ Business logic (recalculating entity rating) belongs in the controller
+    # after form.save — call Entities::CalculateRatingService.call(entity:) there
   end
 
   def create_submission
@@ -278,12 +276,6 @@ class ContentSubmissionForm < ApplicationForm
     # Weighted average of sub-criteria
     ((quality_score * 0.4) + (accuracy_score * 0.3) +
      (relevance_score * 0.2) + (engagement_score * 0.1)).round
-  end
-
-  def update_entity_rating
-    Entities::CalculateRatingService.call(
-      entity: Entity.find(entity_id)
-    )
   end
 
   def author_hasnt_submitted_already
@@ -523,6 +515,8 @@ class EntitiesController < ApplicationController
     @form = EntityRegistrationForm.new(registration_params)
 
     if @form.save
+      # ✅ Side effects explicit in controller, not inside form#persist!
+      EntityMailer.registration_confirmation(@form.entity).deliver_later
       redirect_to @form.entity, notice: "Entity created successfully"
     else
       render :new, status: :unprocessable_entity
@@ -545,7 +539,7 @@ end
 
 ```erb
 <%# app/views/entities/new.html.erb %>
-<%= form_with model: @form, url: entities_path, local: true do |f| %>
+<%= form_with model: @form, url: entities_path do |f| %>
   <%= render "shared/error_messages", object: @form %>
 
   <%= f.hidden_field :owner_id %>
@@ -629,8 +623,59 @@ end
 - `accepts_nested_attributes_for` is sufficient
 - You're just creating a wrapper without added value
 
+## Related Skills
+
+### Primary Skill
+- **`form-object-patterns`** — Full reference: ApplicationForm base, virtual attributes, nested associations, transactions
+
+### Always Include
+- **`tdd-cycle`** — Test validations, persistence, and failure paths; form objects are highly testable in isolation
+
+### Often Needed
+- **`hotwire-patterns`** — Nested forms with Stimulus controllers (`nested-form`); Turbo Stream validation error responses
+- **`rails-service-object`** — Complex business logic triggered after `form.save` belongs in services, not in `persist!`
+- **`viewcomponent-patterns`** — Reusable form field components pair well with form objects
+
+### Decision Guide: Form Object vs `accepts_nested_attributes_for`
+
+```ruby
+# accepts_nested_attributes_for — simple nested CRUD, no cross-model validation
+class Restaurant < ApplicationRecord
+  has_many :menu_items
+  accepts_nested_attributes_for :menu_items, allow_destroy: true
+end
+
+# Form Object — cross-model validations, virtual attributes, or complex persistence
+class RestaurantWithMenuForm < ApplicationForm
+  validate :at_least_one_item
+  validate :no_duplicate_item_names
+
+  def persist!
+    ActiveRecord::Base.transaction do
+      @restaurant = Restaurant.create!(restaurant_attrs)
+      create_items
+    end
+  end
+end
+```
+
+### Decision Guide: Form Object vs Service Object
+
+- **Form Object** — wraps a *user-submitted form* with validation + multi-model persistence
+- **Service Object** — wraps *business logic* triggered after a form succeeds
+
+```ruby
+# Form Object: validates and persists the form submission
+if form.save
+  # Service Object: business logic after successful save
+  Entities::CalculateRatingService.call(entity: form.entity)
+  EntityMailer.confirmation(form.entity).deliver_later
+  redirect_to form.entity
+end
+```
+
 ## Guidelines
 
 - ✅ **Always do:** Write tests, validate all attributes, handle transactions
 - ⚠️ **Ask first:** Before modifying a form used by multiple controllers
-- 🚫 **Never do:** Create forms without tests, ignore errors, mix business logic with presentation
+- 🚫 **Never do:** Create forms without tests, ignore errors, put side effects or business logic inside `persist!`
