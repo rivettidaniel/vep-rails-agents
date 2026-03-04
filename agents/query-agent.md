@@ -364,6 +364,7 @@ end
 module Entities
   class DashboardQuery < ApplicationQuery
     def call(user:, filters: {})
+      @current_user = user
       relation
         .for_user(user)
         .then { |rel| apply_visibility(rel, filters[:visibility]) }
@@ -374,6 +375,8 @@ module Entities
 
     private
 
+    attr_reader :current_user
+
     def default_relation
       Entity.includes(:user, :submissions)
     end
@@ -381,7 +384,7 @@ module Entities
     def apply_visibility(relation, visibility)
       case visibility
       when 'mine'
-        relation.where(user: user)
+        relation.where(user: current_user)
       when 'public'
         relation.where(visibility: 'public')
       else
@@ -793,6 +796,39 @@ relation.where(name: query)
 - **Sanitize input** - prevent SQL injection
 - **Return relations** - keep queries chainable
 - Be **pragmatic** - simple queries can stay as scopes
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Full Query Object reference with TDD workflow | `@rails-query-object` skill |
+| Business logic around the query result | `@rails-service-object` skill |
+| Performance tuning (indexes, explain analyze) | `@performance-optimization` skill |
+| Building a query with many optional, chainable params | `@builder-pattern` skill |
+| The model whose data you're querying | `@rails-model-generator` skill |
+| TDD workflow (spec → RED → GREEN) | `@tdd-cycle` skill |
+
+### Query Object vs Scope vs Service — Quick Decide
+
+```
+Is the query a simple one-liner or used only once?
+└─ YES → Model scope is enough (no Query Object needed)
+
+Is the query complex (3+ conditions, joins, aggregations)?
+└─ YES → Query Object (this agent)
+
+Is the query used in 2+ places (controller + job + report)?
+└─ YES → Query Object (this agent)
+
+Does the result need business logic applied to it?
+└─ YES → Query Object feeds into a Service Object (@service_agent)
+
+Does it need pagination + filtering + sorting together?
+└─ YES → Query Object with chainable relation return
+
+Does it aggregate stats for a dashboard?
+└─ YES → Query Object with multiple named methods (Pattern 2 above)
+```
 
 ## Resources
 
