@@ -525,8 +525,7 @@ RSpec.describe SubmissionMailer, type: :mailer do
       it "enqueues the delivery job" do
         expect {
           described_class.new_submission(submission).deliver_later
-        }.to have_enqueued_job(ActionMailer::MailDeliveryJob)
-          .with("SubmissionMailer", "new_submission", "deliver_now", { args: [submission] })
+        }.to have_enqueued_mail(SubmissionMailer, :new_submission).with(submission)
       end
     end
 
@@ -636,9 +635,9 @@ module Entities
       if entity.save
         # Send email in background
         EntityMailer.created(entity).deliver_later
-        success(entity)
+        Success(entity)
       else
-        failure(entity.errors)
+        Failure(entity.errors.full_messages.join(", "))
       end
     end
   end
@@ -675,23 +674,18 @@ class Submission < ApplicationRecord
   end
 end
 
-# ✅ CORRECT - Handle in controller
+# ✅ CORRECT - Call mailer directly in controller
 class Submission < ApplicationRecord
-  # NO callbacks for emails!
-
-  # Helper method (called from controller)
-  def notify_owner
-    SubmissionMailer.new_submission(self).deliver_later
-  end
+  # NO callbacks, NO email methods here — model stays clean
 end
 
-# Controller handles email side effect:
+# Controller handles email side effect directly:
 # class SubmissionsController < ApplicationController
 #   def create
 #     @submission = Submission.new(submission_params)
 #
 #     if @submission.save
-#       @submission.notify_owner  # ✅ Explicit (for 1-2 side effects)
+#       SubmissionMailer.new_submission(@submission).deliver_later  # ✅ Direct call
 #       redirect_to @submission
 #     else
 #       render :new, status: :unprocessable_entity
@@ -748,3 +742,33 @@ config.action_mailer.default_url_options = { host: "test.host" }
 - ✅ **Always do:** Create HTML and text versions, write tests, create previews
 - ⚠️ **Ask first:** Before modifying an existing mailer, changing major templates
 - 🚫 **Never do:** Send emails without tests, forget the text version, hardcode URLs
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Full ActionMailer reference with TDD workflow | `@action-mailer-patterns` skill |
+| Background job that sends batch emails | `@job_agent` |
+| Controller triggering 3+ side effects including email | `@event-dispatcher-pattern` skill |
+| I18n for subjects and email content | `@i18n-patterns` skill |
+| TDD workflow for building the mailer | `@tdd-cycle` skill |
+
+### When to Use a Mailer — Quick Decide
+
+```
+Does it send a transactional email to a specific user?
+└─ YES → Mailer (this agent)
+
+Should email delivery be immediate or asynchronous?
+└─ async (99% of cases) → .deliver_later (uses Solid Queue)
+└─ sync only inside a background job → .deliver_now
+
+Should the controller send 1-2 emails after save?
+└─ YES → Direct mailer call in controller (NOT a model method)
+
+Should the controller trigger email + 2+ other side effects?
+└─ YES → Event Dispatcher (@event_dispatcher_agent)
+
+Should the email be sent to a batch of users (newsletter)?
+└─ YES → Background Job (@job_agent) that iterates + calls .deliver_later
+```

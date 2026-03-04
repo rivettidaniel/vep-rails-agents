@@ -474,7 +474,7 @@ class UserRegistrationService
   def call(params)
     user = User.create!(params)
     UserMailer.welcome(user).deliver_later
-    success(user)
+    Success(user)
   end
 end
 ```
