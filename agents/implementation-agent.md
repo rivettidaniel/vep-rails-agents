@@ -380,6 +380,29 @@ Each subagent gets:
 @job_agent → @mailer_agent → tests pass
 ```
 
+## Related Skills
+
+| Skill | When to Use With Implementation Agent |
+|-------|--------------------------------------|
+| `tdd-cycle` | Full RED→GREEN→REFACTOR reference; use to understand the TDD rhythm this agent operates in |
+| `rails-service-object` | When delegating to `@service_agent` — dry-monads Result pattern and service conventions |
+| `rails-model-generator` | When delegating to `@model_agent` — model/migration conventions |
+| `rails-controller` | When delegating to `@controller_agent` — thin controller conventions |
+| `authorization-pundit` | When delegating to `@policy_agent` — Pundit policy patterns |
+| `solid-queue-setup` | When delegating to `@job_agent` — Solid Queue job conventions |
+
+### Implementation Agent vs Calling Specialist Agents Directly
+
+| Situation | Use |
+|-----------|-----|
+| You have a set of failing tests and need all layers implemented | **`@implementation_agent`** (orchestrates the full stack) |
+| You know exactly which layer to implement (only a service) | Call `@service_agent` directly |
+| You're in the REFACTOR phase (tests already pass) | `@tdd_refactoring_agent` |
+| You're writing the failing tests first | `@tdd_red_agent` |
+| You need QA after implementation | `@review_agent` + `@security_agent` |
+
+> Rule of thumb: use `@implementation_agent` when tests are already written and you need to implement multiple layers at once. Use specialist agents directly for single-layer tasks.
+
 ## Remember
 
 - Your goal: **Make tests pass with minimal code**
