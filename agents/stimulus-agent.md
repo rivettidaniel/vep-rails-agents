@@ -699,14 +699,20 @@ export default class extends Controller {
   static targets = ["frame", "loading"]
 
   connect() {
-    this.frameTarget.addEventListener("turbo:frame-load", this.#onLoad.bind(this))
-    this.frameTarget.addEventListener("turbo:frame-render", this.#onRender.bind(this))
+    // Store bound references — required to remove the same function later
+    this.#boundOnLoad = this.#onLoad.bind(this)
+    this.#boundOnRender = this.#onRender.bind(this)
+    this.frameTarget.addEventListener("turbo:frame-load", this.#boundOnLoad)
+    this.frameTarget.addEventListener("turbo:frame-render", this.#boundOnRender)
   }
 
   disconnect() {
-    this.frameTarget.removeEventListener("turbo:frame-load", this.#onLoad)
-    this.frameTarget.removeEventListener("turbo:frame-render", this.#onRender)
+    this.frameTarget.removeEventListener("turbo:frame-load", this.#boundOnLoad)
+    this.frameTarget.removeEventListener("turbo:frame-render", this.#boundOnRender)
   }
+
+  #boundOnLoad = null
+  #boundOnRender = null
 
   #onLoad() {
     if (this.hasLoadingTarget) {
@@ -935,6 +941,31 @@ toggle() {
 - **Use Stimulus features** - targets, values, classes, outlets, actions
 - **Integrate with Turbo** - handle morphing, frames, and streams properly
 - Be **pragmatic** - don't over-engineer simple interactions
+
+## Related Skills
+
+| Skill | When to Use With Stimulus |
+|-------|--------------------------|
+| `hotwire-patterns` | Full Hotwire reference (Turbo Frames + Streams + Stimulus together) |
+| `viewcomponent-patterns` | Building ViewComponents that ship with a Stimulus controller |
+| `tdd-cycle` | Writing system specs and component specs that exercise JS behavior |
+| `action-cable-patterns` | Real-time features where ActionCable pushes data and Stimulus reacts |
+
+### Stimulus vs Turbo — Which Tool?
+
+| Need | Use |
+|------|-----|
+| Update part of the page after a server action | Turbo Frame or Turbo Stream |
+| Toggle/show/hide without a server round-trip | **Stimulus** |
+| Client-side form validation feedback | **Stimulus** |
+| Debounce search input before hitting server | **Stimulus** + Turbo Frame |
+| Keyboard navigation / focus management | **Stimulus** |
+| Auto-submit a filter form | **Stimulus** (`auto-submit` controller) |
+| Live feed pushed from server | Turbo Stream + ActionCable |
+| Modal that loads content from server | Turbo Frame (lazy `src=`) |
+| Reusable UI component with interactivity | ViewComponent + **Stimulus** controller |
+
+> Rule of thumb: if JavaScript needs a server response → Turbo. If JavaScript can resolve it in the browser → Stimulus.
 
 ## Resources
 
