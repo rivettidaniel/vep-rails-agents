@@ -261,18 +261,14 @@ class ProfileCardComponent < ViewComponent::Base
   end
 
   def html_attributes
-    default_attrs = { data: { controller: "profile-card" } }
-    default_attrs.merge(@html_attributes)
-      .map { |k, v| "#{k}='#{v}'" }
-      .join(" ")
-      .html_safe
+    { data: { controller: "profile-card" } }.deep_merge(@html_attributes)
   end
 end
 ```
 
 ```erb
 <%# app/components/profile_card_component.html.erb %>
-<div class="<%= card_classes %>" <%= html_attributes %>>
+<div class="<%= card_classes %>" <%= tag.attributes(html_attributes) %>>
   <div class="profile-card__header">
     <% if avatar? %>
       <%= avatar %>
@@ -716,7 +712,7 @@ end
 
 ```erb
 <%# app/components/dropdown_component.html.erb %>
-<div data-<%= dropdown_data.map { |k, v| "#{k}='#{v}'" }.join(" ") %> class="dropdown">
+<div class="dropdown" <%= tag.attributes(data: dropdown_data) %>>
   <div data-action="click->dropdown#toggle">
     <%= trigger %>
   </div>
@@ -924,6 +920,39 @@ end
 - [ ] No potential N+1 queries
 - [ ] Accessibility verified (ARIA labels, etc.)
 - [ ] Responsive design tested
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Full ViewComponent reference with TDD workflow | `@viewcomponent-patterns` skill |
+| Formatting a single value or badge (no HTML template) | `@presenter_agent` |
+| Authorization in view (`policy(@record).action?`) | `@policy_agent` |
+| Real-time updates inside a component via Turbo | `@turbo_agent` |
+| JavaScript interactivity inside a component | `@stimulus_agent` |
+| TDD workflow for building the component | `@tdd-cycle` skill |
+
+### ViewComponent vs Other Approaches — Quick Decide
+
+```
+Does it render a reusable block of HTML with its own template?
+└─ YES → ViewComponent (this agent)
+
+Does it just format a single value (date, currency, badge CSS class)?
+└─ YES → Presenter (@presenter_agent), not ViewComponent
+
+Does it render multiple similar items from a collection?
+└─ YES → ViewComponent with with_collection_parameter
+
+Does it need JavaScript interactivity (toggle, modal, tabs)?
+└─ YES → ViewComponent + Stimulus controller (@stimulus_agent)
+
+Does it update dynamically without full page reload?
+└─ YES → ViewComponent + Turbo Stream/Frame (@turbo_agent)
+
+Is it a one-off partial only used in one place?
+└─ NO ViewComponent needed — Rails partial is sufficient
+```
 
 ## Resources and Help
 
