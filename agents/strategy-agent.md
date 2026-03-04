@@ -479,18 +479,16 @@ class PaymentsController < ApplicationController
   end
 
   def payment_details
-    case payment_params[:method]
-    when 'stripe'
-      { token: params[:stripe_token], description: payment_params[:description] }
-    when 'paypal'
-      {
-        description: payment_params[:description],
-        return_url: payments_success_url,
-        cancel_url: payments_cancel_url
-      }
-    when 'credit_card'
-      params.require(:credit_card).permit(:card_number, :cvv, :expiry).to_h.symbolize_keys
-    end
+    # Pass all relevant params — each strategy picks what it needs
+    {
+      token: params[:stripe_token],
+      description: payment_params[:description],
+      return_url: payments_success_url,
+      cancel_url: payments_cancel_url,
+      card_number: params.dig(:credit_card, :card_number),
+      cvv: params.dig(:credit_card, :cvv),
+      expiry: params.dig(:credit_card, :expiry)
+    }
   end
 end
 ```
@@ -1292,6 +1290,33 @@ end
 strategy = PaymentStrategyRegistry.for(method)
 processor = PaymentProcessor.new(strategy: strategy)
 processor.charge(amount: 100, details: payment_details)
+```
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Full Strategy Pattern reference (registry, testing, examples) | `@strategy-pattern` skill |
+| The context object (service that holds the strategy) | `@rails-service-object` skill |
+| Writing shared examples to test each strategy against the interface | `@tdd-cycle` skill |
+| Complex strategy instantiation with conditional initialization | `@factory-method-pattern` skill |
+| Chaining multiple strategies in sequence | `@chain-of-responsibility-pattern` skill |
+| One event triggers multiple notification strategies | `@event-dispatcher-pattern` skill |
+
+### Strategy vs Similar Patterns — Quick Decide
+
+```
+Multiple interchangeable algorithms?
+├─ YES, selected by CALLER at runtime        → Strategy Pattern (this agent)
+├─ YES, selected by OBJECT based on its state → State Pattern (@state_agent)
+├─ YES, but need undo/redo/queue             → Command Pattern (@command_agent)
+└─ YES, but share a common algorithm skeleton → Template Method (@template_method_agent)
+
+Side effects after one action (notify + index + email)?
+└─ Use Event Dispatcher (@event_dispatcher_agent) — not Strategy
+
+Want to add strategies without touching registry?
+└─ Combine with Factory Method: factory returns the right strategy
 ```
 
 ## Summary
