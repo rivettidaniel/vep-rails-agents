@@ -335,12 +335,12 @@ RSpec.describe Entities::CreateService do
       end
 
       it "returns the created entity" do
-        expect(result.data).to be_a(Entity)
-        expect(result.data).to be_persisted
+        expect(result.value!).to be_a(Entity)
+        expect(result.value!).to be_persisted
       end
 
       it "associates the entity with the user" do
-        expect(result.data.user).to eq(user)
+        expect(result.value!.user).to eq(user)
       end
     end
 
@@ -356,7 +356,7 @@ RSpec.describe Entities::CreateService do
       end
 
       it "returns an error message" do
-        expect(result.error).to include("Name")
+        expect(result.failure).to include("Name")
       end
     end
 
@@ -368,7 +368,7 @@ RSpec.describe Entities::CreateService do
       end
 
       it "returns authorization error" do
-        expect(result.error).to eq("User not authorized")
+        expect(result.failure).to eq("User not authorized")
       end
     end
   end
@@ -400,7 +400,7 @@ RSpec.describe Submissions::CreateService do
 
       it "returns failure" do
         expect(result).to be_failure
-        expect(result.error).to eq("You have already submitted")
+        expect(result.failure).to eq("You have already submitted")
       end
     end
   end
@@ -512,3 +512,37 @@ end
 - ✅ **Always do:** Write tests, follow naming convention, use Result objects
 - ⚠️ **Ask first:** Before modifying an existing service used by multiple controllers
 - 🚫 **Never do:** Create services without tests, put presentation logic in a service, silently ignore errors
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Full service object reference with TDD workflow | `@rails-service-object` skill |
+| Complex database queries the service needs | `@rails-query-object` skill |
+| Service triggers 3+ side effects (email + job + cache...) | `@event-dispatcher-pattern` skill |
+| Service should run asynchronously in the background | `@solid-queue-setup` skill |
+| Service has multiple algorithm variants (payments, exports) | `@strategy-pattern` skill |
+| Multi-step process with fixed flow + variant steps | `@template-method-pattern` skill |
+| TDD workflow for building the service | `@tdd-cycle` skill |
+
+### Service Object vs Other Patterns — Quick Decide
+
+```
+Is it complex business logic touching 2+ models?
+└─ YES → Service Object (this agent)
+
+Does it have 3+ side effects triggered by one action?
+└─ YES → Combine Service + Event Dispatcher (@event_dispatcher_agent)
+
+Does it have multiple interchangeable algorithms (e.g., payment providers)?
+└─ YES → Service Object as context + Strategy Pattern (@strategy_agent)
+
+Does it follow a fixed multi-step flow with variant steps?
+└─ YES → Template Method inside a Service (@template_method_agent)
+
+Should it run in the background (slow, async)?
+└─ YES → Wrap in a Job that calls the service (@job_agent)
+
+Is it just simple CRUD with no business logic?
+└─ NO service needed — controller + model is enough
+```

@@ -106,8 +106,8 @@ RSpec.describe Orders::CreateService do
       end
 
       it 'returns the order' do
-        expect(result.data).to be_a(Order)
-        expect(result.data.user).to eq(user)
+        expect(result.value!).to be_a(Order)
+        expect(result.value!.user).to eq(user)
       end
     end
 
@@ -119,7 +119,7 @@ RSpec.describe Orders::CreateService do
       end
 
       it 'returns error message' do
-        expect(result.error).to eq('No items provided')
+        expect(result.failure).to eq('No items provided')
       end
     end
 
@@ -286,7 +286,7 @@ class ProcessOrderJob < ApplicationJob
     result = Orders::CreateService.new.call(user: user, items: items)
 
     unless result.success?
-      Rails.logger.error("Order failed: #{result.error}")
+      Rails.logger.error("Order failed: #{result.failure}")
       # Handle failure (retry, notify, etc.)
     end
   end
