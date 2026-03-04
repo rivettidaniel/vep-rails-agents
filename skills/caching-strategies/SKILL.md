@@ -330,10 +330,14 @@ end
 ```ruby
 # ✅ GOOD: Service handles operation + cache invalidation
 class Events::UpdateService
+  include Dry::Monads[:result]
+
   def call(event, params)
     event.update!(params)
     invalidate_related_caches(event)  # ✅ Explicit
-    success(event)
+    Success(event)
+  rescue ActiveRecord::RecordInvalid => e
+    Failure(e.record.errors.full_messages.join(", "))
   end
 
   private
@@ -351,9 +355,9 @@ class EventsController < ApplicationController
     result = Events::UpdateService.new.call(@event, event_params)
 
     if result.success?
-      redirect_to result.value
+      redirect_to result.value!
     else
-      @event = result.value
+      flash.now[:alert] = result.failure
       render :edit, status: :unprocessable_entity
     end
   end
@@ -494,12 +498,37 @@ event.vendors_count
 ### Custom Counter Cache
 
 ```ruby
+# ❌ DON'T: Side effect in callback (violates project convention)
 class Event < ApplicationRecord
-  after_commit :update_account_counters
+  after_commit :update_account_counters  # ❌ Side effect in callback!
 
   private
 
   def update_account_counters
+    account.update_columns(
+      events_count: account.events.count,
+      active_events_count: account.events.active.count
+    )
+  end
+end
+
+# ✅ DO: Call explicitly from controller after successful save
+class EventsController < ApplicationController
+  def create
+    @event = Event.new(event_params)
+    authorize @event
+
+    if @event.save
+      update_account_event_counters(@event.account)  # ✅ Explicit
+      redirect_to @event
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def update_account_event_counters(account)
     account.update_columns(
       events_count: account.events.count,
       active_events_count: account.events.active.count

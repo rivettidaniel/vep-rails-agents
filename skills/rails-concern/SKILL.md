@@ -121,8 +121,10 @@ module [ConcernName]
   extend ActiveSupport::Concern
 
   included do
-    # Callbacks
+    # ✅ Allowed callback: data normalization before validation
     before_validation :generate_uuid, on: :create
+    # ❌ NEVER: side-effect callbacks (after_create, after_commit, etc.)
+    # Those belong in controllers, not concerns
 
     # Validations
     validates :uuid, presence: true, uniqueness: true
@@ -219,7 +221,10 @@ module SoftDeletable
     scope :active, -> { where(deleted_at: nil) }
     scope :deleted, -> { where.not(deleted_at: nil) }
 
-    default_scope { active }
+    # ⚠️ Avoid default_scope — it applies to ALL queries including joins and
+    # associations, causing hard-to-debug issues. Use .active explicitly instead:
+    #   Event.active.where(...)   ← prefer this
+    # default_scope { active }   ← avoid this
   end
 
   def soft_delete
@@ -256,6 +261,7 @@ end
 ### Pattern 4: Auditable
 
 ```ruby
+# ❌ DON'T: Side effects in callbacks (violates project's CRITICAL RULE)
 # app/models/concerns/auditable.rb
 module Auditable
   extend ActiveSupport::Concern
@@ -263,19 +269,51 @@ module Auditable
   included do
     has_many :audit_logs, as: :auditable, dependent: :destroy
 
-    after_create :log_creation
-    after_update :log_update
+    after_create :log_creation   # ❌ Side effect in callback!
+    after_update :log_update     # ❌ Side effect in callback!
+  end
+end
+
+# ✅ DO: Expose helper methods, call explicitly from controller or service
+module Auditable
+  extend ActiveSupport::Concern
+
+  included do
+    has_many :audit_logs, as: :auditable, dependent: :destroy
   end
 
-  private
-
   def log_creation
-    audit_logs.create(action: "created", changes: attributes)
+    audit_logs.create!(action: "created", changes: attributes)
   end
 
   def log_update
     return unless saved_changes.any?
-    audit_logs.create(action: "updated", changes: saved_changes)
+
+    audit_logs.create!(action: "updated", changes: saved_changes)
+  end
+end
+
+# Controller calls audit methods explicitly after successful save
+class EventsController < ApplicationController
+  def create
+    @event = Event.new(event_params)
+    authorize @event
+
+    if @event.save
+      @event.log_creation  # ✅ Explicit side effect
+      redirect_to @event
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @event.update(event_params)
+      @event.log_update   # ✅ Explicit side effect
+      redirect_to @event
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 end
 ```
