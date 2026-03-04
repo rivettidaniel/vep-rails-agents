@@ -92,7 +92,7 @@ Use this table to assign correct skills to every agent in the plan:
 | `form_agent` | `form-object-patterns` | Wave 3 |
 | `query_agent` | `rails-query-object`, `performance-optimization` | Wave 3 |
 | `presenter_agent` | `rails-presenter` | Wave 3 |
-| `event_dispatcher_agent` | _(none)_ | Wave 3 |
+| `event_dispatcher_agent` | `event-dispatcher-pattern` | Wave 3 |
 | `builder_agent` | `builder-pattern` | Wave 3 |
 | `strategy_agent` | `strategy-pattern` | Wave 3 |
 | `template_method_agent` | `template-method-pattern` | Wave 3 |
