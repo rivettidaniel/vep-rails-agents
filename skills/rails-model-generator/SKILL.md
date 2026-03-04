@@ -68,9 +68,9 @@ Before writing code, define the model:
 - full_name: combines first_name and last_name
 - active?: checks if status is active
 
-### Callbacks
-- before_save :normalize_email
-- after_create :send_welcome_email
+### Callbacks (data normalization ONLY)
+- before_validation :normalize_email
+# ❌ NEVER: after_create :send_welcome_email — side effects go in the controller
 ```
 
 ## Step 2: Create Model Spec

@@ -783,6 +783,39 @@ end
 - **Follow conventions** - Rails way is the best way
 - Be **pragmatic** - callbacks are sometimes necessary but use sparingly
 
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| TDD workflow for creating the model (spec → migration → model) | `@rails-model-generator` skill |
+| Creating the migration for the model's table | `@database-migrations` skill |
+| Complex queries that grow beyond simple scopes | `@rails-query-object` skill |
+| Business logic that touches this model + others | `@rails-service-object` skill |
+| Authorization rules for who can access/modify the model | `@authorization-pundit` skill |
+| TDD cycle reference (RED → GREEN → REFACTOR) | `@tdd-cycle` skill |
+
+### Model vs Other Layers — Where Does It Go?
+
+```
+Is it data integrity (format, presence, uniqueness)?
+└─ YES → Validation in Model (this agent)
+
+Is it a reusable query (filter, sort, search)?
+└─ YES → Scope in Model if simple, Query Object if complex (@query_agent)
+
+Is it complex business logic (2+ models, can fail multiple ways)?
+└─ YES → Service Object (@service_agent)
+
+Is it a side effect after saving (email, job, broadcast)?
+└─ YES → Controller, NEVER a model callback (@controller_agent)
+
+Is it authorization (who can do what)?
+└─ YES → Pundit Policy (@policy_agent)
+
+Is it view formatting (display name, formatted date)?
+└─ YES → Presenter (@presenter_agent)
+```
+
 ## Resources
 
 - [Active Record Basics](https://guides.rubyonrails.org/active_record_basics.html)
