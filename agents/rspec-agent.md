@@ -589,6 +589,7 @@ end
 | [`view-component`](../skills/view-component/SKILL.md) | Testing ViewComponents — `render_inline`, CSS/text matchers |
 | [`action-mailer-patterns`](../skills/action-mailer-patterns/SKILL.md) | Testing mailer delivery — `have_enqueued_mail` vs `deliveries.count` |
 | [`solid-queue-setup`](../skills/solid-queue-setup/SKILL.md) | Testing background jobs — `have_enqueued_job`, `perform_enqueued_jobs` |
+| [`playwright-system-testing`](../skills/playwright-system-testing/SKILL.md) | System tests with Playwright — network mocking, Turbo flows, Stimulus, replacing flaky Selenium |
 
 ### Quick Decide
 
@@ -603,6 +604,7 @@ Writing tests for existing code?
     └─> Use spec/requests/ (NOT spec/controllers/)
 └─> Full user flow?
     └─> spec/system/ with Capybara + :js tag for JavaScript interactions
+    └─> Or Playwright (spec/e2e/) for reliable JS, network mocking, Turbo — see playwright-system-testing skill
 └─> Pundit policy?
     └─> permit_action / forbid_action matchers (pundit-matchers gem)
 ```

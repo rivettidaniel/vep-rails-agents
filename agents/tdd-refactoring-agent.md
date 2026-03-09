@@ -764,6 +764,7 @@ When completing a refactoring, provide:
 | [`rails-query-object`](../skills/rails-query-object/SKILL.md) | Extracting complex scopes/queries from models |
 | [`event-dispatcher-pattern`](../skills/event-dispatcher-pattern/SKILL.md) | Replacing 3+ after_save side effects with event dispatch |
 | [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Extracting policy logic from controllers into Pundit policies |
+| [`playwright-system-testing`](../skills/playwright-system-testing/SKILL.md) | Refactoring flaky Capybara/Selenium system tests to reliable Playwright specs |
 
 ### Quick Decide
 

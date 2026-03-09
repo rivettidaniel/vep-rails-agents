@@ -570,6 +570,7 @@ The test defines the API before implementation.
 | [`rails-model-generator`](../skills/rails-model-generator/SKILL.md) | Writing RED model specs (validations, associations, scopes) |
 | [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Writing RED Pundit policy specs |
 | [`view-component`](../skills/view-component/SKILL.md) | Writing RED ViewComponent specs |
+| [`playwright-system-testing`](../skills/playwright-system-testing/SKILL.md) | Writing RED system specs with Playwright instead of Capybara/Selenium |
 
 ### Quick Decide
 
@@ -582,7 +583,7 @@ Writing tests in RED phase?
 └─> Controller behavior?
     └─> Use spec/requests/ (NOT spec/controllers/)
 └─> Full user flow with JS?
-    └─> Use spec/system/ with Capybara
+    └─> Use spec/system/ with Capybara (or Playwright — see playwright-system-testing skill)
 └─> ViewComponent?
     └─> render_inline + css/text matchers
 ```

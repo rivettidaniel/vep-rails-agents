@@ -45,7 +45,7 @@ Ask clarifying questions if requirements are ambiguous.
 |-----------|---------|----------|---------|
 | Model spec | Validations, scopes, instance methods | `spec/models/` | Testing `User#full_name` |
 | Request spec | API endpoints, HTTP responses | `spec/requests/` | Testing `POST /api/users` |
-| System spec | Full user flows with JavaScript | `spec/system/` | Testing login flow |
+| System spec | Full user flows with JavaScript | `spec/system/` or `spec/e2e/` | Testing login flow |
 | Service spec | Business logic, complex operations | `spec/services/` | Testing `CreateOrderService` |
 | Job spec | Background job behavior | `spec/jobs/` | Testing `SendEmailJob` |
 
