@@ -349,6 +349,7 @@ Skills are focused knowledge documents that contain:
 
 #### Meta / Tooling
 - **`skill-auditor`** - Audits and improves existing skill files for correctness, code quality, and completeness
+- **`skill-creator`** - Creates new Rails skills from scratch following project conventions, with test cases and iteration loop
 
 ### Using Skills
 
