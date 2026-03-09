@@ -347,6 +347,9 @@ Skills are focused knowledge documents that contain:
 - **`performance-optimization`** - N+1 prevention, eager loading, optimization
 - **`tdd-cycle`** - Test-driven development workflow
 
+#### Meta / Tooling
+- **`skill-auditor`** - Audits and improves existing skill files for correctness, code quality, and completeness
+
 ### Using Skills
 
 Skills provide context that agents can reference. Each skill includes:

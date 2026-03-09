@@ -15,7 +15,7 @@ This is the **Rails AI Suite** - a comprehensive collection of specialized AI ag
 - `feature_spec_agents/` - 3 feature specification agents
 - `commands/` - VEP planning commands (vep-init, vep-feature, vep-wave, vep-state)
 - `planning/` - VEP planning file templates (PROJECT, REQUIREMENTS, ROADMAP, STATE, PHASE_PLAN)
-- `skills/` - 30 reusable knowledge modules
+- `skills/` - 31 reusable knowledge modules
 - `features/` - Feature specification templates
 
 ---
@@ -470,7 +470,7 @@ end
 - [planning/](planning/) - Planning file templates (PROJECT, REQUIREMENTS, ROADMAP, STATE, PHASE_PLAN)
 
 ### Skills
-- [skills/](skills/) - 30 skills library
+- [skills/](skills/) - 31 skills library
 
 ### Templates
 - [features/FEATURE_TEMPLATE.md](features/FEATURE_TEMPLATE.md) - Feature specification template
