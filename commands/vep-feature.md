@@ -208,9 +208,29 @@ Include every task from all waves in the table.
 
 ---
 
-## Step 5: Update STATE.md
+## Step 5: Update ROADMAP.md & STATE.md
 
-Append the following entry to `planning/STATE.md` under the current session heading. If STATE.md does not exist, create it.
+### Update ROADMAP.md
+Insert a new Phase for this feature (or append to an existing phase in ROADMAP.md):
+
+```markdown
+## Phase X: [feature-name] [Status: In Progress]
+
+**Goal:** [1-sentence feature goal]
+**Branch:** `feature/[feature-name]`
+**Requirements covered:** [REQ-XXX, REQ-YYY]
+
+### PRs (ordered by dependency)
+- [ ] PR #N: [task 1.X PR description from PHASE_PLAN]
+- [ ] PR #N+1: [task 2.X PR description from PHASE_PLAN]
+- [ ] PR #N+2: [task 3.X PR description from PHASE_PLAN]
+
+**Estimated time:** [from feature estimate]
+**Actual time:** -
+```
+
+### Update STATE.md
+Append the following entry to `planning/STATE.md`:
 
 ```markdown
 ### Active Feature: [feature-name]

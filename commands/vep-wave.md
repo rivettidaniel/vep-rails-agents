@@ -79,11 +79,22 @@ git commit -m "[commit message from task XML]"
 Mark task as completed in PHASE_PLAN.md progress tracker:
 `| 1.1 User specs | tdd_red_agent | 1 | Done | abc1234 |`
 
-### 7. Update STATE.md
+### 7. Update ROADMAP.md & STATE.md
+After all tasks complete, update both:
+
+**ROADMAP.md:**
+- Mark completed PRs with [x]
+- Update phase `Status:` field
+- Update `Actual time:` elapsed
+- Update Progress Summary table
+
+**STATE.md:**
 ```markdown
 ### Session YYYY-MM-DD
 **Completed:**
 - Wave 1: [task names]
+**Decisions made:**
+- [ADR references if any]
 **Next session:**
 - Start Wave 2: [next wave description]
 ```

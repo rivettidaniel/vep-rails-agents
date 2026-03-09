@@ -35,13 +35,23 @@ Tell the user:
 ```
 VEP planning initialized!
 
-To start development:
-1. Load STATE.md at the beginning of every session
-2. Execute waves using PHASE_PLAN.md
-3. Update STATE.md at the end of every session
-4. Mark ROADMAP.md checkboxes as PRs merge
+📁 Files created:
+- planning/PROJECT.md — vision & scope
+- planning/REQUIREMENTS.md — P0/P1/P2 requirements
+- planning/ROADMAP.md — phase-by-phase plan with PR checkboxes
+- planning/STATE.md — decisions & session context
+- planning/PHASE_PLAN.md — Wave 1 tasks (ready to execute)
 
-Next: Run /vep-wave to start Wave 1 of Phase 1
+To start development:
+1. Load STATE.md at the beginning of every session (copy "Context for Next Session" block)
+2. Execute waves using: /vep-wave 1, /vep-wave 2, etc.
+3. At the end of every wave:
+   - Mark completed PRs in ROADMAP.md with [x]
+   - Update phase Status in ROADMAP.md
+   - Update STATE.md with session log
+4. Use /vep-state at end of session to record decisions and generate next session context
+
+Next: Run /vep-wave 1 to start execution
 ```
 
 ## Rules

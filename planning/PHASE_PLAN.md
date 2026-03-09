@@ -124,14 +124,24 @@ Wave 4 (QA - needs Wave 3): task-7, task-8, task-9 → PARALLEL
 # "Execute Wave 3 tasks 3.1, 3.2, and 3.3 in parallel: [paste task XMLs]"
 ```
 
+## Mapping Tasks to ROADMAP PRs
+
+Tasks in waves map to PRs in ROADMAP.md:
+- **Wave 1** (RED) → PR 1 (tests)
+- **Wave 2** (GREEN) → PR 2 (models)
+- **Wave 3** (Services) → PR 3 (business logic)
+- **Wave 4** (Controllers) → PR 4 (interface)
+- **Wave 5** (Refactor) → PR 5 (cleanup)
+- **Wave 6** (QA) → Update ROADMAP with completion checkmarks after all waves pass
+
 ## Progress Tracker
 
-| Task | Agent | Skills | Wave | Status | Commit |
-|------|-------|--------|------|--------|--------|
-| 1.1 User specs | tdd_red_agent | tdd-cycle | 1 | ⏳ Pending | - |
-| 1.2 Product specs | tdd_red_agent | tdd-cycle | 1 | ⏳ Pending | - |
-| 2.1 Users migration | migration_agent | database-migrations | 2 | ⏳ Pending | - |
-| 2.2 User model | model_agent | rails-model-generator, rails-concern | 2 | ⏳ Pending | - |
-| 3.1 Lint | lint_agent | | 3 | ⏳ Pending | - |
-| 3.2 Security | security_agent | | 3 | ⏳ Pending | - |
-| 3.3 Review | review_agent | rails-architecture | 3 | ⏳ Pending | - |
+| Task | Agent | Skills | Wave | PR | Status | Commit |
+|------|-------|--------|------|----|--------|--------|
+| 1.1 User specs | tdd_red_agent | tdd-cycle | 1 | PR #1 | ⏳ Pending | - |
+| 1.2 Product specs | tdd_red_agent | tdd-cycle | 1 | PR #1 | ⏳ Pending | - |
+| 2.1 Users migration | migration_agent | database-migrations | 2 | PR #2 | ⏳ Pending | - |
+| 2.2 User model | model_agent | rails-model-generator, rails-concern | 2 | PR #2 | ⏳ Pending | - |
+| 3.1 Lint | lint_agent | | 3 | PR #3 | ⏳ Pending | - |
+| 3.2 Security | security_agent | | 3 | PR #3 | ⏳ Pending | - |
+| 3.3 Review | review_agent | rails-architecture | 3 | PR #3 | ⏳ Pending | - |

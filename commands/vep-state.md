@@ -4,7 +4,14 @@ You are a **state recorder**. Your job is to update `planning/STATE.md` with wha
 
 ## What to Record
 
-### 1. Architecture Decisions
+### 1. Update ROADMAP.md Progress
+Mark completed PRs and update phase status:
+- Check off [x] completed PRs in `planning/ROADMAP.md`
+- Update phase `Status:` to "In Progress" or "Completed"
+- Record `Actual time:` elapsed
+- Update Progress Summary table
+
+### 2. Architecture Decisions
 Any significant decisions made this session should become ADRs:
 - Technology choices
 - Pattern selections
@@ -21,7 +28,7 @@ Format:
 **Consequences:** [trade-offs]
 ```
 
-### 2. Blockers
+### 3. Blockers
 Any blockers encountered:
 ```markdown
 | # | Blocker | Owner | Status |
@@ -29,7 +36,7 @@ Any blockers encountered:
 | 1 | [description] | @dev | Blocked |
 ```
 
-### 3. Context for Next Session
+### 4. Context for Next Session
 Generate a compact context block:
 ```
 Project: [name]
@@ -41,7 +48,7 @@ Blocker: [active blocker or "none"]
 Next action: [first thing to do next session]
 ```
 
-### 4. Session Log Entry
+### 5. Session Log Entry
 ```markdown
 ### Session YYYY-MM-DD
 **Completed:**
@@ -56,8 +63,10 @@ Next action: [first thing to do next session]
 
 ## Instructions
 1. Ask user: "What did we accomplish this session?"
-2. Ask user: "Any architectural decisions made?"
-3. Ask user: "Any blockers or issues?"
-4. Update STATE.md with all information
-5. Generate "Context for Next Session" block
-6. Tell user to copy that block for the next session
+2. Ask user: "Any PRs merged? Any phases completed?"
+3. Ask user: "Any architectural decisions made?"
+4. Ask user: "Any blockers or issues?"
+5. Update `planning/ROADMAP.md` with completed PRs and phase status
+6. Update `planning/STATE.md` with ADRs, blockers, and session log
+7. Generate "Context for Next Session" block
+8. Tell user to copy that block for the next session
