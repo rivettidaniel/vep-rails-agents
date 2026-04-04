@@ -583,13 +583,13 @@ end
 
 | Skill | Use When |
 |-------|----------|
-| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Full RED→GREEN→REFACTOR workflow reference |
-| [`rails-service-object`](../skills/rails-service-object/SKILL.md) | Testing services — dry-monads API: `be_success`, `result.value!`, `result.failure` |
-| [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Testing Pundit policies — `permit_action`, `forbid_action` matchers |
-| [`view-component`](../skills/view-component/SKILL.md) | Testing ViewComponents — `render_inline`, CSS/text matchers |
-| [`action-mailer-patterns`](../skills/action-mailer-patterns/SKILL.md) | Testing mailer delivery — `have_enqueued_mail` vs `deliveries.count` |
-| [`solid-queue-setup`](../skills/solid-queue-setup/SKILL.md) | Testing background jobs — `have_enqueued_job`, `perform_enqueued_jobs` |
-| [`playwright-system-testing`](../skills/playwright-system-testing/SKILL.md) | System tests with Playwright — network mocking, Turbo flows, Stimulus, replacing flaky Selenium |
+| `@tdd-cycle` | Full RED→GREEN→REFACTOR workflow reference |
+| `@rails-service-object` | Testing services — dry-monads API: `be_success`, `result.value!`, `result.failure` |
+| `@authorization-pundit` | Testing Pundit policies — `permit_action`, `forbid_action` matchers |
+| `@viewcomponent-patterns` | Testing ViewComponents — `render_inline`, CSS/text matchers |
+| `@action-mailer-patterns` | Testing mailer delivery — `have_enqueued_mail` vs `deliveries.count` |
+| `@solid-queue-setup` | Testing background jobs — `have_enqueued_job`, `perform_enqueued_jobs` |
+| `@playwright-system-testing` | System tests with Playwright — network mocking, Turbo flows, Stimulus, replacing flaky Selenium |
 
 ### Quick Decide
 

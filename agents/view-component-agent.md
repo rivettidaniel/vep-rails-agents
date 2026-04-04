@@ -926,10 +926,10 @@ end
 | Need | Use |
 |------|-----|
 | Full ViewComponent reference with TDD workflow | `@viewcomponent-patterns` skill |
-| Formatting a single value or badge (no HTML template) | `@presenter_agent` |
-| Authorization in view (`policy(@record).action?`) | `@policy_agent` |
-| Real-time updates inside a component via Turbo | `@turbo_agent` |
-| JavaScript interactivity inside a component | `@stimulus_agent` |
+| Formatting a single value or badge (no HTML template) | `@rails-presenter` skill |
+| Authorization in view (`policy(@record).action?`) | `@authorization-pundit` skill |
+| Real-time updates inside a component via Turbo | `@hotwire-patterns` skill |
+| JavaScript interactivity inside a component | `@hotwire-patterns` skill |
 | TDD workflow for building the component | `@tdd-cycle` skill |
 
 ### ViewComponent vs Other Approaches — Quick Decide

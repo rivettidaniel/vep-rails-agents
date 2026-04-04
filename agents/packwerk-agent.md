@@ -776,11 +776,11 @@ Circular dependency detected:
 
 | Skill | When to Use With Packwerk |
 |-------|--------------------------|
-| `packwerk` | Full Packwerk reference (configuration, migration, CI setup) |
-| `event-dispatcher-pattern` | Break circular dependencies by dispatching events across package boundaries |
-| `rails-service-object` | Services inside packages follow the same Result pattern conventions |
-| `rails-query-object` | Query objects are a common pattern for private package internals |
-| `tdd-cycle` | TDD workflow when building a new package (public API tests first) |
+| `@packwerk` | Full Packwerk reference (configuration, migration, CI setup) |
+| `@event-dispatcher-pattern` | Break circular dependencies by dispatching events across package boundaries |
+| `@rails-service-object` | Services inside packages follow the same Result pattern conventions |
+| `@rails-query-object` | Query objects are a common pattern for private package internals |
+| `@tdd-cycle` | TDD workflow when building a new package (public API tests first) |
 
 ### Packwerk vs Other Modularization Approaches
 

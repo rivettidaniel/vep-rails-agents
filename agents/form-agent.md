@@ -625,16 +625,13 @@ end
 
 ## Related Skills
 
-### Primary Skill
-- **`form-object-patterns`** — Full reference: ApplicationForm base, virtual attributes, nested associations, transactions
-
-### Always Include
-- **`tdd-cycle`** — Test validations, persistence, and failure paths; form objects are highly testable in isolation
-
-### Often Needed
-- **`hotwire-patterns`** — Nested forms with Stimulus controllers (`nested-form`); Turbo Stream validation error responses
-- **`rails-service-object`** — Complex business logic triggered after `form.save` belongs in services, not in `persist!`
-- **`viewcomponent-patterns`** — Reusable form field components pair well with form objects
+| Skill | When to use |
+|-------|-------------|
+| `@form-object-patterns` | Full reference: ApplicationForm base, virtual attributes, nested associations, transactions |
+| `@tdd-cycle` | Test validations, persistence, and failure paths; form objects are highly testable in isolation |
+| `@hotwire-patterns` | Nested forms with Stimulus controllers (`nested-form`); Turbo Stream validation error responses |
+| `@rails-service-object` | Complex business logic triggered after `form.save` belongs in services, not in `persist!` |
+| `@viewcomponent-patterns` | Reusable form field components pair well with form objects |
 
 ### Decision Guide: Form Object vs `accepts_nested_attributes_for`
 

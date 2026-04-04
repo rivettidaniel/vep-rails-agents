@@ -1081,18 +1081,15 @@ end
 
 ## Related Skills
 
-### Primary Skill
-- **`rails-controller`** — Full controller reference, RESTful conventions, strong parameters
-
-### Always Include
-- **`tdd-cycle`** — Request specs are written alongside every controller action
-- **`authorization-pundit`** — Every action requires `authorize`; policy patterns live here
-- **`rails-service-object`** — Controllers delegate to services; dry-monads Result API (`value!` / `failure`)
-
-### Often Needed
-- **`rails-query-object`** — Index actions with filtering/sorting/pagination should use Query Objects, not inline scopes
-- **`hotwire-patterns`** — When controller responds with Turbo Streams (`respond_to format.turbo_stream`)
-- **`api-versioning`** — When building `Api::V1::` namespaced JSON controllers
+| Skill | When to use |
+|-------|-------------|
+| `@rails-controller` | Full controller reference, RESTful conventions, strong parameters |
+| `@tdd-cycle` | Request specs are written alongside every controller action |
+| `@authorization-pundit` | Every action requires `authorize`; policy patterns live here |
+| `@rails-service-object` | Controllers delegate to services; dry-monads Result API (`value!` / `failure`) |
+| `@rails-query-object` | Index actions with filtering/sorting/pagination should use Query Objects, not inline scopes |
+| `@hotwire-patterns` | When controller responds with Turbo Streams (`respond_to format.turbo_stream`) |
+| `@api-versioning` | When building `Api::V1::` namespaced JSON controllers |
 
 ## Resources
 

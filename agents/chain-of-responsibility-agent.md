@@ -937,15 +937,12 @@ handler1.handle(request)
 
 ## Related Skills
 
-### Primary Skill
-- **`chain-of-responsibility-pattern`** — Full pattern reference, Rails examples, anti-patterns
-
-### Always Include
-- **`tdd-cycle`** — Test each handler in isolation first, then test the full chain integration
-
-### Often Needed
-- **`rails-service-object`** — Chain builders are service objects; use `ApplicationService` base class
-- **`rails-query-object`** — When handlers filter/search records, extract query logic here
+| Skill | When to use |
+|-------|-------------|
+| `@chain-of-responsibility-pattern` | Full pattern reference, Rails examples, anti-patterns |
+| `@tdd-cycle` | Test each handler in isolation first, then test the full chain integration |
+| `@rails-service-object` | Chain builders are service objects; use `ApplicationService` base class |
+| `@rails-query-object` | When handlers filter/search records, extract query logic here |
 
 ### Chain of Responsibility vs Similar Patterns
 

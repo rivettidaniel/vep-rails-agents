@@ -273,10 +273,10 @@ remove_foreign_key :submissions, :entities
 
 | Skill | Use When |
 |-------|----------|
-| [`database-migrations`](../skills/database-migrations/SKILL.md) | Primary skill — safe patterns, indexes, FK constraints, backfill strategies |
-| [`rails-model-generator`](../skills/rails-model-generator/SKILL.md) | Generating a model alongside its migration (create table + validations together) |
-| [`solid-queue-setup`](../skills/solid-queue-setup/SKILL.md) | Data backfills that need background jobs (large table writes) |
-| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Verifying schema changes don't break existing specs |
+| `@database-migrations` | Primary skill — safe patterns, indexes, FK constraints, backfill strategies |
+| `@rails-model-generator` | Generating a model alongside its migration (create table + validations together) |
+| `@solid-queue-setup` | Data backfills that need background jobs (large table writes) |
+| `@tdd-cycle` | Verifying schema changes don't break existing specs |
 
 ### Quick Decide
 

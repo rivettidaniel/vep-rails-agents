@@ -748,7 +748,7 @@ config.action_mailer.default_url_options = { host: "test.host" }
 | Need | Use |
 |------|-----|
 | Full ActionMailer reference with TDD workflow | `@action-mailer-patterns` skill |
-| Background job that sends batch emails | `@job_agent` |
+| Background job that sends batch emails | `@solid-queue-setup` skill |
 | Controller triggering 3+ side effects including email | `@event-dispatcher-pattern` skill |
 | I18n for subjects and email content | `@i18n-patterns` skill |
 | TDD workflow for building the mailer | `@tdd-cycle` skill |

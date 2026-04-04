@@ -802,9 +802,9 @@ end
 | Need | Use |
 |------|-----|
 | Full presenter pattern reference with TDD workflow | `@rails-presenter` skill |
-| Reusable UI with complex HTML and templates | `@view-component-agent` |
-| Extract complex logic the presenter is calling | `@service_agent` |
-| Authorization logic mixed into display conditions | `@policy_agent` |
+| Reusable UI with complex HTML and templates | `@viewcomponent-patterns` skill |
+| Extract complex logic the presenter is calling | `@rails-service-object` skill |
+| Authorization logic mixed into display conditions | `@authorization-pundit` skill |
 | TDD workflow for building the presenter | `@tdd-cycle` skill |
 
 ### Presenter vs Other Layers — Quick Decide

@@ -268,10 +268,10 @@ end
 
 | Skill | Use When |
 |-------|----------|
-| [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Auditing missing `authorize` calls or writing secure Pundit policies |
-| [`database-migrations`](../skills/database-migrations/SKILL.md) | Checking for missing indexes on sensitive columns or unsafe FK constraints |
-| [`rails-controller`](../skills/rails-controller/SKILL.md) | Auditing strong parameters and CSRF protection in controllers |
-| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Writing security-focused specs (unauthorized access, unauthenticated visitor cases) |
+| `@authorization-pundit` | Auditing missing `authorize` calls or writing secure Pundit policies |
+| `@database-migrations` | Checking for missing indexes on sensitive columns or unsafe FK constraints |
+| `@rails-controller` | Auditing strong parameters and CSRF protection in controllers |
+| `@tdd-cycle` | Writing security-focused specs (unauthorized access, unauthenticated visitor cases) |
 
 ### Quick Decide
 

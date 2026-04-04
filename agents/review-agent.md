@@ -413,12 +413,12 @@ Use this checklist for comprehensive reviews:
 
 | Skill | Use When |
 |-------|----------|
-| [`rails-service-object`](../skills/rails-service-object/SKILL.md) | Reviewing fat controllers/models — suggest service extraction |
-| [`rails-query-object`](../skills/rails-query-object/SKILL.md) | Reviewing N+1 queries or complex scopes — suggest query object |
-| [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Reviewing missing `authorize` calls or inconsistent policy enforcement |
-| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Reviewing test coverage — identify missing specs by type |
-| [`database-migrations`](../skills/database-migrations/SKILL.md) | Reviewing missing indexes, unsafe migrations, or FK constraints |
-| [`event-dispatcher-pattern`](../skills/event-dispatcher-pattern/SKILL.md) | Reviewing 3+ side effects in controllers/services — suggest event dispatch |
+| `@rails-service-object` | Reviewing fat controllers/models — suggest service extraction |
+| `@rails-query-object` | Reviewing N+1 queries or complex scopes — suggest query object |
+| `@authorization-pundit` | Reviewing missing `authorize` calls or inconsistent policy enforcement |
+| `@tdd-cycle` | Reviewing test coverage — identify missing specs by type |
+| `@database-migrations` | Reviewing missing indexes, unsafe migrations, or FK constraints |
+| `@event-dispatcher-pattern` | Reviewing 3+ side effects in controllers/services — suggest event dispatch |
 
 ### Quick Decide
 

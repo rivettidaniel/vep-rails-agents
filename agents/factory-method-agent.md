@@ -984,15 +984,12 @@ notification = factory.create_notification(user: user, message: "Hi")
 
 ## Related Skills
 
-### Primary Skill
-- **`factory-method-pattern`** — Full pattern reference, registry with metaprogramming, product interface
-
-### Always Include
-- **`tdd-cycle`** — Test each concrete factory independently; shared examples verify product interface compliance
-
-### Often Needed
-- **`rails-service-object`** — Factories are used via services (e.g., `NotificationService` wraps the factory call)
-- **`strategy-pattern`** — Frequently confused with Factory Method; see decision guide below
+| Skill | When to use |
+|-------|-------------|
+| `@factory-method-pattern` | Full pattern reference, registry with metaprogramming, product interface |
+| `@tdd-cycle` | Test each concrete factory independently; shared examples verify product interface compliance |
+| `@rails-service-object` | Factories are used via services (e.g., `NotificationService` wraps the factory call) |
+| `@strategy-pattern` | Frequently confused with Factory Method; see decision guide below |
 
 ### Decision Guide: Factory Method vs Strategy
 

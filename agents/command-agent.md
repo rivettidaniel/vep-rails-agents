@@ -750,15 +750,12 @@ Need undo/redo functionality?
 
 ## Related Skills
 
-### Primary Skill
-- **`command-pattern`** — Full pattern reference, Memento integration, Invoker implementation
-
-### Always Include
-- **`tdd-cycle`** — Test `call()` and `undo()` independently; shared examples cover the reversibility contract
-- **`rails-service-object`** — Receivers ARE service objects; use `ApplicationService` base class for them
-
-### Often Needed
-- **`state-pattern`** — When commands trigger state machine transitions (e.g., `PublishCommand` + `Post` state machine)
+| Skill | When to use |
+|-------|-------------|
+| `@command-pattern` | Full pattern reference, Memento integration, Invoker implementation |
+| `@tdd-cycle` | Test `call()` and `undo()` independently; shared examples cover the reversibility contract |
+| `@rails-service-object` | Receivers ARE service objects; use `ApplicationService` base class for them |
+| `@state-pattern` | When commands trigger state machine transitions (e.g., `PublishCommand` + `Post` state machine) |
 
 ### Decision Guide: Command vs Service Object
 

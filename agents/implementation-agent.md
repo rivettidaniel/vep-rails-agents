@@ -384,12 +384,12 @@ Each subagent gets:
 
 | Skill | When to Use With Implementation Agent |
 |-------|--------------------------------------|
-| `tdd-cycle` | Full RED→GREEN→REFACTOR reference; use to understand the TDD rhythm this agent operates in |
-| `rails-service-object` | When delegating to `@service_agent` — dry-monads Result pattern and service conventions |
-| `rails-model-generator` | When delegating to `@model_agent` — model/migration conventions |
-| `rails-controller` | When delegating to `@controller_agent` — thin controller conventions |
-| `authorization-pundit` | When delegating to `@policy_agent` — Pundit policy patterns |
-| `solid-queue-setup` | When delegating to `@job_agent` — Solid Queue job conventions |
+| `@tdd-cycle` | Full RED→GREEN→REFACTOR reference; use to understand the TDD rhythm this agent operates in |
+| `@rails-service-object` | When delegating to `@service_agent` — dry-monads Result pattern and service conventions |
+| `@rails-model-generator` | When delegating to `@model_agent` — model/migration conventions |
+| `@rails-controller` | When delegating to `@controller_agent` — thin controller conventions |
+| `@authorization-pundit` | When delegating to `@policy_agent` — Pundit policy patterns |
+| `@solid-queue-setup` | When delegating to `@job_agent` — Solid Queue job conventions |
 
 ### Implementation Agent vs Calling Specialist Agents Directly
 

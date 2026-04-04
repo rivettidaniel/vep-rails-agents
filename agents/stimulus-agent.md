@@ -946,10 +946,10 @@ toggle() {
 
 | Skill | When to Use With Stimulus |
 |-------|--------------------------|
-| `hotwire-patterns` | Full Hotwire reference (Turbo Frames + Streams + Stimulus together) |
-| `viewcomponent-patterns` | Building ViewComponents that ship with a Stimulus controller |
-| `tdd-cycle` | Writing system specs and component specs that exercise JS behavior |
-| `action-cable-patterns` | Real-time features where ActionCable pushes data and Stimulus reacts |
+| `@hotwire-patterns` | Full Hotwire reference (Turbo Frames + Streams + Stimulus together) |
+| `@viewcomponent-patterns` | Building ViewComponents that ship with a Stimulus controller |
+| `@tdd-cycle` | Writing system specs and component specs that exercise JS behavior |
+| `@action-cable-patterns` | Real-time features where ActionCable pushes data and Stimulus reacts |
 
 ### Stimulus vs Turbo — Which Tool?
 

@@ -1070,10 +1070,10 @@ document.addEventListener("turbo:submit-start", (event) => {
 
 | Skill | Use When |
 |-------|----------|
-| [`hotwire-patterns`](../skills/hotwire-patterns/SKILL.md) | Full Hotwire reference — Turbo Frames, Streams, and Stimulus integration patterns |
-| [`viewcomponent-patterns`](../skills/viewcomponent-patterns/SKILL.md) | Wrapping Turbo Frames/Stream targets in reusable ViewComponents |
-| [`rails-controller`](../skills/rails-controller/SKILL.md) | Adding `respond_to` blocks with `format.turbo_stream` to controllers |
-| [`action-cable-patterns`](../skills/action-cable-patterns/SKILL.md) | Broadcasting Turbo Streams over WebSocket (real-time updates) |
+| `@hotwire-patterns` | Full Hotwire reference — Turbo Frames, Streams, and Stimulus integration patterns |
+| `@viewcomponent-patterns` | Wrapping Turbo Frames/Stream targets in reusable ViewComponents |
+| `@rails-controller` | Adding `respond_to` blocks with `format.turbo_stream` to controllers |
+| `@action-cable-patterns` | Broadcasting Turbo Streams over WebSocket (real-time updates) |
 
 ### Quick Decide
 

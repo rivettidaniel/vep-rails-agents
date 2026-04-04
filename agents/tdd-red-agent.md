@@ -565,12 +565,12 @@ The test defines the API before implementation.
 
 | Skill | Use When |
 |-------|----------|
-| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Full RED→GREEN→REFACTOR workflow reference |
-| [`rails-service-object`](../skills/rails-service-object/SKILL.md) | Writing RED tests for service objects (dry-monads API: `value!`, `failure`) |
-| [`rails-model-generator`](../skills/rails-model-generator/SKILL.md) | Writing RED model specs (validations, associations, scopes) |
-| [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Writing RED Pundit policy specs |
-| [`view-component`](../skills/view-component/SKILL.md) | Writing RED ViewComponent specs |
-| [`playwright-system-testing`](../skills/playwright-system-testing/SKILL.md) | Writing RED system specs with Playwright instead of Capybara/Selenium |
+| `@tdd-cycle` | Full RED→GREEN→REFACTOR workflow reference |
+| `@rails-service-object` | Writing RED tests for service objects (dry-monads API: `value!`, `failure`) |
+| `@rails-model-generator` | Writing RED model specs (validations, associations, scopes) |
+| `@authorization-pundit` | Writing RED Pundit policy specs |
+| `@viewcomponent-patterns` | Writing RED ViewComponent specs |
+| `@playwright-system-testing` | Writing RED system specs with Playwright instead of Capybara/Selenium |
 
 ### Quick Decide
 

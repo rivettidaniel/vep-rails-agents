@@ -451,9 +451,9 @@ If RuboCop reports offenses you cannot auto-correct:
 
 | Skill | Use When |
 |-------|----------|
-| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Run full test suite after linting to confirm no behavior changed |
-| [`rails-service-object`](../skills/rails-service-object/SKILL.md) | Lint agent flags `Metrics/ClassLength` on a service — consider splitting |
-| [`rails-model-generator`](../skills/rails-model-generator/SKILL.md) | Reference for correct model organization order (associations → validations → callbacks → scopes) |
+| `@tdd-cycle` | Run full test suite after linting to confirm no behavior changed |
+| `@rails-service-object` | Lint agent flags `Metrics/ClassLength` on a service — consider splitting |
+| `@rails-model-generator` | Reference for correct model organization order (associations → validations → callbacks → scopes) |
 
 ### Quick Decide
 

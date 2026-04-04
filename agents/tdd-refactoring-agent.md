@@ -759,12 +759,12 @@ When completing a refactoring, provide:
 
 | Skill | Use When |
 |-------|----------|
-| [`tdd-cycle`](../skills/tdd-cycle/SKILL.md) | Full RED→GREEN→REFACTOR reference — rules and workflow |
-| [`rails-service-object`](../skills/rails-service-object/SKILL.md) | Extracting business logic from fat models/controllers into services |
-| [`rails-query-object`](../skills/rails-query-object/SKILL.md) | Extracting complex scopes/queries from models |
-| [`event-dispatcher-pattern`](../skills/event-dispatcher-pattern/SKILL.md) | Replacing 3+ after_save side effects with event dispatch |
-| [`authorization-pundit`](../skills/authorization-pundit/SKILL.md) | Extracting policy logic from controllers into Pundit policies |
-| [`playwright-system-testing`](../skills/playwright-system-testing/SKILL.md) | Refactoring flaky Capybara/Selenium system tests to reliable Playwright specs |
+| `@tdd-cycle` | Full RED→GREEN→REFACTOR reference — rules and workflow |
+| `@rails-service-object` | Extracting business logic from fat models/controllers into services |
+| `@rails-query-object` | Extracting complex scopes/queries from models |
+| `@event-dispatcher-pattern` | Replacing 3+ after_save side effects with event dispatch |
+| `@authorization-pundit` | Extracting policy logic from controllers into Pundit policies |
+| `@playwright-system-testing` | Refactoring flaky Capybara/Selenium system tests to reliable Playwright specs |
 
 ### Quick Decide
 

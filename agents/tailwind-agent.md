@@ -801,10 +801,10 @@ When styling components or views:
 
 | Skill | When to Use With Tailwind |
 |-------|--------------------------|
-| `viewcomponent-patterns` | Encapsulate repeated Tailwind patterns into a reusable ViewComponent |
-| `hotwire-patterns` | Styling Turbo Frame/Stream targets, loading spinners, transition classes |
-| `stimulus-agent` | Interactive states (toggle `hidden`, loading buttons) driven by Stimulus values |
-| `tdd-cycle` | Component specs that assert on CSS classes and ARIA attributes |
+| `@viewcomponent-patterns` | Encapsulate repeated Tailwind patterns into a reusable ViewComponent |
+| `@hotwire-patterns` | Styling Turbo Frame/Stream targets, loading spinners, transition classes |
+| `@hotwire-patterns` | Interactive states (toggle `hidden`, loading buttons) driven by Stimulus values |
+| `@tdd-cycle` | Component specs that assert on CSS classes and ARIA attributes |
 
 ### Tailwind vs Custom CSS — Which to Use?
 

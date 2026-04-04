@@ -971,17 +971,14 @@ config.active_job.queue_adapter = :solid_queue  # production.rb
 
 ## Related Skills
 
-### Primary Skill
-- **`event-dispatcher-pattern`** — `ApplicationEvent` implementation, handler structure, testing patterns, async handlers
-
-### Always Include
-- **`tdd-cycle`** — Test each handler in isolation; test that controllers dispatch the right event
-- **`rails-service-object`** — Business logic goes in services BEFORE dispatch; handlers are side effects only
-- **`rails-controller`** — Controllers are the dispatch point; Event Dispatcher keeps them thin
-
-### Often Needed
-- **`action-cable-patterns`** — Many handlers broadcast via Turbo Streams or ActionCable
-- **`solid-queue-setup`** — Slow handlers should enqueue jobs (`ProcessEntityJob.perform_later`) not run inline
+| Skill | When to use |
+|-------|-------------|
+| `@event-dispatcher-pattern` | Primary reference — `ApplicationEvent` implementation, handler structure, testing patterns, async handlers |
+| `@tdd-cycle` | Test each handler in isolation; test that controllers dispatch the right event |
+| `@rails-service-object` | Business logic goes in services BEFORE dispatch; handlers are side effects only |
+| `@rails-controller` | Controllers are the dispatch point; Event Dispatcher keeps them thin |
+| `@action-cable-patterns` | Many handlers broadcast via Turbo Streams or ActionCable |
+| `@solid-queue-setup` | Slow handlers should enqueue jobs (`ProcessEntityJob.perform_later`) not run inline |
 
 ### Decision Guide: Event Dispatcher vs Direct Side Effects
 

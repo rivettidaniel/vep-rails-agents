@@ -776,8 +776,8 @@ UrgentNotificationJob.set(priority: 10).perform_later(user.id)
 | Need | Use |
 |------|-----|
 | Full Solid Queue setup and configuration | `@solid-queue-setup` skill |
-| Business logic the job delegates to | `@service_agent` |
-| Email sending inside a job | `@mailer_agent` |
+| Business logic the job delegates to | `@rails-service-object` skill |
+| Email sending inside a job | `@action-mailer-patterns` skill |
 | Service with 3+ side effects that triggers the job | `@event-dispatcher-pattern` skill |
 | TDD workflow for building the job | `@tdd-cycle` skill |
 

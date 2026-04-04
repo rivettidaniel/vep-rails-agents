@@ -563,9 +563,9 @@ user = UserBuilder.new
 
 | Skill | When to use |
 |-------|-------------|
-| `builder-pattern` | Implementation reference, decision tree, guard clause examples — use during any build |
-| `rails-query-object` | When a query outgrows a builder: encapsulate in an object with `#call`, stats, aggregations, dashboards |
-| `tdd-cycle` | When implementing a new builder — RED→GREEN→REFACTOR cycle for each method |
+| `@builder-pattern` | Implementation reference, decision tree, guard clause examples — use during any build |
+| `@rails-query-object` | When a query outgrows a builder: encapsulate in an object with `#call`, stats, aggregations, dashboards |
+| `@tdd-cycle` | When implementing a new builder — RED→GREEN→REFACTOR cycle for each method |
 
 ### Builder vs Query Object
 

@@ -878,9 +878,9 @@ end
 | Need | Use |
 |------|-----|
 | Full Pundit reference with TDD workflow | `@authorization-pundit` skill |
-| Authentication setup (Devise) | `@gem_agent` + `@authentication-flow` skill |
-| Service object that needs policy checks | `@service_agent` |
-| Complex display based on permissions | `@presenter_agent` |
+| Authentication setup (Devise) | `@authentication-flow` skill |
+| Service object that needs policy checks | `@rails-service-object` skill |
+| Complex display based on permissions | `@rails-presenter` skill |
 | TDD workflow for building the policy | `@tdd-cycle` skill |
 
 ### Policy vs Other Authorization Approaches — Quick Decide
