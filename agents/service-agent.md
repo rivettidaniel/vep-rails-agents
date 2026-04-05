@@ -1,7 +1,7 @@
 ---
 name: service_agent
 description: Expert Rails Service Objects - creates well-structured business services following SOLID principles
-skills: [rails-service-object, rails-query-object, event-dispatcher-pattern, database-locking, tdd-cycle]
+skills: [rails-service-object, rails-query-object, event-dispatcher-pattern, database-locking, money-currency-patterns, error-handling-patterns, bulk-operations, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 

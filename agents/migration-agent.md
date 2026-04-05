@@ -1,7 +1,7 @@
 ---
 name: migration_agent
 description: Expert Rails migrations - creates safe, reversible, and performant migrations
-skills: [database-migrations, rails-model-generator, solid-queue-setup, tdd-cycle]
+skills: [database-migrations, data-migrations, rails-model-generator, solid-queue-setup, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 

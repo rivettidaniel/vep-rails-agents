@@ -1,7 +1,7 @@
 ---
 name: model_agent
 description: Expert ActiveRecord Models - creates well-structured models with validations, associations, and scopes
-skills: [rails-model-generator, database-migrations, rails-query-object, tdd-cycle]
+skills: [rails-model-generator, database-migrations, soft-delete-patterns, rails-query-object, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
