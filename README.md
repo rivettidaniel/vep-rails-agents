@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/banner.svg?v=1.1" alt="DÉJATE DE MARIQUERAS — Venezuelan Execution Protocol v1.1" width="900"/>
+<img src="assets/banner.svg?v=1.2" alt="DÉJATE DE MARIQUERAS — Venezuelan Execution Protocol v1.2" width="900"/>
 
 **A specialized AI agent suite for Rails development with wave-based parallel execution.**
 
@@ -118,7 +118,7 @@ A curated collection of specialized AI agents for Rails development, organized i
 3. **VEP Planning System** - State-persistent project planning with wave-based parallel execution
 4. **Skills Library** - Reusable knowledge modules for specific Rails patterns and technologies
 
-> **New:** Use this project's 34 agents and 30 skills in your IDE:
+> **New:** Use this project's 34 agents and 34 skills in your IDE:
 > - **Claude Code:** [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md) — use `/vep-feature` to spec + plan any feature and generate a wave-structured PHASE_PLAN. For general Rails setup, see [Claude Code Setup Template](CLAUDE_CODE_SETUP_TEMPLATE.md).
 > - **Cursor:** [Cursor Setup Guide](CURSOR_SETUP.md) — install with `--cursor` and use the same agents as subagents and skills in Cursor Agent.
 
@@ -347,9 +347,20 @@ Skills are focused knowledge documents that contain:
 - **`performance-optimization`** - N+1 prevention, eager loading, optimization
 - **`tdd-cycle`** - Test-driven development workflow
 
+#### Design Patterns (Skills)
+- **`builder-pattern`** - Builder pattern for complex multi-step construction
+- **`chain-of-responsibility-pattern`** - Pipeline/filter pattern
+- **`command-pattern`** - Command pattern with undo/redo, queues, and history
+- **`factory-method-pattern`** - Polymorphic object creation
+- **`state-pattern`** - State machines with transitions
+- **`strategy-pattern`** - Registry-based interchangeable algorithms
+- **`template-method-pattern`** - Workflows with customizable hooks
+- **`event-dispatcher-pattern`** - Explicit side effects (3+ actions)
+
 #### Meta / Tooling
 - **`skill-auditor`** - Audits and improves existing skill files for correctness, code quality, and completeness
 - **`skill-creator`** - Creates new Rails skills from scratch following project conventions, with test cases and iteration loop
+- **`playwright-system-testing`** - End-to-end system tests with Playwright
 
 ### Using Skills
 
@@ -394,7 +405,7 @@ All agents follow best practices from GitHub's analysis:
   - ⚠️ **Ask first** - Requires confirmation
   - 🚫 **Never** - Hard limits
 - **Code Examples** - Real good/bad patterns
-- **Concise** - Under 1,000 lines per agent
+- **Concise** - ~100-150 lines per agent (skills hold the details)
 
 ---
 
@@ -425,7 +436,7 @@ This guide shows how to use the **34 agents** and **30 skills** in this project:
 - **Specialist Agents (31)** - Testing, implementation, frontend, quality, design patterns
 - **Feature Spec Agents (3)** - Specification, planner, reviewer
 - **VEP Planning System** - `/vep-init`, `/vep-feature`, `/vep-wave`, `/vep-state`
-- **Skills (30)** - Architecture patterns, Hotwire, design patterns, and more
+- **Skills (34)** - Architecture patterns, Hotwire, design patterns, and more
 - **Workflow Examples** - From simple features to complex multi-phase projects
 
 ### General Rails Setup Template
