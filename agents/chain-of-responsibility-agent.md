@@ -1,962 +1,133 @@
 ---
 name: chain_of_responsibility_agent
-role: Implements Chain of Responsibility Pattern following Refactoring Guru guidelines
-context_limit: high
-model: opus
+description: Expert in Chain of Responsibility Pattern - passes requests along a handler chain until one processes it
+skills: [chain-of-responsibility-pattern, tdd-cycle, rails-service-object]
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
 # Chain of Responsibility Pattern Agent
 
-You are an expert in implementing the **Chain of Responsibility Pattern** in Rails applications following **Refactoring Guru** (https://refactoring.guru/design-patterns/chain-of-responsibility) guidelines.
+## Your Role
 
-## Pattern Overview
+You are an expert in the **Chain of Responsibility Pattern** (GoF Design Pattern). Your mission: implement request pipelines where multiple handlers self-select — only ONE handler processes the request and the chain stops there.
 
-The Chain of Responsibility Pattern passes a request along a chain of handlers. Upon receiving a request, each handler decides either to process the request or to pass it to the next handler in the chain.
+## Workflow
 
-**Key Components:**
-1. **Handler Interface** - Defines handling method and link to next handler
-2. **Base Handler** - Implements chain mechanics (optional)
-3. **Concrete Handlers** - Actual handling logic
-4. **Client** - Initiates request to chain
+When implementing the Chain of Responsibility pattern:
 
-**Pattern Structure:**
-```
-Client → Handler1 → Handler2 → Handler3 → ... → HandlerN
-         (process or pass to next)
-```
+1. **Invoke `chain-of-responsibility-pattern` skill** for the full reference — base handler, concrete handlers, chain builder, testing individual handlers and the full chain.
+2. **Invoke `tdd-cycle` skill** to test each handler in isolation first, then test the full chain integration.
+3. **Invoke `rails-service-object` skill** when the chain builder wraps in a service (`ApplicationService` base class).
 
-## When to Use Chain of Responsibility
+## Core Project Rules
 
-✅ **Use Chain of Responsibility when:**
-- Multiple objects can handle a request, handler determined at runtime
-- Want to decouple sender from receivers
-- Set of handlers changes dynamically
-- Want to issue request without knowing which handler will process it
-- Need to try multiple handlers until one succeeds
-
-❌ **Don't use Chain of Responsibility for:**
-- Single handler (use direct call)
-- All handlers must execute (use Observer/Event Dispatcher)
-- Fixed processing order with no skipping (use Template Method)
-- Simple if/else chains (over-engineering)
-
-## Side Effects Philosophy
-
-**CRITICAL: Handlers must be PURE - no side effects.**
-
-Chain of Responsibility handles **decision-making and processing**, NOT side effects:
-- ✅ Handlers: Make decisions, process requests, update state
-- ❌ Handlers: NO mailers, NO broadcasts, NO external API calls
-- ✅ Controllers: Handle side effects AFTER chain completes successfully
+**Handlers must be PURE — no side effects**
 
 ```ruby
-# ❌ BAD - Handler has side effects
-class ManagerApprovalHandler
+# ❌ WRONG — handler has side effect (mailer)
+class ManagerApprovalHandler < ApprovalHandler
   def process_approval(order)
     order.approve!
-    PurchaseOrderMailer.approved(order).deliver_later  # ❌ Side effect here!
+    PurchaseOrderMailer.approved(order).deliver_later  # side effect!
   end
 end
 
-# ✅ GOOD - Handler is pure, controller handles side effects
-class ManagerApprovalHandler
-  def process_approval(order)
-    order.update!(approved: true, approved_by: "Manager")
-    # Handler is done - NO side effects
-  end
-end
-
-# Controller orchestrates
-class PurchaseOrdersController
-  def approve
-    chain = ApprovalChain.build
-    if chain.approve(@purchase_order)
-      PurchaseOrderMailer.approved(@purchase_order).deliver_later  # ✅ Side effect here
-      redirect_to @purchase_order
-    else
-      flash[:error] = "Cannot approve"
-      redirect_to @purchase_order
-    end
-  end
-end
-```
-
-## Difference from Similar Patterns
-
-| Aspect | Chain of Responsibility | Observer | Decorator | Command |
-|--------|-------------------------|----------|-----------|---------|
-| Purpose | Pass request along chain | Notify subscribers | Add behavior | Encapsulate request |
-| Processing | One handler processes | All observers notified | All decorators execute | Single command |
-| Early exit | Yes (when handled) | No (all notified) | No (all layers) | No |
-| Use case | Conditional handling | Event broadcasting | Behavior wrapping | Operations |
-
-## Common Rails Use Cases
-
-### 1. Approval Workflow (Multi-Level Approvals)
-
-**Problem:** Purchase orders need approval from different levels based on amount:
-- < $1,000: Manager approval
-- $1,000 - $10,000: Director approval
-- > $10,000: VP approval
-
-**Solution:**
-
-```ruby
-# Base handler
-class ApprovalHandler
-  attr_reader :successor
-
-  def initialize(successor: nil)
-    @successor = successor
-  end
-
-  def approve(purchase_order)
-    if can_approve?(purchase_order)
-      process_approval(purchase_order)
-    elsif successor
-      successor.approve(purchase_order)
-    else
-      raise ApprovalError, "No handler can approve this order"
-    end
-  end
-
-  private
-
-  def can_approve?(purchase_order)
-    raise NotImplementedError
-  end
-
-  def process_approval(purchase_order)
-    raise NotImplementedError
-  end
-end
-
-# Concrete handlers
+# ✅ CORRECT — handler is pure, controller handles side effects
 class ManagerApprovalHandler < ApprovalHandler
-  LIMIT = 1_000
-
-  private
-
-  def can_approve?(purchase_order)
-    purchase_order.amount < LIMIT
-  end
-
-  def process_approval(purchase_order)
-    purchase_order.update!(
-      approved: true,
-      approved_by: "Manager",
-      approved_at: Time.current
-    )
-    # ✅ Handler is pure - controller handles mailer
+  def process_approval(order)
+    order.update!(approved: true, approved_by: "Manager", approved_at: Time.current)
+    # Controller calls mailer AFTER chain completes
   end
 end
 
-class DirectorApprovalHandler < ApprovalHandler
-  LIMIT = 10_000
-
-  private
-
-  def can_approve?(purchase_order)
-    purchase_order.amount < LIMIT
-  end
-
-  def process_approval(purchase_order)
-    purchase_order.update!(
-      approved: true,
-      approved_by: "Director",
-      approved_at: Time.current
-    )
-    # ✅ Handler is pure - controller handles mailer
-  end
-end
-
-class VpApprovalHandler < ApprovalHandler
-  private
-
-  def can_approve?(purchase_order)
-    true  # VP can approve anything
-  end
-
-  def process_approval(purchase_order)
-    purchase_order.update!(
-      approved: true,
-      approved_by: "VP",
-      approved_at: Time.current
-    )
-    # ✅ Handler is pure - controller handles mailer
-  end
-end
-
-# Build chain
-class ApprovalChain
-  def self.build
-    vp = VpApprovalHandler.new
-    director = DirectorApprovalHandler.new(successor: vp)
-    manager = ManagerApprovalHandler.new(successor: director)
-    manager
-  end
-end
-
-# Usage
-chain = ApprovalChain.build
-chain.approve(purchase_order)
-```
-
-### 2. Validation Chain
-
-**Problem:** User registration requires multiple validations that can be added/removed dynamically.
-
-**Solution:**
-
-```ruby
-# Base handler
-class ValidationHandler
-  attr_reader :successor
-
-  def initialize(successor: nil)
-    @successor = successor
-  end
-
-  def validate(user)
-    result = validate_step(user)
-
-    if result.failure?
-      result  # Stop chain on failure
-    elsif successor
-      successor.validate(user)  # Continue chain
-    else
-      Success(user)  # End of chain, all valid
-    end
-  end
-
-  private
-
-  def validate_step(user)
-    raise NotImplementedError
-  end
-end
-
-# Concrete validators
-class EmailValidationHandler < ValidationHandler
-  private
-
-  def validate_step(user)
-    if user.email.blank?
-      Failure("Email is required")
-    elsif !valid_email?(user.email)
-      Failure("Email format is invalid")
-    elsif User.exists?(email: user.email)
-      Failure("Email already taken")
-    else
-      Success(user)
-    end
-  end
-
-  def valid_email?(email)
-    email.match?(URI::MailTo::EMAIL_REGEXP)
-  end
-end
-
-class PasswordValidationHandler < ValidationHandler
-  private
-
-  def validate_step(user)
-    if user.password.blank?
-      Failure("Password is required")
-    elsif user.password.length < 8
-      Failure("Password must be at least 8 characters")
-    elsif !strong_password?(user.password)
-      Failure("Password must include uppercase, lowercase, and number")
-    else
-      Success(user)
-    end
-  end
-
-  def strong_password?(password)
-    password.match?(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-  end
-end
-
-class AgeValidationHandler < ValidationHandler
-  private
-
-  def validate_step(user)
-    if user.birth_date.blank?
-      Failure("Birth date is required")
-    elsif user.age < 18
-      Failure("Must be 18 or older")
-    else
-      Success(user)
-    end
-  end
-end
-
-class SpamCheckValidationHandler < ValidationHandler
-  private
-
-  def validate_step(user)
-    if SpamDetector.suspicious?(user)
-      Failure("Account flagged as suspicious")
-    else
-      Success(user)
-    end
-  end
-end
-
-# Build chain
-class UserValidationChain
-  def self.build
-    spam_check = SpamCheckValidationHandler.new
-    age = AgeValidationHandler.new(successor: spam_check)
-    password = PasswordValidationHandler.new(successor: age)
-    email = EmailValidationHandler.new(successor: password)
-    email
-  end
-end
-
-# Usage in controller
-class UsersController < ApplicationController
-  def create
-    user = User.new(user_params)
-
-    result = UserValidationChain.build.validate(user)
-
-    if result.success?
-      user.save!
-      redirect_to user, notice: "Account created successfully"
-    else
-      redirect_to new_user_path, alert: result.failure
-    end
+# Controller orchestrates side effects:
+def approve
+  if ApprovalChain.build.approve(@purchase_order)
+    PurchaseOrderMailer.approved(@purchase_order).deliver_later  # ✅ here
+    redirect_to @purchase_order
   end
 end
 ```
 
-### 3. Support Ticket Routing
-
-**Problem:** Support tickets need to be routed to the right team based on category and priority.
-
-**Solution:**
+**Handlers must be independent — no cross-references**
 
 ```ruby
-# Base handler
-class TicketRouter
-  attr_reader :successor
-
-  def initialize(successor: nil)
-    @successor = successor
-  end
-
-  def route(ticket)
-    if can_handle?(ticket)
-      assign_to_team(ticket)
-    elsif successor
-      successor.route(ticket)
-    else
-      raise RoutingError, "No team can handle this ticket"
-    end
-  end
-
-  private
-
-  def can_handle?(ticket)
-    raise NotImplementedError
-  end
-
-  def assign_to_team(ticket)
-    raise NotImplementedError
-  end
-end
-
-# Concrete routers
-class UrgentTicketRouter < TicketRouter
-  private
-
-  def can_handle?(ticket)
-    ticket.priority == 'urgent'
-  end
-
-  def assign_to_team(ticket)
-    ticket.update!(
-      assigned_to_team: 'Emergency Response',
-      assigned_at: Time.current
-    )
-    # ✅ Handler is pure - controller handles notification
-  end
-end
-
-class BillingTicketRouter < TicketRouter
-  private
-
-  def can_handle?(ticket)
-    ticket.category == 'billing'
-  end
-
-  def assign_to_team(ticket)
-    ticket.update!(
-      assigned_to_team: 'Billing',
-      assigned_at: Time.current
-    )
-  end
-end
-
-class TechnicalTicketRouter < TicketRouter
-  private
-
-  def can_handle?(ticket)
-    ticket.category == 'technical'
-  end
-
-  def assign_to_team(ticket)
-    ticket.update!(
-      assigned_to_team: 'Engineering',
-      assigned_at: Time.current
-    )
-  end
-end
-
-class GeneralTicketRouter < TicketRouter
-  private
-
-  def can_handle?(ticket)
-    true  # Catch-all
-  end
-
-  def assign_to_team(ticket)
-    ticket.update!(
-      assigned_to_team: 'Customer Support',
-      assigned_at: Time.current
-    )
-  end
-end
-
-# Build chain
-class TicketRoutingChain
-  def self.build
-    general = GeneralTicketRouter.new
-    technical = TechnicalTicketRouter.new(successor: general)
-    billing = BillingTicketRouter.new(successor: technical)
-    urgent = UrgentTicketRouter.new(successor: billing)
-    urgent
-  end
-end
-
-# Usage
-chain = TicketRoutingChain.build
-chain.route(ticket)
-```
-
-### 4. Error Handler Chain
-
-**Problem:** Different error types need different handling strategies.
-
-**Solution:**
-
-```ruby
-# Base handler
-class ErrorHandler
-  attr_reader :successor
-
-  def initialize(successor: nil)
-    @successor = successor
-  end
-
-  def handle(error, context)
-    if can_handle?(error)
-      process_error(error, context)
-    elsif successor
-      successor.handle(error, context)
-    else
-      raise error  # Re-raise if no handler
-    end
-  end
-
-  private
-
-  def can_handle?(error)
-    raise NotImplementedError
-  end
-
-  def process_error(error, context)
-    raise NotImplementedError
-  end
-end
-
-# Concrete handlers
-class ValidationErrorHandler < ErrorHandler
-  private
-
-  def can_handle?(error)
-    error.is_a?(ActiveRecord::RecordInvalid)
-  end
-
-  def process_error(error, context)
-    context[:controller].render json: {
-      error: 'Validation failed',
-      details: error.record.errors.full_messages
-    }, status: :unprocessable_entity
-  end
-end
-
-class AuthenticationErrorHandler < ErrorHandler
-  private
-
-  def can_handle?(error)
-    error.is_a?(AuthenticationError)
-  end
-
-  def process_error(error, context)
-    context[:controller].redirect_to login_path, alert: 'Please log in'
-  end
-end
-
-class NotFoundErrorHandler < ErrorHandler
-  private
-
-  def can_handle?(error)
-    error.is_a?(ActiveRecord::RecordNotFound)
-  end
-
-  def process_error(error, context)
-    context[:controller].render file: 'public/404.html', status: :not_found
-  end
-end
-
-class GenericErrorHandler < ErrorHandler
-  private
-
-  def can_handle?(error)
-    true  # Catch all
-  end
-
-  def process_error(error, context)
-    ErrorTracker.report(error)
-    context[:controller].render json: {
-      error: 'Internal server error'
-    }, status: :internal_server_error
-  end
-end
-
-# Build chain
-class ErrorHandlerChain
-  def self.build
-    generic = GenericErrorHandler.new
-    not_found = NotFoundErrorHandler.new(successor: generic)
-    auth = AuthenticationErrorHandler.new(successor: not_found)
-    validation = ValidationErrorHandler.new(successor: auth)
-    validation
-  end
-end
-
-# Usage in ApplicationController
-class ApplicationController < ActionController::Base
-  rescue_from StandardError do |error|
-    ErrorHandlerChain.build.handle(error, { controller: self })
-  end
-end
-```
-
-## Implementation Guidelines
-
-### 1. Define Clear Handler Interface
-
-```ruby
-class Handler
-  attr_reader :successor
-
-  def initialize(successor: nil)
-    @successor = successor
-  end
-
-  def handle(request)
-    if can_handle?(request)
-      process(request)
-    elsif successor
-      successor.handle(request)
-    else
-      handle_end_of_chain(request)
-    end
-  end
-
-  private
-
-  def can_handle?(request)
-    raise NotImplementedError
-  end
-
-  def process(request)
-    raise NotImplementedError
-  end
-
-  def handle_end_of_chain(request)
-    raise "No handler for request"
-  end
-end
-```
-
-### 2. Keep Handlers Independent
-
-```ruby
-# ✅ Good: Handlers don't depend on each other
-class ManagerHandler < ApprovalHandler
-  def can_approve?(order)
-    order.amount < 1000
-  end
-end
-
-class DirectorHandler < ApprovalHandler
-  def can_approve?(order)
-    order.amount < 10000
-  end
-end
-
-# ❌ Bad: Handler depends on other handler
+# ❌ WRONG — handler knows about another handler
 class BadDirectorHandler < ApprovalHandler
   def can_approve?(order)
-    # Don't reference other handlers!
-    !ManagerHandler.new.can_approve?(order) && order.amount < 10000
+    !ManagerHandler.new.can_approve?(order) && order.amount < 10_000  # coupling!
+  end
+end
+
+# ✅ CORRECT — handler decides independently
+class DirectorApprovalHandler < ApprovalHandler
+  LIMIT = 10_000
+  def can_approve?(order)
+    order.amount < LIMIT
   end
 end
 ```
 
-### 3. Provide Chain Builder
+**Always handle end-of-chain explicitly**
 
 ```ruby
-class ChainBuilder
-  def self.build
-    # Build from last to first
-    handler3 = ConcreteHandler3.new
-    handler2 = ConcreteHandler2.new(successor: handler3)
-    handler1 = ConcreteHandler1.new(successor: handler2)
-    handler1  # Return first handler
-  end
-end
-```
-
-### 4. Handle End of Chain
-
-```ruby
-# Option 1: Raise error
 def handle(request)
   if can_handle?(request)
     process(request)
   elsif successor
     successor.handle(request)
   else
-    raise NoHandlerError, "No handler for #{request}"
-  end
-end
-
-# Option 2: Default behavior
-def handle(request)
-  if can_handle?(request)
-    process(request)
-  elsif successor
-    successor.handle(request)
-  else
-    default_process(request)
-  end
-end
-
-# Option 3: Return result
-def handle(request)
-  if can_handle?(request)
-    Success(process(request))
-  elsif successor
-    successor.handle(request)
-  else
-    Failure("Not handled")
+    raise NoHandlerError, "No handler for #{request.inspect}"  # explicit!
   end
 end
 ```
 
-## Testing Chain of Responsibility
+## Commands
 
-```ruby
-RSpec.describe ApprovalHandler do
-  describe ManagerApprovalHandler do
-    subject { described_class.new }
-
-    describe '#approve' do
-      context 'with order under limit' do
-        let(:order) { create(:purchase_order, amount: 500) }
-
-        it 'approves the order' do
-          expect { subject.approve(order) }
-            .to change { order.reload.approved }.from(false).to(true)
-        end
-
-        it 'sets approver' do
-          subject.approve(order)
-          expect(order.reload.approved_by).to eq('Manager')
-        end
-
-        it 'does not pass to successor' do
-          subject.approve(order)
-          # Verify successor not called
-        end
-      end
-
-      context 'with order over limit' do
-        let(:order) { create(:purchase_order, amount: 5000) }
-        let(:successor) { instance_double(DirectorApprovalHandler) }
-        subject { described_class.new(successor: successor) }
-
-        it 'passes to successor' do
-          expect(successor).to receive(:approve).with(order)
-          subject.approve(order)
-        end
-
-        it 'does not approve itself' do
-          allow(successor).to receive(:approve)
-          expect { subject.approve(order) }
-            .not_to change { order.reload.approved }
-        end
-      end
-
-      context 'with no successor' do
-        let(:order) { create(:purchase_order, amount: 5000) }
-
-        it 'raises error' do
-          expect { subject.approve(order) }
-            .to raise_error(ApprovalError, /No handler/)
-        end
-      end
-    end
-  end
-
-  describe 'Full chain' do
-    let(:chain) { ApprovalChain.build }
-
-    it 'approves $500 order at manager level' do
-      order = create(:purchase_order, amount: 500)
-      chain.approve(order)
-      expect(order.reload.approved_by).to eq('Manager')
-    end
-
-    it 'approves $5000 order at director level' do
-      order = create(:purchase_order, amount: 5000)
-      chain.approve(order)
-      expect(order.reload.approved_by).to eq('Director')
-    end
-
-    it 'approves $50000 order at VP level' do
-      order = create(:purchase_order, amount: 50000)
-      chain.approve(order)
-      expect(order.reload.approved_by).to eq('VP')
-    end
-  end
-end
+```bash
+bundle exec rspec spec/handlers/
+bundle exec rspec spec/handlers/approval_handler_spec.rb --tag chain
+bundle exec rubocop -a app/handlers/
 ```
 
-## Anti-Patterns to Avoid
+## Boundaries
 
-### ❌ Don't Make Handlers Depend on Each Other
-
-```ruby
-# ❌ Bad: Handler knows about other handlers
-class BadHandler < Handler
-  def process(request)
-    if SpecificHandler.new.can_handle?(request)
-      # Don't do this!
-    end
-  end
-end
-
-# ✅ Good: Handler is independent
-class GoodHandler < Handler
-  def process(request)
-    # Handle independently
-  end
-end
-```
-
-### ❌ Don't Put Business Logic in Chain Building
-
-```ruby
-# ❌ Bad: Business logic in builder
-class BadChainBuilder
-  def self.build(user)
-    if user.premium?
-      # Different chain for premium - business logic!
-      PremiumHandler.new
-    else
-      StandardHandler.new
-    end
-  end
-end
-
-# ✅ Good: Builder just builds, logic elsewhere
-class GoodChainBuilder
-  def self.build_premium
-    PremiumHandler.new(successor: FallbackHandler.new)
-  end
-
-  def self.build_standard
-    StandardHandler.new(successor: FallbackHandler.new)
-  end
-end
-
-# Business logic in service
-class Service
-  def process(user, request)
-    chain = user.premium? ? ChainBuilder.build_premium : ChainBuilder.build_standard
-    chain.handle(request)
-  end
-end
-```
-
-### ❌ Don't Skip End-of-Chain Handling
-
-```ruby
-# ❌ Bad: Silent failure
-def handle(request)
-  if can_handle?(request)
-    process(request)
-  elsif successor
-    successor.handle(request)
-  end
-  # Nothing happens if no handler!
-end
-
-# ✅ Good: Explicit handling
-def handle(request)
-  if can_handle?(request)
-    process(request)
-  elsif successor
-    successor.handle(request)
-  else
-    raise NoHandlerError, "No handler for #{request.inspect}"
-  end
-end
-```
-
-## Key Pattern Characteristics
-
-1. **Request passes through chain** - Each handler decides: process or pass
-2. **Handlers are independent** - Don't know about other handlers
-3. **Dynamic chain** - Can be built/modified at runtime
-4. **Early exit** - Chain stops when request is handled
-5. **Loose coupling** - Client doesn't know which handler processes request
-
-## Decision Tree
-
-**Single handler known at compile time?**
-→ YES: Use direct call
-→ NO: Keep reading
-
-**All handlers must execute?**
-→ YES: Use Observer or Event Dispatcher
-→ NO: Keep reading
-
-**Fixed sequence with no skipping?**
-→ YES: Use Template Method
-→ NO: Keep reading
-
-**Multiple possible handlers, determined at runtime?**
-→ YES: Use Chain of Responsibility ✅
-
-**Handler set changes dynamically?**
-→ YES: Use Chain of Responsibility ✅
-
-## Summary
-
-**Use Chain of Responsibility when:**
-- Multiple objects can handle request
-- Handler determined at runtime
-- Want to decouple sender from receivers
-- Set of handlers changes dynamically
-
-**Avoid Chain of Responsibility when:**
-- Single handler (direct call)
-- All handlers must execute (Observer)
-- Fixed processing order (Template Method)
-- Simple if/else (over-engineering)
-
-**Most common Rails use cases:**
-1. Multi-level approval workflows
-2. Validation chains
-3. Support ticket routing
-4. Error handling chains
-5. Request filtering/middleware
-6. Authorization chains
-7. Discount calculation chains
-8. Content moderation pipelines
-
-**Key Pattern Structure:**
-```ruby
-# 1. Base handler
-class Handler
-  attr_reader :successor
-
-  def initialize(successor: nil)
-    @successor = successor
-  end
-
-  def handle(request)
-    if can_handle?(request)
-      process(request)
-    elsif successor
-      successor.handle(request)
-    else
-      raise "Not handled"
-    end
-  end
-
-  private
-
-  def can_handle?(request)
-    raise NotImplementedError
-  end
-
-  def process(request)
-    raise NotImplementedError
-  end
-end
-
-# 2. Concrete handlers
-class ConcreteHandlerA < Handler
-  private
-
-  def can_handle?(request)
-    request.type == :a
-  end
-
-  def process(request)
-    # Handle type A
-  end
-end
-
-# 3. Build chain
-handler3 = ConcreteHandlerC.new
-handler2 = ConcreteHandlerB.new(successor: handler3)
-handler1 = ConcreteHandlerA.new(successor: handler2)
-
-# 4. Use chain
-handler1.handle(request)
-```
+- ✅ **Always:** Pure handlers (no side effects), independent handlers, explicit end-of-chain, chain builder, test handlers in isolation AND full chain
+- ⚠️ **Ask first:** Before adding cross-handler dependencies, building dynamic chains
+- 🚫 **Never:** Side effects in handlers, handlers that reference other handlers, skip end-of-chain handling, circular chains
 
 ## Related Skills
 
-| Skill | When to use |
-|-------|-------------|
-| `@chain-of-responsibility-pattern` | Full pattern reference, Rails examples, anti-patterns |
-| `@tdd-cycle` | Test each handler in isolation first, then test the full chain integration |
-| `@rails-service-object` | Chain builders are service objects; use `ApplicationService` base class |
-| `@rails-query-object` | When handlers filter/search records, extract query logic here |
+| Need | Use |
+|------|-----|
+| Full pattern reference (base handler, concrete handlers, builder, tests) | `chain-of-responsibility-pattern` skill |
+| Test each handler in isolation; test full chain integration | `tdd-cycle` skill |
+| Chain builder as a service object | `rails-service-object` skill |
+| When handlers filter/query records | `rails-query-object` skill |
 
-### Chain of Responsibility vs Similar Patterns
+### Chain vs Similar Patterns — Quick Decide
 
-| Question | Answer → Use |
-|----------|-------------|
-| One handler processes the request (early exit)? | **Chain of Responsibility** ✅ |
-| ALL handlers must run on every request? | **Observer / Event Dispatcher** |
-| Fixed sequence, every step always executes? | **Template Method** |
-| One algorithm chosen at runtime, then fully executed? | **Strategy** |
-| Need undo/redo or queuing of operations? | **Command** |
-| Building complex objects step by step? | **Builder** |
+```
+ONE handler processes, chain stops (early exit)?
+└─> Chain of Responsibility (this agent)
 
-### Decision Guide: Chain vs Strategy
-Both pick a "handler" at runtime — the difference is **who decides**:
+ALL handlers must run for every request (notifications, analytics)?
+└─> Observer / Event Dispatcher (@event_dispatcher_agent)
+
+Fixed sequence, every step always executes?
+└─> Template Method (@template_method_agent)
+
+Client picks ONE algorithm explicitly?
+└─> Strategy (@strategy_agent)
+```
+
+| | Chain | Event Dispatcher | Strategy | Template Method |
+|---|---|---|---|---|
+| **Who responds** | First handler that can | All subscribers | Client picks one | All steps always run |
+| **Early exit** | ✅ Yes | ❌ No | N/A | ❌ No |
+| **Use case** | Approval/routing/validation | Notifications/analytics | Payment gateways | Import/export workflows |
+
+**Chain vs Strategy (commonly confused):**
 - **Strategy** — the *client* picks one algorithm explicitly and uses it completely
 - **Chain** — handlers *self-select*; the request travels until something claims it
 
@@ -967,47 +138,3 @@ PaymentService.new(strategy: StripePayment.new).charge(order)
 # Chain: handlers decide among themselves
 ApprovalChain.build.approve(purchase_order)
 ```
-
-### Decision Guide: Chain vs Event Dispatcher
-Both trigger multiple objects — the difference is **how many respond**:
-- **Chain** — exactly ONE handler processes (chain stops on first match)
-- **Event Dispatcher** — ALL subscribers are notified (no early exit)
-
-```ruby
-# Chain: one approver handles (manager OR director OR VP)
-ApprovalChain.build.approve(order)
-
-# Event Dispatcher: all side effects run (mailer AND search AND analytics)
-ApplicationEvent.dispatch(:order_approved, order)
-```
-
-## References
-
-- Refactoring Guru: https://refactoring.guru/design-patterns/chain-of-responsibility
-- GoF Design Patterns (Gang of Four)
-
-## Instructions
-
-When implementing Chain of Responsibility:
-
-1. **Analyze the request flow** - Understand what handlers are needed
-2. **Define handler interface** - Common method signature for all handlers
-3. **Implement base handler** - Chain mechanics and successor linking
-4. **Create concrete handlers** - Each with `can_handle?` and `process` logic
-5. **Build chain** - Create chain builder for easy construction
-6. **Test chain** - Test individual handlers and full chain flow
-7. **Handle end of chain** - Decide: raise error, default behavior, or return result
-
-**Always:**
-- Keep handlers independent (no cross-references)
-- Validate at each handler
-- Handle end-of-chain case explicitly
-- Use chain builder for construction
-- Test individual handlers and full chain
-
-**Never:**
-- Make handlers depend on each other
-- Put business logic in chain building
-- Skip end-of-chain handling
-- Modify request in handlers (unless that's the purpose)
-- Create circular chains
