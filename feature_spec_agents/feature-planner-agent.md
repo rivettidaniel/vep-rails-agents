@@ -121,25 +121,30 @@ Feature: [Name]
 ## Agent Selection Quick Decide
 
 ```
-Data layer?            → @migration_agent + @model_agent
-Complex queries?       → @query_agent
-Business logic?        → @service_agent
-Multi-model form?      → @form_agent
-Authorization?         → @policy_agent (ALWAYS)
-Reusable UI?           → @view_component_agent
-Real-time updates?     → @turbo_agent (Streams)
-Interactivity?         → @stimulus_agent
-Background job?        → @job_agent (Solid Queue)
-Email?                 → @mailer_agent
-3+ side effects?       → @event_dispatcher_agent
-Undo/redo?             → @command_agent
-Interchangeable algo?  → @strategy_agent
-State machine?         → @state_agent
-Complex construction?  → @builder_agent
-Polymorphic creation?  → @factory_method_agent
-Pipeline/filters?      → @chain_of_responsibility_agent
-Workflow with hooks?   → @template_method_agent
-Package boundaries?    → @packwerk_agent
+Data layer?                      → @migration_agent + @model_agent
+Complex queries?                 → @query_agent
+Business logic?                  → @service_agent
+Multi-model form?                → @form_agent
+Authorization?                   → @policy_agent (ALWAYS)
+Reusable UI?                     → @view_component_agent
+Real-time updates?               → @turbo_agent (Streams)
+Interactivity?                   → @stimulus_agent
+Background job?                  → @job_agent (Solid Queue)
+Email?                           → @mailer_agent
+3+ side effects?                 → @event_dispatcher_agent
+Guaranteed delivery to Kafka?    → @outbox_agent
+Payments / webhooks / retries?   → @idempotency_agent
+Cross-service event streaming?   → @kafka_agent
+Dashboard / aggregation queries? → @read_model_agent
+Full audit trail / replay?       → @event_sourcing_agent
+Undo/redo?                       → @command_agent
+Interchangeable algo?            → @strategy_agent
+State machine?                   → @state_agent
+Complex construction?            → @builder_agent
+Polymorphic creation?            → @factory_method_agent
+Pipeline/filters?                → @chain_of_responsibility_agent
+Workflow with hooks?             → @template_method_agent
+Package boundaries?              → @packwerk_agent
 ```
 
 ## Related Skills

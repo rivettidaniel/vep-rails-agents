@@ -38,6 +38,11 @@
 │    • @tailwind_agent (styling with Tailwind CSS)                │
 │    • @mailer_agent, @job_agent (async)                          │
 │    • @event_dispatcher_agent (side effects 3+)                  │
+│    • @outbox_agent (guaranteed event delivery)                  │
+│    • @idempotency_agent (payments, webhooks, Kafka consumers)   │
+│    • @kafka_agent (cross-service event streaming)               │
+│    • @read_model_agent (materialized views, projections)        │
+│    • @event_sourcing_agent (immutable event log, audit trail)   │
 │    • @builder_agent, @strategy_agent (design patterns)          │
 │    • @command_agent, @state_agent (patterns)                    │
 │    • @packwerk_agent (package boundaries)                       │
@@ -666,6 +671,11 @@ Consider using design pattern agents for complex scenarios:
 | **Factory Method** | `@factory_method_agent` | Polymorphic object creation | Creating different notification types |
 | **Command** | `@command_agent` | Operations with undo/redo support | Canvas editor, document changes |
 | **Event Dispatcher** | `@event_dispatcher_agent` | Complex side effects (3+ actions) | User registration: email + analytics + CRM + notifications |
+| **Outbox Pattern** | `@outbox_agent` | Guaranteed event delivery to external systems (no dual-write) | Order created → notify Kafka without data loss |
+| **Idempotency Keys** | `@idempotency_agent` | Operations that must execute exactly once despite retries | Payment charge, webhook handler, Kafka consumer |
+| **Kafka Integration** | `@kafka_agent` | Cross-service event streaming with fan-out and replay | Publish domain events to downstream microservices |
+| **Read Model / CQRS** | `@read_model_agent` | Pre-computed projections for expensive aggregation queries | Balance dashboard, financial summaries, reporting |
+| **Event Sourcing** | `@event_sourcing_agent` | Immutable event log as source of truth, full audit trail | Financial ledger, inventory, any domain needing history |
 
 **Example: Using Event Dispatcher for Side Effects**
 

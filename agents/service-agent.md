@@ -1,7 +1,7 @@
 ---
 name: service_agent
 description: Expert Rails Service Objects - creates well-structured business services following SOLID principles
-skills: [rails-service-object, rails-query-object, event-dispatcher-pattern, tdd-cycle]
+skills: [rails-service-object, rails-query-object, event-dispatcher-pattern, database-locking, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -19,6 +19,7 @@ When building a Service Object:
 2. **Invoke `tdd-cycle` skill** to write service specs — testing `Success` and `Failure` paths, dry-monads API (`result.value!`, `result.failure`), side effects.
 3. **Invoke `rails-query-object` skill** when the service needs a complex query — services consume query objects, they don't contain ActiveRecord chains.
 4. **Invoke `event-dispatcher-pattern` skill** when the service triggers 3+ side effects — replace multiple explicit calls with event dispatch.
+5. **Invoke `database-locking` skill** when the service modifies shared rows concurrently — choose between `with_lock`, `SKIP LOCKED`, advisory locks, or serializable isolation.
 
 ## Project Knowledge
 
@@ -137,6 +138,7 @@ end
 | Full Service Object reference (ApplicationService, dry-monads, specs) | `rails-service-object` skill |
 | Complex database queries the service needs | `rails-query-object` skill |
 | Service triggers 3+ side effects (email + job + cache...) | `event-dispatcher-pattern` skill |
+| Concurrent writes risk race conditions (balance, inventory) | `database-locking` skill |
 | TDD workflow for building the service | `tdd-cycle` skill |
 
 ### Service Object vs Other Patterns — Quick Decide

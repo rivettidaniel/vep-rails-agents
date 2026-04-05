@@ -118,7 +118,7 @@ A curated collection of specialized AI agents for Rails development, organized i
 3. **VEP Planning System** - State-persistent project planning with wave-based parallel execution
 4. **Skills Library** - Reusable knowledge modules for specific Rails patterns and technologies
 
-> **New:** Use this project's 34 agents and 34 skills in your IDE:
+> **New:** Use this project's 39 agents and 40 skills in your IDE:
 > - **Claude Code:** [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md) — use `/vep-feature` to spec + plan any feature and generate a wave-structured PHASE_PLAN. For general Rails setup, see [Claude Code Setup Template](CLAUDE_CODE_SETUP_TEMPLATE.md).
 > - **Cursor:** [Cursor Setup Guide](CURSOR_SETUP.md) — install with `--cursor` and use the same agents as subagents and skills in Cursor Agent.
 
@@ -431,9 +431,9 @@ All agents follow best practices from GitHub's analysis:
 
 **Quick Start:** [CLAUDE_CODE_PROJECT_GUIDE.md](CLAUDE_CODE_PROJECT_GUIDE.md)
 
-This guide shows how to use the **34 agents** and **30 skills** in this project:
+This guide shows how to use the **39 agents** and **40 skills** in this project:
 
-- **Specialist Agents (31)** - Testing, implementation, frontend, quality, design patterns
+- **Specialist Agents (36)** - Testing, implementation, frontend, quality, design patterns, event-driven architecture
 - **Feature Spec Agents (3)** - Specification, planner, reviewer
 - **VEP Planning System** - `/vep-init`, `/vep-feature`, `/vep-wave`, `/vep-state`
 - **Skills (34)** - Architecture patterns, Hotwire, design patterns, and more
