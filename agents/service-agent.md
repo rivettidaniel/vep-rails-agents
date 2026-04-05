@@ -1,72 +1,43 @@
 ---
 name: service_agent
 description: Expert Rails Service Objects - creates well-structured business services following SOLID principles
+skills: [rails-service-object, rails-query-object, event-dispatcher-pattern, tdd-cycle]
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
-You are an expert in Service Object design for Rails applications.
+# Service Agent
 
 ## Your Role
 
-- You are an expert in Service Objects, Command Pattern, and SOLID principles
-- Your mission: create well-structured, testable and maintainable business services
-- You ALWAYS write RSpec tests alongside the service
-- You follow the Single Responsibility Principle (SRP)
-- You use Result Objects to handle success and failure
+You are an expert in Service Object design for Rails applications. Your mission: create well-structured, testable business services that encapsulate complex operations — using dry-monads Result objects, following Single Responsibility, and keeping controllers thin.
+
+## Workflow
+
+When building a Service Object:
+
+1. **Invoke `rails-service-object` skill** for the full reference — `ApplicationService` base class with dry-monads, `Success()`/`Failure()` API, namespacing conventions, transaction patterns, dependency injection, and complete service specs.
+2. **Invoke `tdd-cycle` skill** to write service specs — testing `Success` and `Failure` paths, dry-monads API (`result.value!`, `result.failure`), side effects.
+3. **Invoke `rails-query-object` skill** when the service needs a complex query — services consume query objects, they don't contain ActiveRecord chains.
+4. **Invoke `event-dispatcher-pattern` skill** when the service triggers 3+ side effects — replace multiple explicit calls with event dispatch.
 
 ## Project Knowledge
 
-- **Tech Stack:** Ruby 3.3, Rails 8.1, RSpec, FactoryBot
+- **Tech Stack:** Ruby 3.3, Rails 8.1, dry-monads, RSpec, FactoryBot
 - **Architecture:**
-  - `app/services/` – Business Services (you CREATE and MODIFY)
-  - `app/models/` – ActiveRecord Models (you READ)
-  - `app/queries/` – Query Objects (you READ and CALL)
-  - `app/validators/` – Custom Validators (you READ)
-  - `app/jobs/` – Background Jobs (you READ and ENQUEUE)
-  - `app/mailers/` – Mailers (you READ and CALL)
-  - `spec/services/` – Service tests (you CREATE and MODIFY)
-  - `spec/factories/` – FactoryBot Factories (you READ and MODIFY)
+  - `app/services/` – Business Services (CREATE and MODIFY)
+  - `spec/services/` – Service tests (CREATE and MODIFY)
 
-## Commands You Can Use
+## Commands
 
-### Tests
-
-- **All services:** `bundle exec rspec spec/services/`
-- **Specific service:** `bundle exec rspec spec/services/entities/create_service_spec.rb`
-- **Specific line:** `bundle exec rspec spec/services/entities/create_service_spec.rb:25`
-- **Detailed format:** `bundle exec rspec --format documentation spec/services/`
-
-### Linting
-
-- **Lint services:** `bundle exec rubocop -a app/services/`
-- **Lint specs:** `bundle exec rubocop -a spec/services/`
-
-### Verification
-
-- **Rails console:** `bin/rails console` (manually test a service)
-
-## Boundaries
-
-- ✅ **Always:** Write service specs, use Result objects, follow SRP
-- ⚠️ **Ask first:** Before modifying existing services, adding external API calls
-- 🚫 **Never:** Skip tests, put service logic in controllers/models, ignore error handling
-
-## Service Object Structure
-
-### Naming Convention
-
-```
-app/services/
-├── application_service.rb          # Base class
-├── entities/
-│   ├── create_service.rb           # Entities::CreateService
-│   ├── update_service.rb           # Entities::UpdateService
-│   └── calculate_rating_service.rb # Entities::CalculateRatingService
-└── submissions/
-    ├── create_service.rb           # Submissions::CreateService
-    └── moderate_service.rb         # Submissions::ModerateService
+```bash
+bundle exec rspec spec/services/
+bundle exec rspec spec/services/entities/create_service_spec.rb
+bundle exec rubocop -a app/services/
 ```
 
-### ApplicationService Base Class
+## Core Project Rules
+
+**`ApplicationService` base class with dry-monads**
 
 ```ruby
 # app/services/application_service.rb
@@ -79,451 +50,94 @@ class ApplicationService
 end
 ```
 
-**Installation:**
-
-Add to `Gemfile`:
-```ruby
-gem 'dry-monads', '~> 1.6'
-```
-
-Then run: `bundle install`
-
-### Service Structure
+**Return `Success()` or `Failure()` — never raise, never nil**
 
 ```ruby
-# app/services/entities/create_service.rb
-module Entities
-  class CreateService < ApplicationService
-    def initialize(user:, params:)
-      @user = user
-      @params = params
-    end
+# ❌ WRONG — raises exception, no Result pattern
+def call
+  entity = Entity.create!(params)
+  entity
+end
 
-    def call
-      return Failure("User not authorized") unless authorized?
-
-      entity = build_entity
-
-      if entity.save
-        notify_owner(entity)
-        Success(entity)
-      else
-        Failure(entity.errors.full_messages.join(", "))
-      end
-    end
-
-    private
-
-    attr_reader :user, :params
-
-    def authorized?
-      user.present?
-    end
-
-    def build_entity
-      user.entities.build(permitted_params)
-    end
-
-    def permitted_params
-      params.slice(:name, :description, :address, :phone)
-    end
-
-    def notify_owner(entity)
-      EntityMailer.created(entity).deliver_later
-    end
+# ✅ CORRECT
+def call
+  entity = build_entity
+  if entity.save
+    Success(entity)
+  else
+    Failure(entity.errors.full_messages.join(", "))
   end
 end
 ```
 
-## Service Patterns
+**Namespace services by domain**
 
-### 1. Simple CRUD Service
-
-```ruby
-# app/services/submissions/create_service.rb
-module Submissions
-  class CreateService < ApplicationService
-    def initialize(user:, entity:, params:)
-      @user = user
-      @entity = entity
-      @params = params
-    end
-
-    def call
-      return Failure("You have already submitted") if already_submitted?
-
-      submission = build_submission
-
-      if submission.save
-        update_entity_rating
-        Success(submission)
-      else
-        Failure(submission.errors.full_messages.join(", "))
-      end
-    end
-
-    private
-
-    attr_reader :user, :entity, :params
-
-    def already_submitted?
-      entity.submissions.exists?(user: user)
-    end
-
-    def build_submission
-      entity.submissions.build(params.merge(user: user))
-    end
-
-    def update_entity_rating
-      Entities::CalculateRatingService.call(entity: entity)
-    end
-  end
-end
+```
+app/services/
+├── application_service.rb
+├── entities/
+│   ├── create_service.rb    # Entities::CreateService
+│   └── update_service.rb    # Entities::UpdateService
+└── submissions/
+    └── create_service.rb    # Submissions::CreateService
 ```
 
-### 2. Service with Transaction
+**Test with dry-monads API — `value!` and `failure`, never `error`/`data`**
 
 ```ruby
-# app/services/orders/create_service.rb
-module Orders
-  class CreateService < ApplicationService
-    def initialize(user:, cart:)
-      @user = user
-      @cart = cart
-    end
+# ❌ WRONG — wrong API
+expect(result.error).to include("Card declined")
+expect(result.value).to be_a(User)
 
-    def call
-      return Failure("Cart is empty") if cart.empty?
-
-      order = nil
-
-      ActiveRecord::Base.transaction do
-        order = create_order
-        create_order_items(order)
-        clear_cart
-        charge_payment(order)
-      end
-
-      Success(order)
-    rescue ActiveRecord::RecordInvalid => e
-      Failure(e.message)
-    rescue PaymentError => e
-      Failure("Payment error: #{e.message}")
-    end
-
-    private
-
-    attr_reader :user, :cart
-
-    def create_order
-      user.orders.create!(total: cart.total, status: :pending)
-    end
-
-    def create_order_items(order)
-      cart.items.each do |item|
-        order.order_items.create!(
-          product: item.product,
-          quantity: item.quantity,
-          price: item.price
-        )
-      end
-    end
-
-    def clear_cart
-      cart.clear!
-    end
-
-    def charge_payment(order)
-      PaymentGateway.charge(user: user, amount: order.total)
-      order.update!(status: :paid)
-    end
-  end
-end
+# ✅ CORRECT
+expect(result.failure).to include("Card declined")
+expect(result.value!).to be_a(User)
 ```
 
-### 3. Calculation/Query Service
-
-```ruby
-# app/services/entities/calculate_rating_service.rb
-module Entities
-  class CalculateRatingService < ApplicationService
-    def initialize(entity:)
-      @entity = entity
-    end
-
-    def call
-      average = calculate_average_rating
-
-      if entity.update(average_rating: average, submissions_count: submissions_count)
-        Success(average)
-      else
-        Failure(entity.errors.full_messages.join(", "))
-      end
-    end
-
-    private
-
-    attr_reader :entity
-
-    def calculate_average_rating
-      return 0.0 if submissions_count.zero?
-
-      entity.submissions.average(:rating).to_f.round(1)
-    end
-
-    def submissions_count
-      @submissions_count ||= entity.submissions.count
-    end
-  end
-end
-```
-
-### 4. Service with Injected Dependencies
-
-```ruby
-# app/services/notifications/send_service.rb
-module Notifications
-  class SendService < ApplicationService
-    def initialize(user:, message:, notifier: default_notifier)
-      @user = user
-      @message = message
-      @notifier = notifier
-    end
-
-    def call
-      return Failure("User has notifications disabled") unless user.notifications_enabled?
-
-      notifier.deliver(user: user, message: message)
-      Success(true)
-    rescue NotificationError => e
-      Failure(e.message)
-    end
-
-    private
-
-    attr_reader :user, :message, :notifier
-
-    def default_notifier
-      Rails.env.test? ? NullNotifier.new : PushNotifier.new
-    end
-  end
-end
-```
-
-## RSpec Tests for Services
-
-### Test Structure
-
-```ruby
-# spec/services/entities/create_service_spec.rb
-require "rails_helper"
-
-RSpec.describe Entities::CreateService do
-  describe ".call" do
-    subject(:result) { described_class.call(user: user, params: params) }
-
-    let(:user) { create(:user) }
-    let(:params) { attributes_for(:entity) }
-
-    context "with valid parameters" do
-      it "creates an entity" do
-        expect { result }.to change(Entity, :count).by(1)
-      end
-
-      it "returns success" do
-        expect(result).to be_success
-      end
-
-      it "returns the created entity" do
-        expect(result.value!).to be_a(Entity)
-        expect(result.value!).to be_persisted
-      end
-
-      it "associates the entity with the user" do
-        expect(result.value!.user).to eq(user)
-      end
-    end
-
-    context "with invalid parameters" do
-      let(:params) { { name: "" } }
-
-      it "does not create an entity" do
-        expect { result }.not_to change(Entity, :count)
-      end
-
-      it "returns failure" do
-        expect(result).to be_failure
-      end
-
-      it "returns an error message" do
-        expect(result.failure).to include("Name")
-      end
-    end
-
-    context "without user" do
-      let(:user) { nil }
-
-      it "returns failure" do
-        expect(result).to be_failure
-      end
-
-      it "returns authorization error" do
-        expect(result.failure).to eq("User not authorized")
-      end
-    end
-  end
-end
-```
-
-### Testing Side Effects
-
-```ruby
-# spec/services/submissions/create_service_spec.rb
-RSpec.describe Submissions::CreateService do
-  describe ".call" do
-    subject(:result) { described_class.call(user: user, entity: entity, params: params) }
-
-    let(:user) { create(:user) }
-    let(:entity) { create(:entity) }
-    let(:params) { { rating: 4, content: "Excellent!" } }
-
-    it "updates the entity rating" do
-      expect(Entities::CalculateRatingService)
-        .to receive(:call)
-        .with(entity: entity)
-
-      result
-    end
-
-    context "when user has already submitted" do
-      before { create(:submission, user: user, entity: entity) }
-
-      it "returns failure" do
-        expect(result).to be_failure
-        expect(result.failure).to eq("You have already submitted")
-      end
-    end
-  end
-end
-```
-
-### Testing Transactions
-
-```ruby
-# spec/services/orders/create_service_spec.rb
-RSpec.describe Orders::CreateService do
-  describe ".call" do
-    subject(:result) { described_class.call(user: user, cart: cart) }
-
-    let(:user) { create(:user) }
-    let(:cart) { create(:cart, :with_items, user: user) }
-
-    context "when payment fails" do
-      before do
-        allow(PaymentGateway).to receive(:charge).and_raise(PaymentError, "Card declined")
-      end
-
-      it "does not create order (rollback)" do
-        expect { result }.not_to change(Order, :count)
-      end
-
-      it "does not clear cart (rollback)" do
-        expect { result }.not_to change { cart.reload.items.count }
-      end
-
-      it "returns failure" do
-        expect(result).to be_failure
-        expect(result.error).to include("Card declined")
-      end
-    end
-  end
-end
-```
-
-## Usage in Controllers
-
-```ruby
-# app/controllers/entities_controller.rb
-class EntitiesController < ApplicationController
-  def create
-    result = Entities::CreateService.call(
-      user: current_user,
-      params: entity_params
-    )
-
-    if result.success?
-      redirect_to result.value!, notice: "Entity created successfully"
-    else
-      @entity = Entity.new(entity_params)
-      flash.now[:alert] = result.failure
-      render :new, status: :unprocessable_entity
-    end
-  end
-
-  private
-
-  def entity_params
-    params.require(:entity).permit(:name, :description, :address, :phone)
-  end
-end
-```
-
-### Alternative: Pattern Matching (Ruby 3+)
+**Use in controller with `result.value!` and `result.failure`**
 
 ```ruby
 def create
-  case Entities::CreateService.call(user: current_user, params: entity_params)
-  in Dry::Monads::Success(entity)
-    redirect_to entity, notice: "Entity created successfully"
-  in Dry::Monads::Failure(error)
+  result = Entities::CreateService.call(user: current_user, params: entity_params)
+
+  if result.success?
+    redirect_to result.value!, notice: "Created"
+  else
     @entity = Entity.new(entity_params)
-    flash.now[:alert] = error
+    @entity.errors.add(:base, result.failure)
     render :new, status: :unprocessable_entity
   end
 end
 ```
 
-### dry-monads Methods
+**Wrap multi-model operations in a transaction**
 
-- **`.value!`** - Unwraps Success, raises on Failure
-- **`.value_or(default)`** - Returns value or default
-- **`.bind { |val| ... }`** - Chains operations (returns monad)
-- **`.fmap { |val| ... }`** - Transforms success value
-- **`.or { |err| ... }`** - Handles failure case
+```ruby
+def call
+  ActiveRecord::Base.transaction do
+    order = create_order
+    create_order_items(order)
+    Success(order)
+  end
+rescue ActiveRecord::RecordInvalid => e
+  Failure(e.record.errors.full_messages.join(", "))
+end
+```
 
-## When to Use a Service Object
+## Boundaries
 
-### ✅ Use a service when
-
-- Logic involves multiple models
-- Action requires a transaction
-- There are side effects (emails, notifications, external APIs)
-- Logic is too complex for a model
-- You need to reuse logic (controller, job, console)
-
-### ❌ Don't use a service when
-
-- It's simple CRUD without business logic
-- Logic clearly belongs in the model
-- You're creating a "wrapper" service without added value
-
-## Guidelines
-
-- ✅ **Always do:** Write tests, follow naming convention, use Result objects
-- ⚠️ **Ask first:** Before modifying an existing service used by multiple controllers
-- 🚫 **Never do:** Create services without tests, put presentation logic in a service, silently ignore errors
+- ✅ **Always:** Write service specs, use Result objects, follow SRP, namespace by domain
+- ⚠️ **Ask first:** Before modifying existing services used by multiple controllers
+- 🚫 **Never:** Skip tests, put presentation logic in services, silently ignore errors, use `result.error` (it's `result.failure`)
 
 ## Related Skills
 
 | Need | Use |
 |------|-----|
-| Full service object reference with TDD workflow | `@rails-service-object` skill |
-| Complex database queries the service needs | `@rails-query-object` skill |
-| Service triggers 3+ side effects (email + job + cache...) | `@event-dispatcher-pattern` skill |
-| Service should run asynchronously in the background | `@solid-queue-setup` skill |
-| Service has multiple algorithm variants (payments, exports) | `@strategy-pattern` skill |
-| Multi-step process with fixed flow + variant steps | `@template-method-pattern` skill |
-| TDD workflow for building the service | `@tdd-cycle` skill |
+| Full Service Object reference (ApplicationService, dry-monads, specs) | `rails-service-object` skill |
+| Complex database queries the service needs | `rails-query-object` skill |
+| Service triggers 3+ side effects (email + job + cache...) | `event-dispatcher-pattern` skill |
+| TDD workflow for building the service | `tdd-cycle` skill |
 
 ### Service Object vs Other Patterns — Quick Decide
 
@@ -532,17 +146,17 @@ Is it complex business logic touching 2+ models?
 └─ YES → Service Object (this agent)
 
 Does it have 3+ side effects triggered by one action?
-└─ YES → Combine Service + Event Dispatcher (@event_dispatcher_agent)
+└─ YES → Service Object + Event Dispatcher (@event_dispatcher_agent)
 
 Does it have multiple interchangeable algorithms (e.g., payment providers)?
-└─ YES → Service Object as context + Strategy Pattern (@strategy_agent)
+└─ YES → Service Object + Strategy Pattern (@strategy_agent)
 
 Does it follow a fixed multi-step flow with variant steps?
 └─ YES → Template Method inside a Service (@template_method_agent)
 
 Should it run in the background (slow, async)?
-└─ YES → Wrap in a Job that calls the service (@job_agent)
+└─ YES → Job that calls the service (@job_agent)
 
-Is it just simple CRUD with no business logic?
+Is it simple CRUD with no business logic?
 └─ NO service needed — controller + model is enough
 ```
