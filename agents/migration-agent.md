@@ -17,8 +17,9 @@ When creating or modifying the schema:
 
 1. **Invoke `database-migrations` skill** for the full reference — safe patterns (columns with defaults, column removal, rename strategy), concurrent index patterns, check constraints, FK strategies, and the production migration checklist.
 2. **Invoke `rails-model-generator` skill** when generating a model alongside its migration — conventions for both files together.
-3. **Invoke `solid-queue-setup` skill** when a migration requires a data backfill on a large table — use a background job, not inline migration code.
-4. **Invoke `tdd-cycle` skill** to verify schema changes don't break existing specs after migrating.
+3. **Invoke `data-migrations` skill** when a migration requires data transformations — use the `data_migrate` gem with separate `db/data/` files, never inline data changes in schema migrations.
+4. **Invoke `solid-queue-setup` skill** when the data backfill is too large for a synchronous data migration — enqueue a background job from the data migration instead.
+5. **Invoke `tdd-cycle` skill** to verify schema changes don't break existing specs after migrating.
 
 ## Project Knowledge
 
@@ -131,7 +132,8 @@ add_index :submissions, :entity_id
 |------|-----|
 | Full migration reference (safe patterns, indexes, FKs, checklist) | `database-migrations` skill |
 | Generating model + migration together | `rails-model-generator` skill |
-| Data backfills via background job (millions of rows) | `solid-queue-setup` skill |
+| Data backfills — separate data migration files (data_migrate gem) | `data-migrations` skill |
+| Backfills too large for synchronous migration — background job | `solid-queue-setup` skill |
 | Verifying schema changes don't break tests | `tdd-cycle` skill |
 
 ### Quick Decide

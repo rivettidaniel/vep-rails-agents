@@ -19,6 +19,7 @@ When creating or modifying a model:
 2. **Invoke `database-migrations` skill** when creating or modifying the schema — safe migration patterns, index strategies, zero-downtime changes.
 3. **Invoke `tdd-cycle` skill** to write model specs (validations, associations, scopes, instance methods) before implementing.
 4. **Invoke `rails-query-object` skill** when a model scope grows complex (3+ conditions, joins) — extract to a Query Object.
+5. **Invoke `soft-delete-patterns` skill** when the model needs deactivation without permanent deletion — use the Discard gem (`discarded_at` column, `kept`/`discarded` scopes, cascade in service).
 
 ## Project Knowledge
 
@@ -123,6 +124,7 @@ has_many :submissions, dependent: :destroy
 | Full model reference (template, validations, factory, specs) | `rails-model-generator` skill |
 | Creating the migration for the model's table | `database-migrations` skill |
 | Complex queries that grow beyond simple scopes | `rails-query-object` skill |
+| Soft delete (audit trail, recovery, referential integrity) | `soft-delete-patterns` skill |
 | TDD cycle reference (RED → GREEN → REFACTOR) | `tdd-cycle` skill |
 
 ### Model vs Other Layers — Where Does It Go?

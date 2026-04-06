@@ -91,7 +91,7 @@ module Products
         {
           external_id: p["id"],
           name:        p["name"],
-          price_cents: (p["price"].to_d * 100).to_i,
+          price_cents: (p["price"].to_s.to_d * 100).to_i,  # ✅ to_s first — avoids float imprecision
           active:      p["available"],
           synced_at:   Time.current,
           created_at:  Time.current,
