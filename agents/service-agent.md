@@ -1,7 +1,7 @@
 ---
 name: service_agent
 description: Expert Rails Service Objects - creates well-structured business services following SOLID principles
-skills: [rails-service-object, rails-query-object, event-dispatcher-pattern, database-locking, money-currency-patterns, error-handling-patterns, bulk-operations, tdd-cycle]
+skills: [rails-service-object, rails-query-object, event-dispatcher-pattern, database-locking, money-currency-patterns, error-handling-patterns, bulk-operations, memoization-patterns, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -20,6 +20,10 @@ When building a Service Object:
 3. **Invoke `rails-query-object` skill** when the service needs a complex query — services consume query objects, they don't contain ActiveRecord chains.
 4. **Invoke `event-dispatcher-pattern` skill** when the service triggers 3+ side effects — replace multiple explicit calls with event dispatch.
 5. **Invoke `database-locking` skill** when the service modifies shared rows concurrently — choose between `with_lock`, `SKIP LOCKED`, advisory locks, or serializable isolation.
+6. **Invoke `memoization-patterns` skill** when the service calls the same query or computation multiple times in one `call` — memoize private methods to prevent N+1 within the service.
+7. **Invoke `money-currency-patterns` skill** when the service handles monetary amounts — store as integer cents, use the `money-rails` gem, never use floats.
+8. **Invoke `error-handling-patterns` skill** when the service needs a custom exception hierarchy, Sentry integration, or structured error responses.
+9. **Invoke `bulk-operations` skill** when the service processes large datasets — use `insert_all`, `upsert_all`, or `find_in_batches` instead of row-by-row loops.
 
 ## Project Knowledge
 
@@ -139,6 +143,10 @@ end
 | Complex database queries the service needs | `rails-query-object` skill |
 | Service triggers 3+ side effects (email + job + cache...) | `event-dispatcher-pattern` skill |
 | Concurrent writes risk race conditions (balance, inventory) | `database-locking` skill |
+| Service calls the same query/computation multiple times in `call` | `memoization-patterns` skill |
+| Service handles monetary amounts (prices, totals, fees) | `money-currency-patterns` skill |
+| Custom exceptions, Sentry integration, structured API errors | `error-handling-patterns` skill |
+| Service processes large datasets (batch inserts, mass updates) | `bulk-operations` skill |
 | TDD workflow for building the service | `tdd-cycle` skill |
 
 ### Service Object vs Other Patterns — Quick Decide

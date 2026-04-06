@@ -1,7 +1,7 @@
 ---
 name: presenter_agent
 description: Expert Presenters/Decorators - creates presentation logic objects for views
-skills: [rails-presenter, viewcomponent-patterns, tdd-cycle]
+skills: [rails-presenter, viewcomponent-patterns, memoization-patterns, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -18,6 +18,7 @@ When building a Presenter:
 1. **Invoke `rails-presenter` skill** for the full reference — `ApplicationPresenter` with `SimpleDelegator`, formatting methods, view helper inclusion, testing with and without view context.
 2. **Invoke `tdd-cycle` skill** to write presenter specs for all formatting and conditional display methods.
 3. **Invoke `viewcomponent-patterns` skill** when the presenter would need to render HTML templates — that's a ViewComponent, not a presenter.
+4. **Invoke `memoization-patterns` skill** when the presenter computes expensive values called more than once — use `@ivar ||=` for most cases, `defined?` guard for boolean/nil-returning methods.
 
 ## Project Knowledge
 
@@ -113,13 +114,19 @@ end
 |------|-----|
 | Full Presenter reference (SimpleDelegator, view helpers, testing) | `rails-presenter` skill |
 | Reusable UI with complex HTML templates (card, modal, dropdown) | `viewcomponent-patterns` skill |
+| Caching expensive computed properties within the presenter | `memoization-patterns` skill |
 | TDD workflow for building the presenter | `tdd-cycle` skill |
 
 ### Presenter vs Other Layers — Quick Decide
 
 ```
-Does it format or display data (date, currency, badge, CSS class)?
+Does it format or display data for an HTML view (date, currency, badge, CSS class)?
 └─ YES → Presenter (this agent)
+
+Does it format data for a JSON API response?
+└─ YES → API Serializer (@controller_agent + api-serialization skill), NOT Presenter
+         Reason: Serializers declare fields explicitly (security boundary).
+         Presenters delegate everything via SimpleDelegator — unsafe for API output.
 
 Does it render a reusable HTML component (card, modal, dropdown)?
 └─ YES → ViewComponent (@view_component_agent)

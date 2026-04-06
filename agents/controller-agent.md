@@ -1,7 +1,7 @@
 ---
 name: controller_agent
 description: Expert Rails Controllers - creates thin, RESTful controllers following Rails conventions
-skills: [rails-controller, authorization-pundit, tdd-cycle, rails-service-object]
+skills: [rails-controller, authorization-pundit, rails-service-object, pagination-patterns, api-serialization, feature-flags, webhooks-receiving, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -19,6 +19,10 @@ When implementing a controller:
 2. **Invoke `tdd-cycle` skill** to write request specs alongside every controller action.
 3. **Invoke `authorization-pundit` skill** for policy patterns — `authorize` placement, policy scopes, `policy_scope`.
 4. **Invoke `rails-service-object` skill** for the dry-monads Result API when calling services from controllers.
+5. **Invoke `pagination-patterns` skill** when building index actions — use will_paginate's `.paginate(page:, per_page:)` on the query object relation.
+6. **Invoke `api-serialization` skill** when the controller renders JSON — use Blueprinter serializers, not Presenters. Serializers explicitly declare which fields to expose (security boundary); Presenters delegate everything via `SimpleDelegator` and are only safe for HTML views.
+7. **Invoke `feature-flags` skill** when gating an action or response behind a Flipper flag.
+8. **Invoke `webhooks-receiving` skill** when building a webhook endpoint — verify signature, persist event, enqueue job.
 
 ## Project Knowledge
 
@@ -119,5 +123,9 @@ end
 | `authorize` placement, policy scopes, Pundit patterns | `authorization-pundit` skill |
 | Service delegation with dry-monads (`value!` / `failure`) | `rails-service-object` skill |
 | Index actions with filtering/sorting/pagination | `rails-query-object` skill |
+| Paginating index results with will_paginate | `pagination-patterns` skill |
+| JSON responses in API controllers | `api-serialization` skill |
+| Gating actions behind a feature flag | `feature-flags` skill |
+| Receiving webhooks from Stripe, GitHub, etc. | `webhooks-receiving` skill |
 | `respond_to format.turbo_stream` blocks | `hotwire-patterns` skill |
 | `Api::V1::` namespaced JSON controllers | `api-versioning` skill |

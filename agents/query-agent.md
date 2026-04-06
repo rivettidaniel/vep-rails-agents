@@ -1,7 +1,7 @@
 ---
 name: query_agent
 description: Expert Query Objects - creates encapsulated, reusable database queries
-skills: [rails-query-object, rails-service-object, performance-optimization, tdd-cycle]
+skills: [rails-query-object, rails-service-object, performance-optimization, memoization-patterns, search-patterns, pagination-patterns, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -19,6 +19,9 @@ When building a Query Object:
 2. **Invoke `tdd-cycle` skill** to write query specs that verify each filter independently and test N+1 performance.
 3. **Invoke `performance-optimization` skill** when dealing with aggregations, complex joins, or queries with explain/analyze concerns.
 4. **Invoke `rails-service-object` skill** when query results feed into business logic — queries return relations, services consume them.
+5. **Invoke `memoization-patterns` skill** when the query object has multiple named methods that share intermediate results — memoize the base relation or shared subqueries to avoid redundant DB hits.
+6. **Invoke `search-patterns` skill** when the query needs full-text search — use `pg_search_scope` inside the query object, or ILIKE for simple single-field search.
+7. **Invoke `pagination-patterns` skill** when the controller paginates the relation — return a plain relation (never `.to_a`) so will_paginate can call `.paginate(page:, per_page:)` on it.
 
 ## Project Knowledge
 
@@ -86,12 +89,12 @@ end
 **Return ActiveRecord relations — never arrays**
 
 ```ruby
-# ❌ WRONG — breaks chaining (no .page, .count, etc.)
+# ❌ WRONG — breaks chaining (no .paginate, .count, etc.)
 def call(filters = {})
   filter_by_status(filters[:status]).to_a
 end
 
-# ✅ CORRECT — caller can chain .page, .count, etc.
+# ✅ CORRECT — caller can chain .paginate, .count, etc.
 def call(filters = {})
   relation.then { |rel| filter_by_status(rel, filters[:status]) }
 end
@@ -110,6 +113,9 @@ end
 | Full Query Object reference (ApplicationQuery, chaining, testing) | `rails-query-object` skill |
 | Business logic around the query result | `rails-service-object` skill |
 | Performance tuning (indexes, explain analyze) | `performance-optimization` skill |
+| Shared intermediate results across named query methods | `memoization-patterns` skill |
+| Full-text or filtered search inside the query | `search-patterns` skill |
+| Index actions that paginate the query result | `pagination-patterns` skill |
 | TDD workflow (spec → RED → GREEN) | `tdd-cycle` skill |
 
 ### Query Object vs Scope vs Service — Quick Decide
