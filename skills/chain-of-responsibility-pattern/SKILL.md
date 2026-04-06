@@ -331,7 +331,7 @@ class UrgentTicketRouter < TicketRouter
 
   def assign_to_team(ticket)
     ticket.update!(assigned_to_team: 'Emergency Response')
-    Team.find_by(name: 'Emergency Response').notify_urgent(ticket)
+    # ✅ Side effect (notify_urgent) belongs in controller — handler is pure
   end
 end
 

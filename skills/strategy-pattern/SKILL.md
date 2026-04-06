@@ -147,7 +147,7 @@ class NotificationSender
     @strategy = strategy
   end
 
-  def send(recipient:, message:)
+  def deliver(recipient:, message:)
     @strategy.deliver(recipient: recipient, message: message)
   end
 end
@@ -171,7 +171,7 @@ end
 # Usage based on user preference (no case statement!)
 strategy = NotificationStrategyRegistry.for(user.notification_preference)
 sender = NotificationSender.new(strategy: strategy)
-sender.send(recipient: user, message: notification_message)
+sender.deliver(recipient: user, message: notification_message)
 ```
 
 ### 3. Export Formats
@@ -391,7 +391,7 @@ class NotificationSender
     @fallback = fallback
   end
 
-  def send(recipient:, message:)
+  def deliver(recipient:, message:)
     result = @primary.deliver(recipient: recipient, message: message)
     @fallback.deliver(recipient: recipient, message: message) if !result[:success] && @fallback
   end

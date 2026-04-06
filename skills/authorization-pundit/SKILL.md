@@ -286,11 +286,11 @@ class EventPolicy < ApplicationPolicy
   end
 
   def admin?
-    user.admin?
+    user&.admin?
   end
 
   def member_or_above?
-    user.member? || user.admin?
+    user&.member? || user&.admin?
   end
 
   def owner_or_admin?

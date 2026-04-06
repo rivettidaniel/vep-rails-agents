@@ -86,12 +86,6 @@ Hotwire Implementation:
 | Modal dialogs | Turbo Frame | Load on demand |
 | Flash messages | Turbo Stream | Append/update |
 
-## References
-
-- See [turbo-frames.md](reference/turbo-frames.md) for frame patterns
-- See [turbo-streams.md](reference/turbo-streams.md) for stream patterns
-- See [stimulus.md](reference/stimulus.md) for controller patterns
-
 ## Testing Hotwire
 
 ### System Specs

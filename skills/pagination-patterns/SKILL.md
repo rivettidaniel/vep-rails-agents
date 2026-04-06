@@ -59,17 +59,39 @@ end
 ## Testing
 
 ```ruby
-RSpec.describe PostsController, type: :request do
+# spec/requests/posts_spec.rb
+RSpec.describe "Posts", type: :request do
+  let!(:posts) { create_list(:post, 30, :published) }
+
+  it "renders first page with pagination nav" do
+    get posts_path
+
+    expect(response).to have_http_status(:ok)
+    # will_paginate renders a <div class="will-paginate"> nav when multiple pages exist
+    expect(response.body).to include("will-paginate")
+    # Only 25 of 30 posts on page 1 — last 5 posts appear only on page 2
+    expect(response.body).not_to include(posts.last.title)
+  end
+
+  it "renders page 2 with remaining records" do
+    get posts_path, params: { page: 2 }
+
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include(posts.last.title)
+  end
+end
+
+# For API endpoints — parse JSON response
+RSpec.describe "Posts API", type: :request do
   before { create_list(:post, 30, :published) }
 
   it "paginates results" do
-    get posts_path
-    expect(assigns(:posts).size).to eq(25)
-  end
+    get posts_path, as: :json
 
-  it "returns page 2" do
-    get posts_path, params: { page: 2 }
-    expect(assigns(:posts).size).to eq(5)
+    json = response.parsed_body
+    expect(json["posts"].size).to eq(25)
+    expect(json["total_pages"]).to eq(2)
+    expect(json["total"]).to eq(30)
   end
 end
 ```

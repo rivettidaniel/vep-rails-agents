@@ -110,8 +110,6 @@ EMAIL FLOWS:
 └─────────────────────┘
 ```
 
-See [layer-interactions.md](reference/layer-interactions.md) for detailed examples.
-
 ## Layer Responsibilities
 
 | Layer | Responsibility | Should NOT contain |
@@ -172,9 +170,9 @@ class OrdersController < ApplicationController
     )
 
     if result.success?
-      redirect_to result.data, notice: t(".success")
+      redirect_to result.value!, notice: t(".success")
     else
-      flash.now[:alert] = result.error
+      flash.now[:alert] = result.failure
       render :new, status: :unprocessable_entity
     end
   end
@@ -215,21 +213,17 @@ Services handle:
 
 ### 3. Result Objects for Services
 
-All services return a consistent Result object:
+All services use dry-monads Result pattern — `Success()` / `Failure()`. See **rails-service-object** skill for full details.
 
 ```ruby
-class Result
-  attr_reader :data, :error, :code
+# Services include Dry::Monads[:result] via ApplicationService
+result = Orders::CreateService.new.call(user: current_user, params: order_params)
 
-  def initialize(success:, data: nil, error: nil, code: nil)
-    @success = success
-    @data = data
-    @error = error
-    @code = code
-  end
-
-  def success? = @success
-  def failure? = !@success
+if result.success?
+  redirect_to result.value!, notice: t(".success")
+else
+  flash.now[:alert] = result.failure
+  render :new, status: :unprocessable_entity
 end
 ```
 
@@ -470,10 +464,3 @@ Database-backed caching, no Redis required.
 | **I18n** | i18n-patterns |
 | **Testing** | tdd-cycle |
 
-## References
-
-- See [layer-interactions.md](reference/layer-interactions.md) for layer communication patterns
-- See [service-patterns.md](reference/service-patterns.md) for service object patterns
-- See [query-patterns.md](reference/query-patterns.md) for query object patterns
-- See [error-handling.md](reference/error-handling.md) for error handling strategies
-- See [testing-strategy.md](reference/testing-strategy.md) for comprehensive testing

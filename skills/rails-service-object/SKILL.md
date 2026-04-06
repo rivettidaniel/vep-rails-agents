@@ -55,15 +55,14 @@ Creates a new order with inventory validation and payment processing.
 - items: Array<Hash> (required) - Items to order [{product_id:, quantity:}]
 - payment_method_id: Integer (optional) - Saved payment method
 
-### Output (Result object)
+### Output (dry-monads Result)
 Success:
 - success?: true
-- data: Order instance
+- value!: Order instance
 
 Failure:
-- success?: false
-- error: String (error message)
-- code: Symbol (error code for programmatic handling)
+- failure?: true
+- failure: String (error message)
 
 ### Dependencies
 - inventory_service: Checks product availability
@@ -137,8 +136,6 @@ RSpec.describe Orders::CreateService do
   end
 end
 ```
-
-See [templates/service_spec.erb](templates/service_spec.erb) for full template.
 
 ## Step 3-6: Implement Service
 

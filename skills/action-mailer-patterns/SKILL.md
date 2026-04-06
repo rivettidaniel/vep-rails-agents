@@ -467,14 +467,20 @@ UserMailer.welcome(user).deliver_later(wait_until: Date.tomorrow.noon)
 UserMailer.welcome(user).deliver_later(queue: :mailers)
 ```
 
-### From Services
+### From Controllers (after service succeeds)
 
 ```ruby
-class UserRegistrationService
-  def call(params)
-    user = User.create!(params)
-    UserMailer.welcome(user).deliver_later
-    Success(user)
+# ✅ Side effects (emails) belong in the controller, not the service
+class RegistrationsController < ApplicationController
+  def create
+    result = UserRegistrationService.new.call(user_params)
+
+    if result.success?
+      UserMailer.welcome(result.value!).deliver_later
+      redirect_to root_path, notice: t(".success")
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 end
 ```

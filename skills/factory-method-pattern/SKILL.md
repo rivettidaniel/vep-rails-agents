@@ -57,7 +57,7 @@ Client → Creator (base) → Product (interface)
 ```ruby
 # Product interface
 class Notification
-  def send
+  def deliver
     raise NotImplementedError
   end
 
@@ -72,7 +72,7 @@ class EmailNotification < Notification
     @user, @message, @subject = user, message, subject
   end
 
-  def send
+  def deliver
     NotificationMailer.send_notification(
       to: @user.email,
       subject: @subject,
@@ -90,7 +90,7 @@ class SmsNotification < Notification
     @user, @message = user, message
   end
 
-  def send
+  def deliver
     TwilioClient.send_sms(to: @user.phone, body: @message)
   end
 
@@ -116,7 +116,7 @@ class NotificationFactory
   # Template method using factory method
   def send_notification(user:, message:, **options)
     notification = create_notification(user: user, message: message, **options)
-    notification.send
+    notification.deliver
   end
 
   # Static factory using metaprogramming instead of case statement
@@ -536,9 +536,9 @@ end
 RSpec.describe EmailNotification do
   it_behaves_like 'a notification'
 
-  describe '#send' do
+  describe '#deliver' do
     it 'enqueues email' do
-      expect { subject.send }.to have_enqueued_mail
+      expect { subject.deliver }.to have_enqueued_mail
     end
   end
 end
@@ -633,7 +633,7 @@ class NotificationService
     message = premium_template(message) if user.premium?
     factory = NotificationFactory.for(user.preference)
     notification = factory.create_notification(user: user, message: message)
-    notification.send
+    notification.deliver
   end
 end
 ```
@@ -683,13 +683,13 @@ end
 
 # ✅ Good: Common interface
 class Notification
-  def send
+  def deliver
     raise NotImplementedError
   end
 end
 
 class EmailNotification < Notification
-  def send
+  def deliver
     # Email logic
   end
 end

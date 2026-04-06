@@ -307,8 +307,6 @@ end
 
 ## References
 
-- See [sessions.md](reference/sessions.md) for session management details
-- See [current.md](reference/current.md) for Current attributes patterns
 
 ## Common Customizations
 

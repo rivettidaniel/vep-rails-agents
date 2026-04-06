@@ -138,7 +138,7 @@ Use this as the skeleton — adapt based on the skill's domain:
   - Nil-guard: `user&.admin?` when user can be nil
 - **Under 500 lines:** If approaching the limit, move reference material to `references/` and link to it clearly
 
-See `references/rails-layer-map.md` for which skills cover which layers, to avoid overlap.
+Run `ls skills/` and grep existing skill descriptions to check for overlap before writing.
 
 ---
 
@@ -273,7 +273,7 @@ Test by asking: "If you saw this message with access to skill X, would you load 
 
 ## Reference files
 
-- `references/rails-layer-map.md` — which existing skills cover which Rails layers (prevents overlap)
+- Run `ls skills/` and `grep -r "description:" skills/*/SKILL.md` to find overlapping skills
 
 ---
 

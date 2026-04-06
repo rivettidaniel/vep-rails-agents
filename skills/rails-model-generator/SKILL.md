@@ -120,7 +120,6 @@ RSpec.describe ModelName, type: :model do
 end
 ```
 
-See [templates/model_spec.erb](templates/model_spec.erb) for full template.
 
 ## Step 3: Create Factory
 
@@ -149,7 +148,6 @@ FactoryBot.define do
 end
 ```
 
-See [templates/factory.erb](templates/factory.erb) for full template.
 
 ## Step 4: Run Spec (Verify RED)
 
@@ -262,12 +260,6 @@ bundle exec rspec spec/models/model_name_spec.rb
 ```
 
 All specs should pass.
-
-## References
-
-- See [templates/model_spec.erb](templates/model_spec.erb) for spec template
-- See [templates/factory.erb](templates/factory.erb) for factory template
-- See [reference/validations.md](reference/validations.md) for validation patterns
 
 ## Common Patterns
 

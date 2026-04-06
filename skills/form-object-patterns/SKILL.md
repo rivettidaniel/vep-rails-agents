@@ -582,7 +582,7 @@ end
 
 ```erb
 <%# app/views/events/_search_form.html.erb %>
-<%= form_with model: @search_form, url: events_path, method: :get, local: true do |f| %>
+<%= form_with model: @search_form, url: events_path, method: :get do |f| %>
   <div class="flex gap-4">
     <%= f.search_field :query, placeholder: "Search events..." %>
     <%= f.select :event_type, @search_form.event_type_options, include_blank: "All types" %>

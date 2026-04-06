@@ -1,3 +1,9 @@
+---
+name: command-pattern
+description: Implements Command Pattern in Rails for operations with undo/redo, audit trails, or queuing. Use when building CMS editors, project management tools, e-commerce order flows, or any operation that needs reversibility and history tracking.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep
+---
+
 # Command Pattern in Rails
 
 ## Overview
@@ -95,7 +101,7 @@ module Posts
       # Delegate to Receiver
       result = publisher.publish(post)
 
-      return Failure(result.error) if result.failure?
+      return Failure(result.failure) if result.failure?
 
       Success(post)
     end
@@ -237,8 +243,13 @@ class PostsController < ApplicationController
 
   private
 
+  # NOTE: CommandInvoker stores command objects in memory and cannot be
+  # serialized to a cookie-based session. For undo/redo across requests,
+  # persist command history in the database (e.g., a command_logs table)
+  # and reconstruct the invoker from stored records.
+  # For single-request use (e.g., within a job or service), memoize per request:
   def invoker
-    @invoker ||= session[:command_invoker] ||= CommandInvoker.new
+    @invoker ||= CommandInvoker.new
   end
 end
 ```
