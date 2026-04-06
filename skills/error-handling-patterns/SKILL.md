@@ -58,7 +58,7 @@ class AppError < StandardError
   end
 end
 
-# Domain errors — raise these from services or model callbacks
+# Domain errors — raise these from services or controllers
 class NotFoundError      < AppError
   def initialize(resource = "Resource")
     super("#{resource} not found", code: :not_found, status: :not_found)

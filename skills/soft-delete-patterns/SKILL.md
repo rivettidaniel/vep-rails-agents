@@ -229,12 +229,12 @@ class Order < ApplicationRecord
 
   has_many :order_items
 
-  # Option A: Cascade in service (preferred — explicit)
+  # Option A: Cascade in service (preferred — explicit, follows project no-callback rule)
   # See DiscardService above
 
-  # Option B: Callback (acceptable for discard-only side effect)
-  after_discard   { order_items.each(&:discard) }
-  after_undiscard { order_items.each(&:undiscard) }
+  # Option B: Discard gem lifecycle hooks (avoid — prefer Option A)
+  # after_discard   { order_items.each(&:discard) }
+  # after_undiscard { order_items.each(&:undiscard) }
 end
 ```
 

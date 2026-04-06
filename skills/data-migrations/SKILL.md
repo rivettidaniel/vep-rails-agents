@@ -146,18 +146,20 @@ end
 ### insert_all / upsert_all — For Creating Records in Bulk
 
 ```ruby
-# ✅ Avoids N+1 inserts — creates 10,000 records in one SQL statement
+# ✅ Batched bulk insert — avoids loading all records into memory
 def up
-  records = User.all.map do |user|
-    {
-      user_id:    user.id,
-      balance:    0,
-      created_at: Time.current,
-      updated_at: Time.current
-    }
-  end
+  User.find_in_batches(batch_size: 1_000) do |batch|
+    records = batch.map do |user|
+      {
+        user_id:    user.id,
+        balance:    0,
+        created_at: Time.current,
+        updated_at: Time.current
+      }
+    end
 
-  LedgerAccount.insert_all(records, unique_by: :user_id)
+    LedgerAccount.insert_all(records, unique_by: :user_id)
+  end
 end
 ```
 
