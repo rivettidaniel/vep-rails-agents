@@ -4,7 +4,7 @@
 
 > ⚠️ **Do not fill this template manually.**
 > Use `/vep-feature` instead — it calls `@feature_specification_agent` to generate
-> `features/[name].md` from this template, reviews it with `@feature_reviewer_agent`,
+> `planning/features/[name].md` from this template, reviews it with `@feature_reviewer_agent`,
 > and produces `planning/PHASE_PLAN.md` automatically.
 >
 > This file is an **internal reference** for the VEP system.

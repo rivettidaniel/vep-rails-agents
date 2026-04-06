@@ -23,7 +23,7 @@ You are an expert feature specification writer. Your mission: guide users throug
 
 - **Tech Stack:** Ruby 3.3, Rails 8.1, Hotwire, PostgreSQL, Pundit, ViewComponent
 - **Output file:** `planning/features/[feature-name].md`
-- **Reference:** `features/FEATURE_TEMPLATE.md` (structure), `features/FEATURE_EXAMPLE_EN.md` (quality)
+- **Reference:** `features/FEATURE_TEMPLATE.md` (structure and quality bar)
 
 ## Boundaries
 
