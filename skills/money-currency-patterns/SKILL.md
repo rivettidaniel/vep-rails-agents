@@ -114,18 +114,17 @@ module Orders
     end
 
     def call
-      order = Order.new(
-        user:   user,
-        # ✅ Accept cents from params (API) or Money object
-        amount: parse_amount(params[:amount], params[:currency] || "USD"),
-        tax:    calculate_tax(parse_amount(params[:amount], params[:currency] || "USD"))
-      )
+      # ✅ Parse once — reuse for both amount and tax calculation
+      amount = parse_amount(params[:amount], params[:currency] || "USD")
+      order  = Order.new(user: user, amount: amount, tax: calculate_tax(amount))
 
       if order.save
         Success(order)
       else
         Failure(order.errors.full_messages.join(", "))
       end
+    rescue ArgumentError => e
+      Failure(e.message)
     end
 
     private
@@ -135,9 +134,9 @@ module Orders
     def parse_amount(raw, currency)
       case raw
       when Money    then raw
-      when Integer  then Money.new(raw, currency)         # Already cents
-      when String   then Money.from_amount(raw.to_d, currency)  # "19.99" → 1999 cents
-      when Float    then Money.from_amount(raw.to_d, currency)  # Convert via BigDecimal
+      when Integer  then Money.new(raw, currency)                  # Already cents
+      when String   then Money.from_amount(raw.to_d, currency)     # "19.99" → 1999 cents
+      when Float    then Money.from_amount(raw.to_s.to_d, currency) # ✅ to_s first — avoids float imprecision
       else raise ArgumentError, "Cannot parse amount: #{raw.inspect}"
       end
     end
