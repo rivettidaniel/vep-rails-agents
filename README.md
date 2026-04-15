@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/banner.svg?v=1.2" alt="DÉJATE DE MARIQUERAS — Venezuelan Execution Protocol v1.2" width="900"/>
+<img src="assets/banner.svg?v=1.2" alt="Venezuelan Execution Protocol v1.2" width="900"/>
 
 **A specialized AI agent suite for Rails development with wave-based parallel execution.**
 
@@ -118,7 +118,7 @@ A curated collection of specialized AI agents for Rails development, organized i
 3. **VEP Planning System** - State-persistent project planning with wave-based parallel execution
 4. **Skills Library** - Reusable knowledge modules for specific Rails patterns and technologies
 
-> **New:** Use this project's 39 agents and 45 skills in your IDE:
+> **New:** Use this project's 39 agents and 52 skills in your IDE:
 > - **Claude Code:** [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md) — use `/vep-feature` to spec + plan any feature and generate a wave-structured PHASE_PLAN. For general Rails setup, see [Claude Code Setup Template](CLAUDE_CODE_SETUP_TEMPLATE.md).
 > - **Cursor:** [Cursor Setup Guide](CURSOR_SETUP.md) — install with `--cursor` and use the same agents as subagents and skills in Cursor Agent.
 
@@ -170,6 +170,7 @@ Modern Rails architecture with clear separation of concerns, SOLID principles, a
 - **`@job_agent`** - Background jobs (Solid Queue)
 - **`@mailer_agent`** - Mailers with previews
 - **`@migration_agent`** - Safe migrations
+- **`@gem_agent`** - Gemfile and gem management
 - **`@implementation_agent`** - General implementation
 
 #### Frontend
@@ -193,6 +194,13 @@ Modern Rails architecture with clear separation of concerns, SOLID principles, a
 #### Event Handling & Package Management
 - **`@event_dispatcher_agent`** - Event dispatcher for complex side effects (3+ actions)
 - **`@packwerk_agent`** - Package boundary management with Packwerk
+
+#### Event-Driven & Distributed Systems
+- **`@outbox_agent`** - Transactional Outbox pattern (solves dual-write problem with Kafka)
+- **`@idempotency_agent`** - Idempotency keys for payments, webhooks, and at-least-once delivery
+- **`@kafka_agent`** - Kafka via Karafka (producers, consumers, DLQ, consumer groups)
+- **`@read_model_agent`** - Read Models / CQRS (materialized views, read replicas, projections)
+- **`@event_sourcing_agent`** - Event Sourcing with RailsEventStore (AggregateRoot, immutable events)
 
 ### Standard Rails Workflow Example
 
@@ -343,9 +351,39 @@ Skills are focused knowledge documents that contain:
 - **`api-versioning`** - Versioned REST APIs
 - **`i18n-patterns`** - Internationalization and localization
 
-#### Performance & Testing
+#### Performance & Scaling
 - **`performance-optimization`** - N+1 prevention, eager loading, optimization
+- **`memoization-patterns`** - Instance-level and request-level memoization
+- **`pagination-patterns`** - Cursor and offset pagination with Pagy
+- **`search-patterns`** - Full-text and filtered search strategies
+
+#### Testing
 - **`tdd-cycle`** - Test-driven development workflow
+- **`playwright-system-testing`** - End-to-end system tests with Playwright
+
+#### Feature Management & Integrations
+- **`feature-flags`** - Feature flag patterns and rollout strategies
+- **`webhooks-receiving`** - Secure webhook ingestion and idempotent processing
+- **`api-serialization`** - JSON serialization with jsonapi-serializer and custom presenters
+
+#### Rails Best Practices
+- **`money-currency-patterns`** - Integer cents storage, money-rails gem, BigDecimal, formatting
+- **`error-handling-patterns`** - Custom exception hierarchy, rescue_from, dry-monads → HTTP, Sentry
+- **`data-migrations`** - data_migrate gem, zero-downtime backfills, batch processing
+- **`soft-delete-patterns`** - Discard gem, discarded_at scopes, cascade, GDPR
+- **`bulk-operations`** - insert_all, upsert_all, find_in_batches, update_all safety
+- **`database-locking`** - with_lock, FOR UPDATE, SKIP LOCKED, NOWAIT, advisory locks
+
+#### Event-Driven & Distributed Systems (Skills)
+- **`outbox-pattern`** - Transactional Outbox, relay job, SKIP LOCKED
+- **`idempotency-keys`** - Redis lock, DB key, unique constraint
+- **`kafka-karafka`** - Karafka producers, consumers, DLQ, testing
+- **`read-model-patterns`** - Materialized views, CONCURRENT refresh, read replicas
+- **`event-sourcing-rails`** - RailsEventStore, AggregateRoot, subscribers
+- **`parallel-execution-patterns`** - Wave-based parallel agent execution patterns
+
+#### Package Management
+- **`packwerk`** - Package boundaries, privacy enforcement, dependency rules
 
 #### Design Patterns (Skills)
 - **`builder-pattern`** - Builder pattern for complex multi-step construction
@@ -360,7 +398,6 @@ Skills are focused knowledge documents that contain:
 #### Meta / Tooling
 - **`skill-auditor`** - Audits and improves existing skill files for correctness, code quality, and completeness
 - **`skill-creator`** - Creates new Rails skills from scratch following project conventions, with test cases and iteration loop
-- **`playwright-system-testing`** - End-to-end system tests with Playwright
 
 ### Using Skills
 
@@ -431,12 +468,12 @@ All agents follow best practices from GitHub's analysis:
 
 **Quick Start:** [CLAUDE_CODE_PROJECT_GUIDE.md](CLAUDE_CODE_PROJECT_GUIDE.md)
 
-This guide shows how to use the **39 agents** and **45 skills** in this project:
+This guide shows how to use the **39 agents** and **52 skills** in this project:
 
 - **Specialist Agents (36)** - Testing, implementation, frontend, quality, design patterns, event-driven architecture
 - **Feature Spec Agents (3)** - Specification, planner, reviewer
 - **VEP Planning System** - `/vep-init`, `/vep-feature`, `/vep-wave`, `/vep-state`
-- **Skills (34)** - Architecture patterns, Hotwire, design patterns, and more
+- **Skills (52)** - Architecture patterns, Hotwire, design patterns, event-driven systems, Rails best practices, and more
 - **Workflow Examples** - From simple features to complex multi-phase projects
 
 ### General Rails Setup Template
