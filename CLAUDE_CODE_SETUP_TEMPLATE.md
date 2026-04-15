@@ -2,7 +2,7 @@
 
 > ⚠️ **NOTE:** This is a **GENERAL TEMPLATE** for setting up Claude Code with Rails projects.
 >
-> **For THIS project's specific agents and skills (34 agents + 30 skills), see:**
+> **For THIS project's specific agents and skills (39 agents + 52 skills), see:**
 > - 📘 [**CLAUDE_CODE_PROJECT_GUIDE.md**](CLAUDE_CODE_PROJECT_GUIDE.md) - How to use this project's agents and skills
 > - 📋 [**CLAUDE.md**](CLAUDE.md) - Project-specific conventions and rules
 >
