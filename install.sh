@@ -81,6 +81,12 @@ link_project() {
 
   step "Linking VEP into $(pwd)/$TARGET_DIR/"
 
+  # Remove legacy feature_spec_agents directory symlink if present
+  if [ -L "$TARGET_DIR/feature_spec_agents" ]; then
+    rm "$TARGET_DIR/feature_spec_agents"
+    ok "Removed legacy feature_spec_agents symlink"
+  fi
+
   COMPONENTS=("agents" "commands" "skills" "features" "planning")
 
   for component in "${COMPONENTS[@]}"; do
@@ -124,6 +130,12 @@ uninstall_vep() {
       ok "Removed $target"
     fi
   done
+
+  # Remove legacy feature_spec_agents directory symlink if present
+  if [ -L "$TARGET_DIR/feature_spec_agents" ]; then
+    rm "$TARGET_DIR/feature_spec_agents"
+    ok "Removed $TARGET_DIR/feature_spec_agents"
+  fi
 
   # Remove feature spec agent symlinks from agents/
   if [ -d "$INSTALL_DIR/feature_spec_agents" ]; then
