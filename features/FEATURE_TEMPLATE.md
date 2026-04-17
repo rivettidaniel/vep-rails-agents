@@ -21,7 +21,8 @@
 │                         ↓                                        │
 │    [If score < 7 or critical issues: revise]                    │
 │                         ↓                                        │
-│ 3. @feature_planner_agent → implementation plan                 │
+│ 3a. /vep-feature → generates PHASE_PLAN.md (VEP users)         │
+│ 3b. @feature_planner_agent → implementation plan (standalone)  │
 ├─────────────────────────────────────────────────────────────────┤
 │                    🔴 RED PHASE (per PR)                         │
 ├─────────────────────────────────────────────────────────────────┤
@@ -787,8 +788,8 @@ end
 ```
 
 **Trigger:**
-- Where: `ModelName#method_name`
-- When: `after_commit :enqueue_job`
+- Where: controller action (after successful save)
+- When: `MyJob.perform_later(record)` called explicitly in controller
 
 ---
 
@@ -803,7 +804,7 @@ end
 - [ ] Associations (belongs_to, has_many, etc.)
 - [ ] Scopes (verify SQL queries)
 - [ ] Business methods (logic, edge cases)
-- [ ] Callbacks (after_save, before_destroy, etc.)
+- [ ] Normalizations (`before_validation` only — no side-effect callbacks)
 
 **Test examples:**
 ```ruby

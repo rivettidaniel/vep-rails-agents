@@ -164,7 +164,9 @@ Feature: [Feature Name]
 2. [Second most critical]
 
 ### Verdict
-[Score ≥ 7/10, no CRITICAL] → ✅ **Ready for `@feature_planner_agent`**
+[Score ≥ 7/10, no CRITICAL] → ✅ **Ready — next step depends on your workflow:**
+  - **VEP users:** `/vep-feature` already handles this automatically
+  - **Standalone users:** `@feature_planner_agent` for implementation plan (no planning files)
 [Otherwise] → ⚠️ **Revise and re-run `@feature_reviewer_agent`**
 ```
 

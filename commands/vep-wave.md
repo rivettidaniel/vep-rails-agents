@@ -170,6 +170,11 @@ Use this table when building the dispatch message to know which skills to pass t
 | `chain_of_responsibility_agent` | `chain-of-responsibility-pattern` | Wave 3 |
 | `factory_method_agent` | `factory-method-pattern` | Wave 3 |
 | `command_agent` | `command-pattern` | Wave 3 |
+| `outbox_agent` | `outbox-pattern` | Wave 3 |
+| `idempotency_agent` | `idempotency-keys` | Wave 3 |
+| `kafka_agent` | `kafka-karafka` | Wave 3 |
+| `read_model_agent` | `read-model-patterns` | Wave 3 |
+| `event_sourcing_agent` | `event-sourcing-rails` | Wave 3 |
 | `packwerk_agent` | `packwerk` | Wave 3-4 |
 | `gem_agent` | _(none)_ | Wave 1-4 (as needed) |
 | `implementation_agent` | `rails-architecture` | Wave 2-4 (as needed) |

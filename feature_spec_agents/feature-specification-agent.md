@@ -261,5 +261,6 @@ Feature: [Feature Name]
 |------|-----|
 | Gather requirements → write spec | **`@feature_specification_agent`** (you are here) |
 | Review spec for quality/completeness | `@feature_reviewer_agent` |
-| Create implementation plan from approved spec | `@feature_planner_agent` |
+| Create implementation plan (no planning files) | `@feature_planner_agent` |
+| Create implementation plan + PHASE_PLAN.md (VEP) | `/vep-feature` |
 | Write failing tests from Gherkin scenarios | `@tdd_red_agent` |

@@ -274,10 +274,10 @@ High-level planning and orchestration for complex features.
 ### Available Agents
 
 - **`@feature_specification_agent`** - Writes detailed feature specifications
-- **`@feature_planner_agent`** - Breaks features into tasks, recommends agents
-- **`@feature_reviewer_agent`** - Reviews completed features against specs
+- **`@feature_reviewer_agent`** - Reviews specs for quality and completeness
+- **`@feature_planner_agent`** - Breaks a reviewed spec into tasks and agent assignments *(standalone fallback — no planning files created)*
 
-### VEP Feature Workflow
+### VEP Feature Workflow (recommended)
 
 VEP (Venezuelan Execution Protocol) replaces manual orchestration with a state-persistent planning system. Use `/vep-feature` to automatically spec, review, and generate a wave-structured PHASE_PLAN:
 
@@ -294,12 +294,20 @@ Feature specification agents are called automatically by `/vep-feature`:
 
 ```
 1. @feature_specification_agent write spec for blog with comments
-
 2. @feature_reviewer_agent verify spec is complete and implementable
-
 3. [PHASE_PLAN.md generated with wave structure]
-
 4. /vep-wave N  execute each wave
+```
+
+### Standalone Workflow (without VEP)
+
+For quick planning without creating `planning/` files:
+
+```
+1. @feature_specification_agent write spec for blog with comments
+2. @feature_reviewer_agent verify spec is complete and implementable
+3. @feature_planner_agent create implementation plan from the reviewed spec
+4. [Use specialist agents manually, no PHASE_PLAN.md generated]
 ```
 
 ---

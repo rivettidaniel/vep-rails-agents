@@ -24,6 +24,11 @@ Ask the user these 5 questions before doing anything else. Wait for all answers 
    - [ ] Real-time Turbo Streams
    - [ ] Complex authorization (Pundit policies)
    - [ ] Design patterns (Builder / Strategy / Template Method / State / Chain / Factory / Command)
+   - [ ] Guaranteed delivery to external systems (Outbox pattern)
+   - [ ] Idempotency required (payments, webhooks, retries)
+   - [ ] Event streaming / Kafka integration
+   - [ ] Dashboard / aggregation / read models (CQRS)
+   - [ ] Full audit trail / event replay (Event Sourcing)
 
 Record all answers. They drive agent selection in Steps 4 and 5.
 
@@ -100,6 +105,11 @@ Use this table to assign correct skills to every agent in the plan:
 | `chain_of_responsibility_agent` | `chain-of-responsibility-pattern` | Wave 3 |
 | `factory_method_agent` | `factory-method-pattern` | Wave 3 |
 | `command_agent` | `command-pattern` | Wave 3 |
+| `outbox_agent` | `outbox-pattern` | Wave 3 |
+| `idempotency_agent` | `idempotency-keys` | Wave 3 |
+| `kafka_agent` | `kafka-karafka` | Wave 3 |
+| `read_model_agent` | `read-model-patterns` | Wave 3 |
+| `event_sourcing_agent` | `event-sourcing-rails` | Wave 3 |
 | `packwerk_agent` | `packwerk` | Wave 3-4 |
 | `gem_agent` | _(none)_ | Wave 1-4 (as needed) |
 | `implementation_agent` | `rails-architecture` | Wave 2-4 (as needed) |
@@ -145,6 +155,12 @@ Include only agents the feature needs (based on Step 1 answers):
   - `@builder_agent`, `@strategy_agent`, `@template_method_agent`
   - `@state_agent` — if "state machine" selected
   - `@chain_of_responsibility_agent`, `@factory_method_agent`, `@command_agent`
+- Distributed systems agents — only if the corresponding option was selected in Step 1:
+  - `@outbox_agent` — if "guaranteed delivery to external systems" selected
+  - `@idempotency_agent` — if "idempotency required" selected
+  - `@kafka_agent` — if "event streaming / Kafka integration" selected
+  - `@read_model_agent` — if "dashboard / aggregation / read models" selected
+  - `@event_sourcing_agent` — if "full audit trail / event replay" selected
 
 All Wave 3 tasks are parallel because they work on different files.
 

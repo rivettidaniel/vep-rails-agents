@@ -17,8 +17,8 @@ This installs VEP once to `~/.vep/` and creates symlinks in your project’s `.c
 
 | Symlink           | Cursor role        | Contents                                      |
 |-------------------|--------------------|-----------------------------------------------|
-| `.cursor/agents/` | **Subagents**      | 31 specialist agents (TDD, models, services, etc.) |
-| `.cursor/skills/` | **Agent Skills**   | 30 Rails knowledge modules (SKILL.md format)  |
+| `.cursor/agents/` | **Subagents**      | 36 specialist agents (TDD, models, services, etc.) |
+| `.cursor/skills/` | **Agent Skills**   | 52 Rails knowledge modules (SKILL.md format)  |
 | `.cursor/commands/` | Reference only   | VEP command docs (vep-init, vep-feature, etc.) |
 | `.cursor/planning/` | Reference only   | PROJECT, REQUIREMENTS, ROADMAP, STATE, PHASE_PLAN |
 | `.cursor/features/` | Reference only  | Feature specification templates               |
@@ -61,7 +61,7 @@ Same workflows as in the [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.m
 
 Skills in `.cursor/skills/` are **Agent Skills**. Cursor discovers them automatically and applies them when relevant. You can also invoke a skill explicitly by typing `/` in Agent chat and choosing the skill.
 
-No extra setup; the 30 Rails skills (e.g. `rails-service-object`, `hotwire-patterns`, `database-migrations`) are available to the agent.
+No extra setup; the 52 Rails skills (e.g. `rails-service-object`, `hotwire-patterns`, `database-migrations`) are available to the agent.
 
 ---
 

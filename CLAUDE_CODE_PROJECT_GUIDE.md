@@ -218,21 +218,26 @@ High-level planning and requirements management.
 | Agent | Purpose | When to Use |
 |-------|---------|-------------|
 | `@feature_specification_agent` | Writes detailed feature specs | Before starting implementation |
-| `@feature_planner_agent` | Breaks features into tasks, recommends agents | Planning implementation approach |
-| `@feature_reviewer_agent` | Reviews completed features against specs | After implementation complete |
+| `@feature_reviewer_agent` | Reviews spec for quality and completeness | After spec is written |
+| `@feature_planner_agent` | Breaks a reviewed spec into tasks and agent assignments | Standalone workflow (no VEP) |
 
-**Example (called automatically via `/vep-feature`, or manually):**
+There are two ways to use these agents depending on whether you use VEP:
+
+**VEP Workflow (recommended) — creates `planning/` files, wave structure, persistent state:**
 ```
-# Automatic (recommended) — called by /vep-feature:
-/vep-feature                 # prompts for feature name, then runs:
-#   @feature_specification_agent write spec
-#   @feature_reviewer_agent verify spec
-#   [generates PHASE_PLAN.md with wave structure]
+/vep-feature    # calls @feature_specification_agent + @feature_reviewer_agent automatically,
+                # then generates planning/PHASE_PLAN.md with agents+skills per wave
+/vep-wave 1     # RED: failing tests
+/vep-wave 2-4   # GREEN: implementation waves
+/vep-wave 5-6   # REFACTOR + QA
+```
 
-# Manual (if needed individually):
-@feature_specification_agent write spec for multi-tenant blog with comments and moderation
-
-@feature_reviewer_agent verify implementation matches features/blog_feature.md
+**Standalone Workflow — quick plan in chat, no planning files created:**
+```
+@feature_specification_agent write spec for multi-tenant blog with comments
+@feature_reviewer_agent verify spec is complete and implementable
+@feature_planner_agent create implementation plan from the reviewed spec
+# Then call specialist agents manually
 ```
 
 ---
