@@ -96,6 +96,19 @@ link_project() {
       ok "Linked $component"
     fi
   done
+
+  # Link individual feature spec agents into agents/
+  if [ -d "$INSTALL_DIR/feature_spec_agents" ] && [ -d "$TARGET_DIR/agents" ]; then
+    for agent_file in "$INSTALL_DIR/feature_spec_agents"/*.md; do
+      agent_name=$(basename "$agent_file")
+      agent_link="$TARGET_DIR/agents/$agent_name"
+      if [ -L "$agent_link" ]; then
+        rm "$agent_link"
+      fi
+      ln -s "$agent_file" "$agent_link"
+      ok "Linked feature_spec_agents/$agent_name"
+    done
+  fi
 }
 
 # ── Uninstall ────────────────────────────────────────────────
@@ -111,6 +124,17 @@ uninstall_vep() {
       ok "Removed $target"
     fi
   done
+
+  # Remove feature spec agent symlinks from agents/
+  if [ -d "$INSTALL_DIR/feature_spec_agents" ]; then
+    for agent_file in "$INSTALL_DIR/feature_spec_agents"/*.md; do
+      agent_link="$TARGET_DIR/agents/$(basename "$agent_file")"
+      if [ -L "$agent_link" ]; then
+        rm "$agent_link"
+        ok "Removed $agent_link"
+      fi
+    done
+  fi
 
   step "Removing VEP from $INSTALL_DIR"
   if [ -d "$INSTALL_DIR" ]; then
