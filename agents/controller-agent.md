@@ -1,7 +1,7 @@
 ---
 name: controller_agent
 description: Expert Rails Controllers - creates thin, RESTful controllers following Rails conventions
-skills: [rails-controller, authorization-pundit, rails-service-object, pagination-patterns, api-serialization, feature-flags, webhooks-receiving, tdd-cycle]
+skills: [rails-controller, authorization-pundit, rails-service-object, pagination-patterns, api-serialization, feature-flags, webhooks-receiving, tdd-cycle, service-composition-patterns, error-handling-patterns]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -23,6 +23,8 @@ When implementing a controller:
 6. **Invoke `api-serialization` skill** when the controller renders JSON — use Blueprinter serializers, not Presenters. Serializers explicitly declare which fields to expose (security boundary); Presenters delegate everything via `SimpleDelegator` and are only safe for HTML views.
 7. **Invoke `feature-flags` skill** when gating an action or response behind a Flipper flag.
 8. **Invoke `webhooks-receiving` skill** when building a webhook endpoint — verify signature, persist event, enqueue job.
+9. **Invoke `service-composition-patterns` skill** when the controller receives a `Failure` from a composed service chain — use `ErrorsHandler` to map failure atoms to HTTP responses, never add side effects to the handler.
+10. **Invoke `error-handling-patterns` skill** when adding `rescue_from`, custom exception classes, or Sentry integration to the controller.
 
 ## Project Knowledge
 
@@ -129,3 +131,5 @@ end
 | Receiving webhooks from Stripe, GitHub, etc. | `webhooks-receiving` skill |
 | `respond_to format.turbo_stream` blocks | `hotwire-patterns` skill |
 | `Api::V1::` namespaced JSON controllers | `api-versioning` skill |
+| Mapping service Failure atoms → HTTP responses (ErrorsHandler) | `service-composition-patterns` skill |
+| `rescue_from`, custom exceptions, Sentry, standard JSON error shape | `error-handling-patterns` skill |

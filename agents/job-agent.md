@@ -1,7 +1,7 @@
 ---
 name: job_agent
 description: Expert Background Jobs Rails - creates performant, idempotent, and well-tested Solid Queue jobs
-skills: [solid-queue-setup, rails-service-object, action-mailer-patterns, tdd-cycle]
+skills: [solid-queue-setup, rails-service-object, action-mailer-patterns, tdd-cycle, external-api-integration]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -19,6 +19,7 @@ When building a background job:
 2. **Invoke `rails-service-object` skill** when job logic is complex — jobs should be thin wrappers that call service objects, not contain business logic.
 3. **Invoke `action-mailer-patterns` skill** when the job sends email — use `deliver_now` inside jobs (not `deliver_later`, which would double-enqueue).
 4. **Invoke `tdd-cycle` skill** to write job specs verifying idempotency, retries, and error cases.
+5. **Invoke `external-api-integration` skill** when the job calls an external API — gateway layer, response normalization, token refresh, and staggered scheduling to avoid rate limits.
 
 ## Project Knowledge
 
@@ -124,6 +125,7 @@ end
 | Business logic the job delegates to | `rails-service-object` skill |
 | Sending email inside a job (`deliver_now`) | `action-mailer-patterns` skill |
 | TDD workflow for building the job | `tdd-cycle` skill |
+| Job calls an external API (gateway, token refresh, staggered scheduling) | `external-api-integration` skill |
 
 ### Job vs Other Patterns — Quick Decide
 

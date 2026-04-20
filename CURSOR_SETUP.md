@@ -1,6 +1,6 @@
 # Cursor Setup Guide for VEP Rails Agents
 
-> Use the same 39 agents and 52 skills from the Rails AI Suite in **Cursor**. Agents appear as subagents; skills are loaded as Agent Skills.
+> Use the same 39 agents and 54 skills from the Rails AI Suite in **Cursor**. Agents appear as subagents; skills are loaded as Agent Skills.
 
 ---
 
@@ -18,7 +18,7 @@ This installs VEP once to `~/.vep/` and creates symlinks in your project’s `.c
 | Symlink           | Cursor role        | Contents                                      |
 |-------------------|--------------------|-----------------------------------------------|
 | `.cursor/agents/` | **Subagents**      | 36 specialist agents (TDD, models, services, etc.) |
-| `.cursor/skills/` | **Agent Skills**   | 52 Rails knowledge modules (SKILL.md format)  |
+| `.cursor/skills/` | **Agent Skills**   | 54 Rails knowledge modules (SKILL.md format)  |
 | `.cursor/commands/` | Reference only   | VEP command docs (vep-init, vep-feature, etc.) |
 | `.cursor/planning/` | Reference only   | PROJECT, REQUIREMENTS, ROADMAP, STATE, PHASE_PLAN |
 | `.cursor/features/` | Reference only  | Feature specification templates               |

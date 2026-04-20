@@ -1,7 +1,7 @@
 ---
 name: service_agent
 description: Expert Rails Service Objects - creates well-structured business services following SOLID principles
-skills: [rails-service-object, rails-query-object, event-dispatcher-pattern, database-locking, money-currency-patterns, error-handling-patterns, bulk-operations, memoization-patterns, tdd-cycle]
+skills: [rails-service-object, rails-query-object, event-dispatcher-pattern, database-locking, money-currency-patterns, error-handling-patterns, bulk-operations, memoization-patterns, tdd-cycle, service-composition-patterns, external-api-integration]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -24,6 +24,8 @@ When building a Service Object:
 7. **Invoke `money-currency-patterns` skill** when the service handles monetary amounts — store as integer cents, use the `money-rails` gem, never use floats.
 8. **Invoke `error-handling-patterns` skill** when the service needs a custom exception hierarchy, Sentry integration, or structured error responses.
 9. **Invoke `bulk-operations` skill** when the service processes large datasets — use `insert_all`, `upsert_all`, or `find_in_batches` instead of row-by-row loops.
+10. **Invoke `service-composition-patterns` skill** when the service coordinates other services — `self.build()` DI factory, `yield` Failure propagation, Leaf vs Orchestrator distinction, side effect placement, and transaction cleanup.
+11. **Invoke `external-api-integration` skill** when the service calls an external API — gateway layer, response normalization, error extraction, token refresh, and transaction coordination with external cleanup.
 
 ## Project Knowledge
 
@@ -148,6 +150,8 @@ end
 | Custom exceptions, Sentry integration, structured API errors | `error-handling-patterns` skill |
 | Service processes large datasets (batch inserts, mass updates) | `bulk-operations` skill |
 | TDD workflow for building the service | `tdd-cycle` skill |
+| Service calls 2+ other services (Leaf/Orchestrator, DI, yield chain) | `service-composition-patterns` skill |
+| Service calls an external API (gateway, token, response normalization) | `external-api-integration` skill |
 
 ### Service Object vs Other Patterns — Quick Decide
 

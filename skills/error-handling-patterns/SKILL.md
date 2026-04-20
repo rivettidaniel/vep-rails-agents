@@ -345,6 +345,62 @@ class ErrorsController < ApplicationController
 end
 ```
 
+## ErrorsHandler: Mapping Failure Atoms to HTTP
+
+When a controller serves many failure paths, extract the Failure → HTTP mapping to a dedicated handler. This keeps the controller thin without embedding logic in the service.
+
+```ruby
+# app/services/auth/errors_handler.rb
+module Auth
+  class ErrorsHandler
+    FAILURE_MAP = {
+      user_not_found:              { status: :not_found,            code: :user_not_found },
+      invalid_token:               { status: :unauthorized,          code: :invalid_token },
+      language_selection_required: { status: :unprocessable_entity, code: :language_required },
+      external_service:            { status: :bad_gateway,           code: :external_service_error }
+    }.freeze
+
+    def self.call(failure)
+      type    = failure.is_a?(Array) ? failure.first : failure
+      mapping = FAILURE_MAP.fetch(type, { status: :unprocessable_entity, code: :service_error })
+      { status: mapping[:status], payload: { success: false, error: mapping[:code] } }
+    end
+  end
+end
+
+# Controller
+result = Auth::JwtAuthenticator.build.call(token:, locale:)
+if result.success?
+  render json: { user: result.value! }, status: :ok
+else
+  resp = Auth::ErrorsHandler.call(result.failure)
+  render json: resp[:payload], status: resp[:status]
+end
+```
+
+**ErrorsHandler hard limits — it must NEVER:**
+- Persist to the database (no `create`, `update`, `save`)
+- Send emails or notifications (`deliver_now`, `deliver_later`)
+- Enqueue background jobs
+- Call external services
+
+Violating these limits turns a simple translation object into a hidden side-effect source — the exact bug seen when `SystemMailer.deliver_now` was called inside an `ErrorsHandler`.
+
+See `service-composition-patterns` skill for the full composition and side-effect placement rules.
+
+## Result Return Conventions
+
+Choose the right return convention and **do not mix** within the same service chain:
+
+| Convention | When to use | Example |
+|------------|-------------|---------|
+| `Success` / `Failure` (dry-monads) | Services inside a `yield` chain | `yield Orders::CreateService.call(...)` |
+| Hash `{ success?: Boolean, error: }` | Utility/manager called outside monad context | `TokenManagerService#call` |
+| Symbol (`:ok`, `:failed`) | Dispatcher routing events (no chain) | `Webhooks::Dispatcher#dispatch` |
+| Plain return value | Pure transformation with no failure path | `IcalGenerationService#call` |
+
+**If the orchestrator uses `yield`, every collaborator must return a monad.** Mixing hash-returns and monads in the same `yield` chain causes `NoMethodError` at runtime.
+
 ## Anti-Patterns to Avoid
 
 1. **Rescuing `StandardError` broadly in services** — only rescue specific, expected exceptions
@@ -354,3 +410,5 @@ end
 5. **Different error shapes per endpoint** — standardize the JSON error envelope across all APIs
 6. **Reporting expected errors to Sentry** — configure `excluded_exceptions` to avoid noise
 7. **Using string matching on error messages** — use typed failures (`[:not_found, msg]`) for branching, not `result.failure.include?("not found")`
+8. **Side effects in ErrorsHandler** — sending emails, creating records, or calling external APIs inside a failure mapper silently bypasses the controller's side-effect boundary
+9. **Mixing return conventions in a `yield` chain** — hash-returning services used with `yield` cause runtime `NoMethodError`; pick one convention per chain

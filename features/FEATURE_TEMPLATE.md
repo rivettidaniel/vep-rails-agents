@@ -677,6 +677,8 @@ Consider using design pattern agents for complex scenarios:
 | **Kafka Integration** | `@kafka_agent` | Cross-service event streaming with fan-out and replay | Publish domain events to downstream microservices |
 | **Read Model / CQRS** | `@read_model_agent` | Pre-computed projections for expensive aggregation queries | Balance dashboard, financial summaries, reporting |
 | **Event Sourcing** | `@event_sourcing_agent` | Immutable event log as source of truth, full audit trail | Financial ledger, inventory, any domain needing history |
+| **Service Composition** | `@service_agent` + `service-composition-patterns` skill | Services coordinating other services — Leaf/Orchestrator split, DI factory, Failure propagation | Auth pipeline, checkout flow, multi-step onboarding |
+| **External API Integration** | `@service_agent` + `external-api-integration` skill | Gateway layer, response normalization, token refresh, transaction cleanup | Cal.com sync, Stripe integration, third-party webhooks |
 
 **Example: Using Event Dispatcher for Side Effects**
 

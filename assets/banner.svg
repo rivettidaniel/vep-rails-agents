@@ -53,11 +53,11 @@
 
     <!-- Title and tagline -->
     <text class="text white" font-size="15" y="188">  Venezuelan Execution Protocol <tspan class="dim">v1.2</tspan></text>
-    <text class="text white" font-size="15" y="212">  39 agents · 52 skills · wave-based parallel execution.</text>
+    <text class="text white" font-size="15" y="212">  39 agents · 54 skills · wave-based parallel execution.</text>
 
     <!-- Install output -->
     <text class="text" font-size="15" y="260"><tspan class="green">  ✓</tspan><tspan class="white"> Installed agents/         </tspan><tspan class="dim">(39 specialist agents)</tspan></text>
-    <text class="text" font-size="15" y="282"><tspan class="green">  ✓</tspan><tspan class="white"> Installed skills/         </tspan><tspan class="dim">(52 knowledge modules)</tspan></text>
+    <text class="text" font-size="15" y="282"><tspan class="green">  ✓</tspan><tspan class="white"> Installed skills/         </tspan><tspan class="dim">(54 knowledge modules)</tspan></text>
     <text class="text" font-size="15" y="304"><tspan class="green">  ✓</tspan><tspan class="white"> Installed commands/        </tspan><tspan class="dim">(vep-init, vep-feature, vep-wave, vep-state)</tspan></text>
     <text class="text" font-size="15" y="326"><tspan class="green">  ✓</tspan><tspan class="white"> Installed features/        </tspan><tspan class="dim">(feature specs and templates)</tspan></text>
     <text class="text" font-size="15" y="348"><tspan class="green">  ✓</tspan><tspan class="white"> Installed planning/        </tspan><tspan class="dim">(PROJECT, ROADMAP, STATE, PHASE_PLAN)</tspan></text>
