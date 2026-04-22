@@ -1,6 +1,6 @@
 # Cursor Setup Guide for VEP Rails Agents
 
-> Use the same 39 agents and 54 skills from the Rails AI Suite in **Cursor**. Agents appear as subagents; skills are loaded as Agent Skills.
+> Use the same 39 agents and 56 skills from the Rails AI Suite in **Cursor**. Agents appear as subagents; skills are loaded as Agent Skills.
 
 ---
 
