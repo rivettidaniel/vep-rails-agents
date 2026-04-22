@@ -300,16 +300,18 @@ Skills provide deep knowledge modules that agents reference automatically.
 **When agents use these:**
 - `@migration_agent` → uses `database-migrations`
 
-### Background Jobs & Real-time (3 skills)
+### Background Jobs & Real-time (5 skills)
 
 | Skill | What It Covers |
 |-------|----------------|
 | `solid-queue-setup` | Background job processing |
+| `job-fan-out-pattern` | Scheduler + worker split, perform_all_later, Set-based filtering |
+| `queue-concurrency-throttling` | Per-queue thread cap for external API rate/burst limits |
 | `action-cable-patterns` | WebSocket real-time features |
 | `action-mailer-patterns` | Transactional emails |
 
 **When agents use these:**
-- `@job_agent` → uses `solid-queue-setup`
+- `@job_agent` → uses `solid-queue-setup`, `job-fan-out-pattern`, `queue-concurrency-throttling`
 - `@mailer_agent` → uses `action-mailer-patterns`
 
 ### API & Internationalization (2 skills)

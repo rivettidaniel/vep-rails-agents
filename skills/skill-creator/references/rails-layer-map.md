@@ -57,6 +57,8 @@ Use this to avoid creating skills that duplicate existing coverage.
 | Skill | What it covers |
 |-------|---------------|
 | `solid-queue-setup` | Background jobs, SolidQueue configuration |
+| `job-fan-out-pattern` | Scheduler + worker split, perform_all_later, Set-based filtering |
+| `queue-concurrency-throttling` | Per-queue thread cap for external API rate/burst limits |
 | `action-mailer-patterns` | Transactional emails, previews, testing |
 | `action-cable-patterns` | WebSocket real-time features |
 

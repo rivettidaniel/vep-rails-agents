@@ -118,7 +118,7 @@ Use this table to assign correct skills to every agent in the plan:
 | `turbo_agent` | `hotwire-patterns` | Wave 4 |
 | `stimulus_agent` | `hotwire-patterns` | Wave 4 |
 | `mailer_agent` | `action-mailer-patterns` | Wave 4 |
-| `job_agent` | `solid-queue-setup` | Wave 4 |
+| `job_agent` | `solid-queue-setup`, `job-fan-out-pattern`, `queue-concurrency-throttling` | Wave 4 |
 | `tailwind_agent` | _(none)_ | Wave 4-5 |
 | `tdd_refactoring_agent` | `tdd-cycle`, `rails-architecture` | Wave 5 |
 | `lint_agent` | _(none)_ | Wave 5 |
