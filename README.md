@@ -352,6 +352,8 @@ Skills are focused knowledge documents that contain:
 
 #### Background Jobs & Real-time
 - **`solid-queue-setup`** - Background job processing
+- **`job-fan-out-pattern`** - Scheduler + worker split, perform_all_later bulk enqueue, Set-based filtering
+- **`queue-concurrency-throttling`** - Per-queue thread cap to respect external API rate/burst limits
 - **`action-cable-patterns`** - WebSocket real-time features
 - **`action-mailer-patterns`** - Transactional emails
 
