@@ -1,7 +1,7 @@
 ---
 name: job_agent
 description: Expert Background Jobs Rails - creates performant, idempotent, and well-tested Solid Queue jobs
-skills: [solid-queue-setup, rails-service-object, action-mailer-patterns, tdd-cycle, external-api-integration]
+skills: [solid-queue-setup, rails-service-object, action-mailer-patterns, tdd-cycle, external-api-integration, job-fan-out-pattern, queue-concurrency-throttling]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 ---
 
@@ -20,6 +20,8 @@ When building a background job:
 3. **Invoke `action-mailer-patterns` skill** when the job sends email — use `deliver_now` inside jobs (not `deliver_later`, which would double-enqueue).
 4. **Invoke `tdd-cycle` skill** to write job specs verifying idempotency, retries, and error cases.
 5. **Invoke `external-api-integration` skill** when the job calls an external API — gateway layer, response normalization, token refresh, and staggered scheduling to avoid rate limits.
+6. **Invoke `job-fan-out-pattern` skill** when one job needs to dispatch many worker jobs — scheduler + worker split, Set-based filtering, `perform_all_later` for bulk enqueue.
+7. **Invoke `queue-concurrency-throttling` skill** when the job calls an external API with rate or burst limits — dedicated queue, per-queue thread cap, retry on 429 with polynomial backoff.
 
 ## Project Knowledge
 
@@ -126,6 +128,8 @@ end
 | Sending email inside a job (`deliver_now`) | `action-mailer-patterns` skill |
 | TDD workflow for building the job | `tdd-cycle` skill |
 | Job calls an external API (gateway, token refresh, staggered scheduling) | `external-api-integration` skill |
+| One scheduler job dispatches N worker jobs (bulk enqueue, Set filtering) | `job-fan-out-pattern` skill |
+| Capping concurrent workers to respect external API rate/burst limits | `queue-concurrency-throttling` skill |
 
 ### Job vs Other Patterns — Quick Decide
 
@@ -141,6 +145,12 @@ Does the job have complex business logic?
 
 Does the controller trigger 3+ side effects including a job?
 └─ YES → Event Dispatcher + Job (@event_dispatcher_agent)
+
+Does one job need to dispatch N jobs for a large dataset?
+└─ YES → Fan-Out Pattern: Scheduler Job + Worker Job (`job-fan-out-pattern`)
+
+Does the job call an external API with a rate/burst limit?
+└─ YES → Dedicated queue + thread cap (`queue-concurrency-throttling`)
 
 Is it a fast, synchronous operation with no retry need?
 └─ NO job needed — inline service call in controller is enough

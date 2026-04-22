@@ -325,3 +325,11 @@ end
 5. **Assuming callbacks run on `insert_all`** — they don't; if you need `after_create` behavior, trigger it manually after insert
 6. **`upsert_all` without `unique_by`** — without a unique constraint to conflict on, behavior is undefined
 7. **Skipping validation silently** — document clearly when validations are skipped, and add a post-import validation pass if data quality matters
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Bulk-enqueuing N background jobs from a scheduler job | `job-fan-out-pattern` skill |
+| Separate data migrations from schema migrations | `data-migrations` skill |
+| Memory-safe reads + bulk writes in background jobs | `solid-queue-setup` skill |

@@ -289,3 +289,14 @@ SolidQueue::Job.where('finished_at < ?', 1.week.ago).delete_all
 | `perform_in(5.minutes, args)` | `set(wait: 5.minutes).perform_later(args)` |
 | `sidekiq_options queue: 'critical'` | `queue_as :critical` |
 | `sidekiq_retry_in` | `retry_on` with `wait:` |
+| `Sidekiq::Client.push_bulk(...)` | `ActiveJob::Base.perform_all_later(*jobs)` |
+| `sidekiq_throttle concurrency: { limit: N }` | Dedicated queue with `threads: N` in `solid_queue.yml` |
+
+## Related Skills
+
+| Need | Use |
+|------|-----|
+| Dispatching N worker jobs from one scheduler job | `job-fan-out-pattern` skill |
+| Capping concurrent workers for external API rate limits | `queue-concurrency-throttling` skill |
+| Bulk DB operations inside a job (insert_all, upsert_all) | `bulk-operations` skill |
+| External API calls with gateway layer and retry strategy | `external-api-integration` skill |
