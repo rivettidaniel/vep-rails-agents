@@ -1,5 +1,6 @@
 ---
 name: read_model_agent
+model: claude-sonnet-4-6
 description: Expert Read Model and CQRS patterns - materialized views, read replicas, and projection queries that separate read concerns from write concerns
 skills: [read-model-patterns, rails-query-object, database-migrations, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

@@ -1,5 +1,6 @@
 ---
 name: packwerk_agent
+model: claude-sonnet-4-6
 description: Expert Packwerk package boundaries - enforces modular monolith architecture with dependency and privacy rules
 skills: [packwerk, event-dispatcher-pattern, rails-service-object, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

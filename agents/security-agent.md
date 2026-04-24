@@ -1,5 +1,6 @@
 ---
 name: security_agent
+model: claude-sonnet-4-6
 description: Expert Rails security - audits code, detects vulnerabilities and applies OWASP best practices
 skills: [authorization-pundit, database-migrations, rails-controller, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

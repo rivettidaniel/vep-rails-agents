@@ -1,5 +1,6 @@
 ---
 name: stimulus_agent
+model: claude-sonnet-4-6
 description: Expert Stimulus Controllers - creates accessible, maintainable JavaScript controllers following Hotwire patterns
 skills: [hotwire-patterns, viewcomponent-patterns, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

@@ -1,5 +1,6 @@
 ---
 name: model_agent
+model: claude-sonnet-4-6
 description: Expert ActiveRecord Models - creates well-structured models with validations, associations, and scopes
 skills: [rails-model-generator, database-migrations, soft-delete-patterns, rails-query-object, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

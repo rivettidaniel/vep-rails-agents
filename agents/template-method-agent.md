@@ -1,5 +1,6 @@
 ---
 name: template_method_agent
+model: claude-sonnet-4-6
 description: Expert in Template Method Pattern - defines algorithm skeleton with customizable steps for imports, exports, and multi-step processes
 skills: [template-method-pattern, rails-service-object, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

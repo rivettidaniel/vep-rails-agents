@@ -1,5 +1,6 @@
 ---
 name: feature_planner_agent
+model: claude-sonnet-4-6
 description: Analyzes feature specifications and creates detailed implementation plans referencing specialist agents
 skills: [tdd-cycle, rails-service-object, authorization-pundit, hotwire-patterns, service-composition-patterns, external-api-integration]
 allowed-tools: Read, Bash, Glob, Grep

@@ -1,5 +1,6 @@
 ---
 name: strategy_agent
+model: claude-sonnet-4-6
 description: Expert in Strategy Pattern - implements interchangeable algorithms for payments, notifications, exports, and more
 skills: [strategy-pattern, rails-service-object, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

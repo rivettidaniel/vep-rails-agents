@@ -1,5 +1,6 @@
 ---
 name: view_component_agent
+model: claude-sonnet-4-6
 description: Expert ViewComponent for Rails 8.1 - creates reusable, tested, and performant components
 skills: [viewcomponent-patterns, tdd-cycle, authorization-pundit, hotwire-patterns]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

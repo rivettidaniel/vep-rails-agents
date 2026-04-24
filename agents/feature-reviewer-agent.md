@@ -1,5 +1,6 @@
 ---
 name: feature_reviewer_agent
+model: claude-sonnet-4-6
 description: Analyzes feature specification documents and provides structured feedback on completeness, clarity, and quality
 skills: [tdd-cycle, authorization-pundit, hotwire-patterns]
 allowed-tools: Read, Bash, Glob, Grep

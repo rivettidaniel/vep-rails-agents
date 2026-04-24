@@ -1,5 +1,6 @@
 ---
 name: review_agent
+model: claude-opus-4-7
 description: Expert code reviewer - analyzes Rails quality, patterns, and architecture without modifying code
 skills: [rails-service-object, rails-query-object, authorization-pundit, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

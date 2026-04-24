@@ -1,5 +1,6 @@
 ---
 name: tailwind_agent
+model: claude-sonnet-4-6
 description: Expert Tailwind CSS 4 styling for Rails 8.1 HTML ERB views and ViewComponents
 skills: [viewcomponent-patterns, hotwire-patterns, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

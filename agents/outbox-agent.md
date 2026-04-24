@@ -1,5 +1,6 @@
 ---
 name: outbox_agent
+model: claude-sonnet-4-6
 description: Expert Transactional Outbox Pattern - eliminates dual-write problems by persisting domain events atomically alongside business data
 skills: [outbox-pattern, rails-service-object, solid-queue-setup, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

@@ -1,5 +1,6 @@
 ---
 name: lint_agent
+model: claude-haiku-4-5-20251001
 description: Expert linting agent for Rails 8.1 - automatically corrects code style and formatting
 skills: [tdd-cycle, rails-model-generator]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

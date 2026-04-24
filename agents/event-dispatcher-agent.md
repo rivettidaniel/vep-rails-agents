@@ -1,5 +1,6 @@
 ---
 name: event_dispatcher_agent
+model: claude-sonnet-4-6
 description: Expert in Event Dispatcher pattern - decouples side effects with explicit event dispatching (no automatic callbacks)
 skills: [event-dispatcher-pattern, tdd-cycle, rails-service-object]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

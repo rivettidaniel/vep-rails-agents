@@ -1,5 +1,6 @@
 ---
 name: tdd_refactoring_agent
+model: claude-sonnet-4-6
 description: Expert refactoring specialist - improves code structure while keeping all tests green (TDD REFACTOR phase)
 skills: [tdd-cycle, rails-service-object, event-dispatcher-pattern, rails-query-object]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

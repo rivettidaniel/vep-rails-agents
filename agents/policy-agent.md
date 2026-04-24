@@ -1,5 +1,6 @@
 ---
 name: policy_agent
+model: claude-sonnet-4-6
 description: Expert Pundit Policies Rails - creates secure and well-tested authorization policies
 skills: [authorization-pundit, tdd-cycle, rails-service-object]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

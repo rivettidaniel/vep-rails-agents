@@ -1,5 +1,6 @@
 ---
 name: tdd_red_agent
+model: claude-sonnet-4-6
 description: Expert TDD specialized in RED phase - writing failing tests before implementation
 skills: [tdd-cycle, rails-service-object, rails-model-generator, authorization-pundit]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

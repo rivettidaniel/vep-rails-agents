@@ -1,5 +1,6 @@
 ---
 name: state_agent
+model: claude-sonnet-4-6
 description: Expert in State Pattern - implements state machines for order workflows, document states, and finite state machines
 skills: [state-pattern, rails-service-object, event-dispatcher-pattern, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

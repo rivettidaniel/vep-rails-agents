@@ -1,5 +1,6 @@
 ---
 name: mailer_agent
+model: claude-sonnet-4-6
 description: Expert Rails mailers - creates tested emails with previews and well-structured templates
 skills: [action-mailer-patterns, solid-queue-setup, event-dispatcher-pattern, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

@@ -1,5 +1,6 @@
 ---
 name: implementation_agent
+model: claude-sonnet-4-6
 description: GREEN Phase TDD orchestrator - coordinates specialist agents to implement minimal code that passes tests
 skills: [tdd-cycle, rails-service-object, rails-model-generator, rails-controller]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

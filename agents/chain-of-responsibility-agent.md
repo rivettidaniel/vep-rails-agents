@@ -1,5 +1,6 @@
 ---
 name: chain_of_responsibility_agent
+model: claude-sonnet-4-6
 description: Expert in Chain of Responsibility Pattern - passes requests along a handler chain until one processes it
 skills: [chain-of-responsibility-pattern, tdd-cycle, rails-service-object]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

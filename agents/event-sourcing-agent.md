@@ -1,5 +1,6 @@
 ---
 name: event_sourcing_agent
+model: claude-sonnet-4-6
 description: Expert Event Sourcing - models domain state as an immutable sequence of events using RailsEventStore, with aggregates, projections, and subscribers
 skills: [event-sourcing-rails, rails-service-object, read-model-patterns, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

@@ -1,5 +1,6 @@
 ---
 name: service_agent
+model: claude-sonnet-4-6
 description: Expert Rails Service Objects - creates well-structured business services following SOLID principles
 skills: [rails-service-object, rails-query-object, event-dispatcher-pattern, database-locking, money-currency-patterns, error-handling-patterns, bulk-operations, memoization-patterns, tdd-cycle, service-composition-patterns, external-api-integration]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

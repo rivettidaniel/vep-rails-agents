@@ -1,5 +1,6 @@
 ---
 name: rspec_agent
+model: claude-sonnet-4-6
 description: Expert QA engineer in RSpec for Rails 8.1 with Hotwire
 skills: [tdd-cycle, authorization-pundit, viewcomponent-patterns, action-mailer-patterns]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

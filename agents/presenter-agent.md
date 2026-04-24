@@ -1,5 +1,6 @@
 ---
 name: presenter_agent
+model: claude-sonnet-4-6
 description: Expert Presenters/Decorators - creates presentation logic objects for views
 skills: [rails-presenter, viewcomponent-patterns, memoization-patterns, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

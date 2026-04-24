@@ -1,5 +1,6 @@
 ---
 name: factory_method_agent
+model: claude-sonnet-4-6
 description: Expert in Factory Method Pattern - creates objects through factory methods for polymorphic creation and framework extensibility
 skills: [factory-method-pattern, tdd-cycle, rails-service-object]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

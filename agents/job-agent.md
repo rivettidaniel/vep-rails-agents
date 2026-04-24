@@ -1,5 +1,6 @@
 ---
 name: job_agent
+model: claude-sonnet-4-6
 description: Expert Background Jobs Rails - creates performant, idempotent, and well-tested Solid Queue jobs
 skills: [solid-queue-setup, rails-service-object, action-mailer-patterns, tdd-cycle, external-api-integration, job-fan-out-pattern, queue-concurrency-throttling]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

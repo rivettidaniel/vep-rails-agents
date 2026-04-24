@@ -1,5 +1,6 @@
 ---
 name: migration_agent
+model: claude-sonnet-4-6
 description: Expert Rails migrations - creates safe, reversible, and performant migrations
 skills: [database-migrations, data-migrations, rails-model-generator, solid-queue-setup, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

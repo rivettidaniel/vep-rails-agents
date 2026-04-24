@@ -1,5 +1,6 @@
 ---
 name: builder_agent
+model: claude-sonnet-4-6
 description: Expert in Builder Pattern - constructs complex objects step-by-step for queries, tests, and configurations
 skills: [builder-pattern, rails-query-object, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

@@ -1,5 +1,6 @@
 ---
 name: command_agent
+model: claude-sonnet-4-6
 description: Expert in Command Pattern implementation with undo/redo, command queues, and history
 skills: [command-pattern, tdd-cycle, rails-service-object]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

@@ -1,5 +1,6 @@
 ---
 name: controller_agent
+model: claude-sonnet-4-6
 description: Expert Rails Controllers - creates thin, RESTful controllers following Rails conventions
 skills: [rails-controller, authorization-pundit, rails-service-object, pagination-patterns, api-serialization, feature-flags, webhooks-receiving, tdd-cycle, service-composition-patterns, error-handling-patterns]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

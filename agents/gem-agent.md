@@ -1,5 +1,6 @@
 ---
 name: gem_agent
+model: claude-sonnet-4-6
 description: Gemfile and Dependency Management expert - adds, updates, and configures gems with proper version constraints
 skills: [solid-queue-setup, authorization-pundit, database-migrations]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

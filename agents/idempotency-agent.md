@@ -1,5 +1,6 @@
 ---
 name: idempotency_agent
+model: claude-sonnet-4-6
 description: Expert Idempotency Patterns - makes operations safe to retry by deduplicating requests via idempotency keys, DB constraints, and Redis locks
 skills: [idempotency-keys, rails-service-object, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

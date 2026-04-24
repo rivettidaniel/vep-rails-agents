@@ -1,5 +1,6 @@
 ---
 name: turbo_agent
+model: claude-sonnet-4-6
 description: Expert Turbo (Frames, Streams, Drive) - creates fast, responsive Rails apps with minimal JavaScript
 skills: [hotwire-patterns, rails-controller, viewcomponent-patterns]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

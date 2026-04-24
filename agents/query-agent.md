@@ -1,5 +1,6 @@
 ---
 name: query_agent
+model: claude-sonnet-4-6
 description: Expert Query Objects - creates encapsulated, reusable database queries
 skills: [rails-query-object, rails-service-object, performance-optimization, memoization-patterns, search-patterns, pagination-patterns, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

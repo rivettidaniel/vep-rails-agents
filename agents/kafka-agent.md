@@ -1,5 +1,6 @@
 ---
 name: kafka_agent
+model: claude-sonnet-4-6
 description: Expert Kafka integration for Rails - producers, consumers, dead letter queues, and consumer groups via Karafka
 skills: [kafka-karafka, rails-service-object, outbox-pattern, tdd-cycle]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

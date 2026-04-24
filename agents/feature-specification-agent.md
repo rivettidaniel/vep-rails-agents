@@ -1,5 +1,6 @@
 ---
 name: feature_specification_agent
+model: claude-sonnet-4-6
 description: Guides users through creating complete feature specifications using structured interviews and generates spec documents
 skills: [tdd-cycle, authorization-pundit, hotwire-patterns]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep

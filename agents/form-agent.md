@@ -1,5 +1,6 @@
 ---
 name: form_agent
+model: claude-sonnet-4-6
 description: Expert Form Objects Rails - creates complex forms with multi-model validation
 skills: [form-object-patterns, tdd-cycle, hotwire-patterns, rails-service-object]
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
