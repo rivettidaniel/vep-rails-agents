@@ -53,7 +53,7 @@ Agent names use underscores in the repo (e.g. `model_agent`); Cursor may show th
 
 Same workflows as in the [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md)—TDD, thin controllers, service objects, no callback side effects.
 
-**Note:** The repo also includes 3 feature-spec agents in `feature_spec_agents/`; they are not symlinked by default. For the VEP feature workflow, ask the agent to follow `.cursor/commands/vep-feature.md`; it describes how to run the spec and review steps.
+**Note:** The 3 feature-spec agents (`@feature_specification_agent`, `@feature_planner_agent`, `@feature_reviewer_agent`) live in `agents/` alongside all other agents. For the VEP feature workflow, ask the agent to follow `.cursor/commands/vep-feature.md`; it describes how to run the spec and review steps.
 
 ---
 

@@ -11,8 +11,7 @@ This is the **Rails AI Suite** - a comprehensive collection of specialized AI ag
 **Purpose:** Provide curated agents and skills that help developers build Rails applications following best practices.
 
 **Structure:**
-- `agents/` - 31 specialist agents (TDD, implementation, quality, design patterns)
-- `feature_spec_agents/` - 3 feature specification agents
+- `agents/` - 39 specialist agents (TDD, implementation, quality, design patterns, feature spec)
 - `commands/` - VEP planning commands (vep-init, vep-feature, vep-wave, vep-state)
 - `planning/` - VEP planning file templates (PROJECT, REQUIREMENTS, ROADMAP, STATE, PHASE_PLAN)
 - `skills/` - 32 reusable knowledge modules
@@ -462,8 +461,7 @@ end
 - [README.md](README.md) - Project overview
 
 ### Agent Files
-- [agents/](agents/) - 31 specialist agents
-- [feature_spec_agents/](feature_spec_agents/) - 3 feature spec agents
+- [agents/](agents/) - 39 specialist agents (includes feature spec agents)
 
 ### VEP Planning
 - [commands/](commands/) - VEP commands (vep-init, vep-feature, vep-wave, vep-state)

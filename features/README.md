@@ -294,7 +294,7 @@ A: ±20% typically. Adjust based on actual times for future planning.
 - Test with small feature first
 
 **Integration with Agents:**
-- Templates are designed to work with feature_spec_agents
+- Templates are designed to work with feature spec agents (`@feature_specification_agent`, `@feature_planner_agent`, `@feature_reviewer_agent`) in `agents/`
 - Follow the workflow: Spec → Plan → Parallel → Execute
 - Each step feeds into the next
 

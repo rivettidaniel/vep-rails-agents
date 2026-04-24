@@ -11,10 +11,20 @@
 │                    YOUR RAILS PROJECT                           │
 │                                                                 │
 │  .claude/                                                       │
-│  ├── agents → ~/.vep/agents (symlink)                          │
-│  ├── commands → ~/.vep/commands (symlink)                      │
-│  ├── skills → ~/.vep/skills (symlink)                          │
-│  ├── planning → ~/.vep/planning (symlink)                      │
+│  ├── agents/                                                    │
+│  │   ├── model-agent.md → ~/.vep/agents/model-agent.md         │
+│  │   ├── service-agent.md → ~/.vep/agents/service-agent.md     │
+│  │   ├── my-custom-agent.md  ← your own files coexist safely   │
+│  │   └── ... (per-file symlinks)                               │
+│  ├── commands/                                                  │
+│  │   └── ... (per-file symlinks → ~/.vep/commands/)            │
+│  ├── skills/                                                    │
+│  │   ├── rspec-testing/ → ~/.vep/skills/rspec-testing/         │
+│  │   ├── my-custom-skill/  ← your own skills coexist safely    │
+│  │   └── ... (per-skill-dir symlinks)                          │
+│  ├── planning/  ← real directory, project-specific data        │
+│  │   ├── PROJECT.md, REQUIREMENTS.md, STATE.md ...             │
+│  │   └── features/[name].md                                    │
 │  └── CLAUDE.md (project-specific rules)                        │
 └─────────────────────────────────────────────────────────────────┘
                               ↓
@@ -68,19 +78,25 @@ curl -fsSL https://raw.githubusercontent.com/rivettidaniel/vep-rails-agents/main
 
 **Result:**
 ```
-~/.vep/                    (shared by all projects)
+~/.vep/                    (shared by all projects, updated via git pull)
 ├── agents/
 ├── commands/
 ├── skills/
 └── planning/
 
 my-rails-app/.claude/
-├── agents → ~/.vep/agents
-├── commands → ~/.vep/commands
-├── skills → ~/.vep/skills
-├── planning → ~/.vep/planning
+├── agents/                     (real dir — VEP files symlinked per-file)
+├── commands/                   (real dir — VEP files symlinked per-file)
+├── skills/                     (real dir — VEP skills symlinked per-skill-dir)
+├── planning/                   (real dir — project-specific, NOT shared)
 └── CLAUDE.md (you create this)
 ```
+
+**Key behavior:**
+- Existing files in `.claude/agents/`, `.claude/skills/`, etc. are **never deleted**
+- VEP agents/skills are added alongside your own files
+- Running install again is safe — only updates VEP symlinks, skips user files
+- `planning/` is project-specific — templates are copied once, never overwritten
 
 **For Cursor:** Create `.cursor/` and pass `--cursor` so symlinks are created in `.cursor/` instead:
 
@@ -371,12 +387,12 @@ Backups are created: `~/.claude/settings.json.backup.1234567890`
 ### What Gets Installed
 
 ```
-~/.vep/                           (git repo, ~1MB)
+~/.vep/                           (git repo, ~1MB — shared by all projects)
 ├── agents/
 │   ├── model-agent.md
 │   ├── controller-agent.md
 │   ├── service-agent.md
-│   └── ... (31 total)
+│   └── ... (36 total)
 ├── commands/
 │   ├── vep-init.md
 │   ├── vep-feature.md
@@ -385,8 +401,8 @@ Backups are created: `~/.claude/settings.json.backup.1234567890`
 ├── skills/
 │   ├── rails-architecture/
 │   ├── rails-service-object/
-│   └── ... (30 total)
-├── planning/
+│   └── ... (56 total)
+├── planning/                     (templates — copied to each project on first install)
 │   ├── PROJECT.md
 │   ├── REQUIREMENTS.md
 │   ├── ROADMAP.md
@@ -404,11 +420,18 @@ Backups are created: `~/.claude/settings.json.backup.1234567890`
     ├── block-dangerous-commands.sh (~3KB)
     └── rails-after-edit.sh       (~1KB)
 
-my-project/.claude/               (symlinks only)
-├── agents → ~/.vep/agents
-├── commands → ~/.vep/commands
-├── skills → ~/.vep/skills
-└── planning → ~/.vep/planning
+my-project/.claude/               (per-file symlinks — safe to add own files)
+├── agents/
+│   ├── model-agent.md → ~/.vep/agents/model-agent.md
+│   └── ... (one symlink per agent)
+├── commands/
+│   └── ... (one symlink per command)
+├── skills/
+│   ├── rails-architecture/ → ~/.vep/skills/rails-architecture/
+│   └── ... (one symlink per skill dir)
+└── planning/                     (real dir — project-specific, not shared)
+    ├── PROJECT.md
+    └── STATE.md ...
 ```
 
 ---
