@@ -119,7 +119,7 @@ A curated collection of specialized AI agents for Rails development, organized i
 4. **Skills Library** - Reusable knowledge modules for specific Rails patterns and technologies
 
 > **New:** Use this project's 39 agents and 56 skills in your IDE:
-> - **Claude Code:** [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md) — use `/vep-feature` to spec + plan any feature and generate a wave-structured PHASE_PLAN. For general Rails setup, see [Claude Code Setup Template](CLAUDE_CODE_SETUP_TEMPLATE.md).
+> - **Claude Code:** [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md) — use `/vep-feature` to spec + plan any feature and generate a wave-structured PHASE_PLAN.
 > - **Cursor:** [Cursor Setup Guide](CURSOR_SETUP.md) — install with `--cursor` and use the same agents as subagents and skills in Cursor Agent.
 
 Built using insights from [GitHub's analysis of 2,500+ agent.md files](https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/).
@@ -485,15 +485,6 @@ This guide shows how to use the **39 agents** and **56 skills** in this project:
 - **VEP Planning System** - `/vep-init`, `/vep-feature`, `/vep-wave`, `/vep-state`
 - **Skills (56)** - Architecture patterns, Hotwire, design patterns, event-driven systems, Rails best practices, and more
 - **Workflow Examples** - From simple features to complex multi-phase projects
-
-### General Rails Setup Template
-
-For configuring Claude Code with **any Rails project**, see [CLAUDE_CODE_SETUP_TEMPLATE.md](CLAUDE_CODE_SETUP_TEMPLATE.md):
-
-- **Global Configuration** - CLAUDE.md, settings.json, directory structure
-- **Security Hooks** - Block secrets, dangerous commands, Rails-specific protections
-- **Custom Commands** - `/ci`, `/lint`, `/security`, `/rails-test`, `/generate`
-- **MCP Servers** - GitHub, PostgreSQL, sequential thinking integration
 
 ### Cursor
 
