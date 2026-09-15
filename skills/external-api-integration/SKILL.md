@@ -278,6 +278,24 @@ def handle_api_response(response)
 end
 ```
 
+## Wrapping a Single Third-Party Exception with Dry::Monads::Try
+
+`Dry::Monads[:result, :try]` adds `Try()`, which catches one exception class and converts it into a `Result` — useful when a gateway call raises exactly one exception type you want to turn into a `Failure` without writing `rescue ... Failure(...)` by hand:
+
+```ruby
+class ChargeCardService < ApplicationService
+  include Dry::Monads[:result, :try]
+
+  def call(token:, amount_cents:)
+    Try(Stripe::CardError) { stripe_client.charges.create(source: token, amount: amount_cents) }
+      .to_result
+      .or { |e| Failure([:card_declined, e.message]) }
+  end
+end
+```
+
+`Try()` only takes an exception class list — it can't attach different `Failure` codes per exception type in one call. **Prefer explicit `rescue` → `Failure([:code, msg])`** (as used everywhere else in this skill) whenever a gateway can raise more than one exception type that should map to different failure codes — that's the common case here (HTTParty timeouts vs. 4xx vs. 5xx, S3 file-type vs. size errors, Twilio config vs. delivery errors). Reach for `Try` only for a single, single-exception wrap where writing out `rescue` would be pure boilerplate.
+
 ## Staggered Job Scheduling (Thundering Herd Prevention)
 
 When syncing many records to an external API, stagger the jobs to avoid rate limits:
