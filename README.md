@@ -118,7 +118,7 @@ A curated collection of specialized AI agents for Rails development, organized i
 3. **VEP Planning System** - State-persistent project planning with wave-based parallel execution
 4. **Skills Library** - Reusable knowledge modules for specific Rails patterns and technologies
 
-> **New:** Use this project's 39 agents and 56 skills in your IDE:
+> **New:** Use this project's 41 agents and 56 skills in your IDE:
 > - **Claude Code:** [Claude Code Project Guide](CLAUDE_CODE_PROJECT_GUIDE.md) — use `/vep-feature` to spec + plan any feature and generate a wave-structured PHASE_PLAN.
 > - **Cursor:** [Cursor Setup Guide](CURSOR_SETUP.md) — install with `--cursor` and use the same agents as subagents and skills in Cursor Agent.
 
@@ -177,6 +177,10 @@ Modern Rails architecture with clear separation of concerns, SOLID principles, a
 - **`@stimulus_agent`** - Stimulus controllers
 - **`@turbo_agent`** - Turbo Frames/Streams
 - **`@tailwind_agent`** - Tailwind CSS styling
+
+#### Senior (no-VEP workflow)
+- **`@senior_developer`** - End-to-end implementation (TDD), debugging and refactors without `/vep-feature`; full skills catalog
+- **`@senior_qa_reviewer`** - Full QA pass (security, UX/UI, a11y, performance, tests) with prioritized verdict; full skills catalog
 
 #### Quality
 - **`@review_agent`** - Code quality analysis
@@ -478,7 +482,7 @@ All agents follow best practices from GitHub's analysis:
 
 **Quick Start:** [CLAUDE_CODE_PROJECT_GUIDE.md](CLAUDE_CODE_PROJECT_GUIDE.md)
 
-This guide shows how to use the **39 agents** and **56 skills** in this project:
+This guide shows how to use the **41 agents** and **56 skills** in this project:
 
 - **Specialist Agents (36)** - Testing, implementation, frontend, quality, design patterns, event-driven architecture
 - **Feature Spec Agents (3)** - Specification, planner, reviewer
