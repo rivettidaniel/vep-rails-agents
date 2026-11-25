@@ -42,7 +42,7 @@ Combine multiple agents for complex tasks:
 ```
 @feature_planner_agent analyze this feature
 Then use recommended agents to implement
-@senior_qa_reviewer review the implementation
+@senior_qa_reviewer_vep review the implementation
 ```
 
 ---

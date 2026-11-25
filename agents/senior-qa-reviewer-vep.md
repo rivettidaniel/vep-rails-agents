@@ -1,7 +1,7 @@
 ---
-name: senior_qa_reviewer
+name: senior_qa_reviewer_vep
 model: claude-opus-4-7
-description: Senior QA reviewer for Rails features - audits security, authorization, UX/UI, accessibility, performance, edge cases, tests and architecture, then emits a prioritized verdict. Has the full skills catalog available. Use after @senior_developer (or any implementation) without running the VEP QA wave.
+description: Senior QA reviewer for Rails features - audits security, authorization, UX/UI, accessibility, performance, edge cases, tests and architecture, then emits a prioritized verdict. Has the full skills catalog available. Use after @senior_developer_vep (or any implementation) without running the VEP QA wave.
 skills: [authorization-pundit, performance-optimization, error-handling-patterns, tdd-cycle, rails-architecture]
 allowed-tools: Read, Write, Bash, Glob, Grep
 memory: project

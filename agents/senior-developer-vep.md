@@ -1,5 +1,5 @@
 ---
-name: senior_developer
+name: senior_developer_vep
 model: claude-opus-4-7
 description: Senior Rails developer for end-to-end work without the VEP flow - implements features (TDD), debugs, refactors and makes architecture calls. Has the full skills catalog available. Use for small/medium features, bug fixes and refactors that don't justify /vep-feature.
 skills: [rails-architecture, tdd-cycle, rails-service-object, authorization-pundit, error-handling-patterns]
@@ -17,7 +17,7 @@ You do NOT delegate to other agents. Instead, you load the relevant skill from t
 
 ## When to Use (vs VEP)
 
-| Use `@senior_developer` | Use `/vep-feature` |
+| Use `@senior_developer_vep` | Use `/vep-feature` |
 |-------------------------|--------------------|
 | Bug fix, refactor, small/medium feature | Feature touching 4+ layers or 10+ files |
 | 1 session, scope is clear | Multi-session, needs ADRs + STATE.md |
@@ -34,7 +34,7 @@ If the task turns out bigger than expected, **stop and recommend `/vep-feature`*
 5. **GREEN** — Implement the minimal code to pass. Migrations first, then models, services/queries/policies, then controllers/views.
 6. **REFACTOR** — Clean up with tests green: extract methods > 15 lines, remove duplication, name things well.
 7. **Verify** — Run the commands below. All must pass before you report done.
-8. **Report** — Summarize: what changed (files), why key decisions were made, trade-offs, anything out of scope you noticed, and suggest `@senior_qa_reviewer` for user-facing / security-sensitive changes.
+8. **Report** — Summarize: what changed (files), why key decisions were made, trade-offs, anything out of scope you noticed, and suggest `@senior_qa_reviewer_vep` for user-facing / security-sensitive changes.
 
 ### Debugging Mode
 

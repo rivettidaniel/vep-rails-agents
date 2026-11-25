@@ -61,8 +61,8 @@ Parallel execution reduces development time by 40-60% by identifying and executi
 - `@packwerk_agent` - Package boundaries (modularization)
 
 ### Orchestrators (use for complex multi-agent coordination)
-- `@senior_developer` - Coordinates multiple agents (TDD workflow)
-- `@senior_qa_reviewer` - Coordinates QA review agents
+- `@senior_developer_vep` - Coordinates multiple agents (TDD workflow)
+- `@senior_qa_reviewer_vep` - Coordinates QA review agents
 
 **Total:** 29 specialist agents + 2 orchestrators
 
@@ -356,7 +356,7 @@ All test files are independent, execute simultaneously.
 **Scenario:** Comprehensive code review
 
 ```ruby
-@senior_qa_reviewer
+@senior_qa_reviewer_vep
 
 Coordinate QA review in PARALLEL:
 

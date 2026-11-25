@@ -179,8 +179,8 @@ Modern Rails architecture with clear separation of concerns, SOLID principles, a
 - **`@tailwind_agent`** - Tailwind CSS styling
 
 #### Senior (no-VEP workflow)
-- **`@senior_developer`** - End-to-end implementation (TDD), debugging and refactors without `/vep-feature`; full skills catalog
-- **`@senior_qa_reviewer`** - Full QA pass (security, UX/UI, a11y, performance, tests) with prioritized verdict; full skills catalog
+- **`@senior_developer_vep`** - End-to-end implementation (TDD), debugging and refactors without `/vep-feature`; full skills catalog
+- **`@senior_qa_reviewer_vep`** - Full QA pass (security, UX/UI, a11y, performance, tests) with prioritized verdict; full skills catalog
 
 #### Quality
 - **`@review_agent`** - Code quality analysis

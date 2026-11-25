@@ -189,12 +189,12 @@ end
 ### When to Use Which Agent
 
 #### Quick Path (without VEP)
-- `@senior_developer` - Small/medium feature, bug fix or refactor end-to-end (plan → RED → GREEN → REFACTOR → verify)
-- `@senior_qa_reviewer` - QA review after implementation (replaces Wave 6 for small changes)
+- `@senior_developer_vep` - Small/medium feature, bug fix or refactor end-to-end (plan → RED → GREEN → REFACTOR → verify)
+- `@senior_qa_reviewer_vep` - QA review after implementation (replaces Wave 6 for small changes)
 
 ```
-@senior_developer add CSV export to the orders index
-@senior_qa_reviewer review the CSV export
+@senior_developer_vep add CSV export to the orders index
+@senior_qa_reviewer_vep review the CSV export
 ```
 
 #### For Testing
